@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UF Hoy Chile | Datos Oficiales y Abiertos</title>
+  <meta name="description" content="Portal público de datos oficiales de la Unidad de Fomento (UF) de Chile. Actualización diaria directa del SII y Banco Central.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Navbar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="text-2xl">🇨🇱</span>
+        <div>
+          <h1 class="font-bold text-slate-900 leading-tight">Datos Económicos Chile</h1>
+          <p class="text-xs text-slate-500 font-medium">Iniciativa de Datos Abiertos</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="https://github.com/jpqb/datos_economicos_chile" target="_blank" rel="noopener noreferrer" 
+           class="inline-flex items-center space-x-2 text-xs font-semibold px-3 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition">
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Ver Repositorio</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
+
+    <!-- Hero: Tarjeta Principal UF -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Valor de Hoy -->
+      <div class="lg:col-span-2 bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-xl relative overflow-hidden flex flex-col justify-between">
+        <div class="relative z-10 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-blue-200 backdrop-blur-sm border border-white/10">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>OFICIAL • SERVICIO DE IMPUESTOS INTERNOS</span>
+            </span>
+            <span id="fecha-actual" class="text-xs sm:text-sm text-slate-300 font-medium">Cargando...</span>
+          </div>
+
+          <div>
+            <p class="text-xs sm:text-sm uppercase tracking-wider text-slate-300 font-semibold">Unidad de Fomento (UF)</p>
+            <div class="flex flex-wrap items-baseline gap-3 mt-1">
+              <h2 id="valor-uf-hoy" class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">$ --.---,--</h2>
+              <span id="badge-variacion" class="inline-flex items-center text-sm font-semibold px-2.5 py-1 rounded-lg bg-white/10">
+                Calculando...
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative z-10 pt-6 mt-6 border-t border-white/10 flex flex-wrap items-center justify-between text-xs text-slate-300 gap-2">
+          <span>Fuente: <strong>Servicio de Impuestos Internos / Banco Central</strong></span>
+          <span id="timestamp-utc" class="text-slate-400">Sincronización diaria: 09:15 CLT</span>
+        </div>
+
+        <!-- Efecto decorativo de fondo -->
+        <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      </div>
+
+      <!-- Resumen de Consumo Directo (APIs) -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+        <div>
+          <h3 class="font-bold text-slate-900 flex items-center space-x-2">
+            <i data-lucide="code" class="w-5 h-5 text-blue-600"></i>
+            <span>Acceso Gratuito a la API</span>
+          </h3>
+          <p class="text-xs text-slate-600 mt-1">
+            Consume esta información sin API keys, sin intermediarios y sin límites de cuota.
+          </p>
+
+          <div class="mt-4 space-y-2.5">
+            <div>
+              <label class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">JSON Oficial Diario</label>
+              <div class="flex items-center mt-1 bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-mono text-slate-700 justify-between">
+                <span class="truncate mr-2">.../data/uf_hoy.json</span>
+                <button onclick="copiarUrl('https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_hoy.json')" 
+                        class="text-blue-600 hover:text-blue-800 text-xs font-medium px-2 py-0.5 rounded bg-blue-50 hover:bg-blue-100 transition">Copiar</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">CSV Histórico Anual</label>
+              <div class="flex items-center mt-1 bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-mono text-slate-700 justify-between">
+                <span class="truncate mr-2">.../data/uf_ultimo_ano.csv</span>
+                <button onclick="copiarUrl('https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_ultimo_ano.csv')" 
+                        class="text-blue-600 hover:text-blue-800 text-xs font-medium px-2 py-0.5 rounded bg-blue-50 hover:bg-blue-100 transition">Copiar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 flex gap-2">
+          <a href="data/uf_ultimo_ano.csv" download class="flex-1 text-center py-2 px-3 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg transition flex items-center justify-center space-x-1">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Descargar CSV</span>
+          </a>
+          <a href="data/uf_hoy.json" target="_blank" class="flex-1 text-center py-2 px-3 text-xs font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition flex items-center justify-center space-x-1">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Ver JSON</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de Proyecciones Futuras -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+        <div>
+          <h3 class="font-bold text-slate-900 text-lg flex items-center space-x-2">
+            <i data-lucide="calendar" class="w-5 h-5 text-blue-600"></i>
+            <span>Valores Oficiales Proyectados</span>
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Por ley, el Banco Central fija la UF con hasta 30 días de anticipación según el último IPC publicado.
+          </p>
+        </div>
+        <span class="text-xs text-slate-400 font-medium self-start sm:self-auto bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200">
+          Valores oficiales ya calculados
+        </span>
+      </div>
+
+      <div id="grid-proyecciones" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mt-4">
+        <!-- Render dinámico aquí -->
+        <div class="p-3 bg-slate-50 rounded-xl animate-pulse text-center text-xs text-slate-400">Cargando proyecciones...</div>
+      </div>
+    </div>
+
+    <!-- Gráfico Interactivo de Evolución -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="font-bold text-slate-900 text-lg flex items-center space-x-2">
+            <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i>
+            <span>Evolución Histórica de la UF</span>
+          </h3>
+          <p class="text-xs text-slate-500">Comportamiento diario oficial consolidado.</p>
+        </div>
+        <div class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-50 text-xs font-semibold self-start sm:self-auto">
+          <button onclick="filtrarRango(30)" id="btn-30" class="px-3 py-1 rounded-md bg-white shadow-sm text-blue-600 transition">30 Días</button>
+          <button onclick="filtrarRango(90)" id="btn-90" class="px-3 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">90 Días</button>
+          <button onclick="filtrarRango('todos')" id="btn-todos" class="px-3 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">Año Completo</button>
+        </div>
+      </div>
+
+      <div class="relative h-72 sm:h-80 w-full pt-2">
+        <canvas id="graficoUF"></canvas>
+      </div>
+    </div>
+
+    <!-- Citas Metodológicas y de Gobernanza -->
+    <div class="bg-slate-100 rounded-2xl p-6 text-xs text-slate-600 space-y-2 border border-slate-200">
+      <h4 class="font-bold text-slate-800 uppercase tracking-wider text-[11px]">Fundamento Normativo y Metodológico</h4>
+      <p>
+        La Unidad de Fomento (UF) es una unidad de cuenta reajustable según la variación del Índice de Precios al Consumidor (IPC), creada mediante el Decreto con Fuerza de Ley N° 40 de 1960 y normada actualmente por el Banco Central de Chile y el Servicio de Impuestos Internos (SII).
+      </p>
+      <p>
+        Los datos aquí publicados son de libre uso para fines de investigación académica, minutas informativas, software libre y aplicaciones comerciales.
+      </p>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>© 2026 Datos Económicos de Chile • Código y datos abiertos.</p>
+      <p>Desarrollado para Universidad Central de Chile & Ecosistema de Datos Abiertos.</p>
+    </div>
+  </footer>
+
+  <!-- Script de carga y lógica -->
+  <script>
+    let chartInstance = null;
+    let serieCompleta = [];
+
+    // URLs de carga (con fallback a raw.githubusercontent.com para ejecuciones locales)
+    const URL_JSON_LOCAL = "data/uf_hoy.json";
+    const URL_CSV_LOCAL = "data/uf_ultimo_ano.csv";
+    const URL_JSON_FALLBACK = "https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_hoy.json";
+    const URL_CSV_FALLBACK = "https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_ultimo_ano.csv";
+
+    // Formateador de moneda chilena
+    const formatoCLP = new Intl.NumberFormat("es-CL", {
+      style: "currency",
+      currency: "CLP",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+    // Cargar datos al iniciar
+    async function inicializarDashboard() {
+      lucide.createIcons();
+      await cargarResumenHoy();
+      await cargarSerieHistorica();
+    }
+
+    async function cargarResumenHoy() {
+      try {
+        let res;
+        try {
+          res = await fetch(URL_JSON_LOCAL);
+          if (!res.ok) throw new Error();
+        } catch {
+          res = await fetch(URL_JSON_FALLBACK);
+        }
+        const data = await res.json();
+        const hoy = data.hoy;
+
+        // Formatear fecha legible
+        const partesFecha = hoy.fecha.split("-");
+        const fechaObj = new Date(partesFecha[0], partesFecha[1] - 1, partesFecha[2]);
+        const fechaLegible = fechaObj.toLocaleDateString("es-CL", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+        document.getElementById("fecha-actual").textContent = fechaLegible.charAt(0).toUpperCase() + fechaLegible.slice(1);
+        document.getElementById("valor-uf-hoy").textContent = formatoCLP.format(hoy.valor_clp);
+
+        // Badge de variación
+        const badge = document.getElementById("badge-variacion");
+        const varCLP = hoy.variacion_diaria_clp;
+        const varPCT = hoy.variacion_diaria_pct;
+
+        if (varCLP >= 0) {
+          badge.className = "inline-flex items-center text-sm font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+          badge.innerHTML = `▲ +${varCLP.toFixed(2)} CLP (+${varPCT.toFixed(4)}%)`;
+        } else {
+          badge.className = "inline-flex items-center text-sm font-semibold px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30";
+          badge.innerHTML = `▼ ${varCLP.toFixed(2)} CLP (${varPCT.toFixed(4)}%)`;
+        }
+
+        // Renderizar proyecciones futuras
+        const grid = document.getElementById("grid-proyecciones");
+        grid.innerHTML = "";
+
+        const proyecciones = data.proyecciones_publicadas_dias_siguientes || [];
+        if (proyecciones.length === 0) {
+          grid.innerHTML = "<p class='col-span-full text-slate-500 text-xs py-2'>No hay proyecciones adicionales para este ciclo.</p>";
+        } else {
+          proyecciones.slice(0, 10).forEach(item => {
+            const f = item.fecha.split("-");
+            const d = new Date(f[0], f[1] - 1, f[2]);
+            const diaMes = d.toLocaleDateString("es-CL", { day: 'numeric', month: 'short' });
+            const diaSemana = d.toLocaleDateString("es-CL", { weekday: 'short' });
+
+            const card = document.createElement("div");
+            card.className = "p-3 bg-slate-50 border border-slate-200/80 rounded-xl hover:border-blue-400 hover:bg-blue-50/50 transition";
+            card.innerHTML = `
+              <div class="text-[11px] font-semibold text-slate-500 capitalize">${diaSemana}, ${diaMes}</div>
+              <div class="text-sm sm:text-base font-bold text-slate-900 mt-0.5">${formatoCLP.format(item.valor_clp)}</div>
+            `;
+            grid.appendChild(card);
+          });
+        }
+
+      } catch (err) {
+        console.error("Error al cargar resumen de hoy:", err);
+      }
+    }
+
+    async function cargarSerieHistorica() {
+      try {
+        let res;
+        try {
+          res = await fetch(URL_CSV_LOCAL);
+          if (!res.ok) throw new Error();
+        } catch {
+          res = await fetch(URL_CSV_FALLBACK);
+        }
+        const csvTexto = await res.text();
+        const filas = csvTexto.trim().split("\n").slice(1); // Omitir cabecera
+
+        serieCompleta = filas.map(f => {
+          const cols = f.split(",");
+          return {
+            fecha: cols[0],
+            valor: parseFloat(cols[1])
+          };
+        }).filter(item => !isNaN(item.valor));
+
+        filtrarRango(30);
+
+      } catch (err) {
+        console.error("Error al cargar serie histórica:", err);
+      }
+    }
+
+    function renderizarGrafico(datos) {
+      const ctx = document.getElementById("graficoUF").getContext("2d");
+
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+      gradient.addColorStop(0, 'rgba(37, 99, 235, 0.25)');
+      gradient.addColorStop(1, 'rgba(37, 99, 235, 0.0)');
+
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: datos.map(d => {
+            const p = d.fecha.split("-");
+            return `${p[2]}/${p[1]}`;
+          }),
+          datasets: [{
+            label: 'Valor UF (CLP)',
+            data: datos.map(d => d.valor),
+            borderColor: '#2563eb',
+            borderWidth: 2.5,
+            fill: true,
+            backgroundColor: gradient,
+            pointRadius: datos.length > 60 ? 0 : 2,
+            pointHoverRadius: 5,
+            tension: 0.25
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              padding: 10,
+              titleFont: { size: 12 },
+              bodyFont: { size: 13, weight: 'bold' },
+              callbacks: {
+                label: function(context) {
+                  return "UF: " + formatoCLP.format(context.parsed.y);
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { maxTicksLimit: 12, font: { size: 11 } }
+            },
+            y: {
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                callback: function(value) {
+                  return "$" + value.toLocaleString("es-CL");
+                },
+                font: { size: 11 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function filtrarRango(dias) {
+      document.querySelectorAll("[id^='btn-']").forEach(btn => {
+        btn.className = "px-3 py-1 rounded-md text-slate-600 hover:text-slate-900 transition";
+      });
+
+      let datosFiltrados = [];
+      if (dias === 'todos') {
+        datosFiltrados = serieCompleta;
+        document.getElementById("btn-todos").className = "px-3 py-1 rounded-md bg-white shadow-sm text-blue-600 font-bold transition";
+      } else {
+        datosFiltrados = serieCompleta.slice(-dias);
+        const btn = document.getElementById(`btn-${dias}`);
+        if (btn) btn.className = "px-3 py-1 rounded-md bg-white shadow-sm text-blue-600 font-bold transition";
+      }
+
+      renderizarGrafico(datosFiltrados);
+    }
+
+    function copiarUrl(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        alert("Enlace copiado al portapapeles:\n" + url);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", inicializarDashboard);
+  </script>
+</body>
+</html>
