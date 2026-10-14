@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-14T23:56:24.228504+00:00",
+    "fecha_actualizacion_utc": "2026-10-14T23:58:59.996216+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes": "SII, Banco Central de Chile, INE, Cochilco, FRED"
   },
@@ -33,21 +33,21 @@
   "commodities": {
     "cobre": {
       "nombre": "Cobre (LME)",
-      "valor": 6.612,
+      "valor": 6.6115,
       "unidad": "US$/lb",
       "var_ww": "▲ 0,08"
     },
     "petroleo_brent": {
       "nombre": "Petróleo Brent",
-      "valor": 105.67,
+      "valor": 105.69,
       "unidad": "US$/bbl",
-      "var_ww": "▲ 1,67"
+      "var_ww": "▲ 1,69"
     },
     "petroleo_wti": {
       "nombre": "Petróleo WTI",
-      "valor": 94.79,
+      "valor": 94.77,
       "unidad": "US$/bbl",
-      "var_ww": "▲ 2,36"
+      "var_ww": "▲ 2,34"
     }
   },
   "politica_y_precios": {

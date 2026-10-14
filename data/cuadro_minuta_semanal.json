@@ -52,15 +52,15 @@
     },
     {
       "variable": "Petróleo Brent (US$/bbl)",
-      "cierre_semanal": "105,67",
-      "variacion_ww": "▲ 1,67",
+      "cierre_semanal": "105,69",
+      "variacion_ww": "▲ 1,69",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "lectura_analitica": "Sensibilidad a tensiones geopolíticas y cuotas de bombeo de la OPEP+."
     },
     {
       "variable": "Petróleo WTI (US$/bbl)",
-      "cierre_semanal": "94,79",
-      "variacion_ww": "▲ 2,36",
+      "cierre_semanal": "94,77",
+      "variacion_ww": "▲ 2,34",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "lectura_analitica": "Referencia estadounidense condicionada por inventarios de crudo en Cushing."
     },
