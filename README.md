@@ -19,13 +19,13 @@ Este proyecto resuelve ese problema de raíz:
 
 ## 📂 Archivos y Endpoints Públicos
 
-Una vez publicado en tu cuenta de GitHub (`https://github.com/<tu-usuario>/datos_economicos_chile`), los datos quedan accesibles en:
+Una vez publicado en tu cuenta de GitHub (`https://github.com/jpqb/datos_economicos_chile`), los datos quedan accesibles en:
 
 | Archivo | Formato | Propósito | Enlace Crudo de Consumo |
 | :--- | :---: | :--- | :--- |
-| `data/uf_hoy.json` | JSON | Valor de hoy, variación diaria, metadatos y proyecciones de los próximos 15 días. | `https://raw.githubusercontent.com/<tu-usuario>/datos_economicos_chile/main/data/uf_hoy.json` |
-| `data/uf_ultimo_ano.csv` | CSV | Serie histórica completa del año en curso en formato tabular limpio (*tidy data*). | `https://raw.githubusercontent.com/<tu-usuario>/datos_economicos_chile/main/data/uf_ultimo_ano.csv` |
-| `data/uf_serie_2026.csv` | CSV | Archivo versionado específico para el año 2026. | `https://raw.githubusercontent.com/<tu-usuario>/datos_economicos_chile/main/data/uf_serie_2026.csv` |
+| `data/uf_hoy.json` | JSON | Valor de hoy, variación diaria, metadatos y proyecciones de los próximos 15 días. | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_hoy.json` |
+| `data/uf_ultimo_ano.csv` | CSV | Serie histórica completa del año en curso en formato tabular limpio (*tidy data*). | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_ultimo_ano.csv` |
+| `data/uf_serie_2026.csv` | CSV | Archivo versionado específico para el año 2026. | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_serie_2026.csv` |
 
 ---
 
@@ -36,7 +36,7 @@ Una vez publicado en tu cuenta de GitHub (`https://github.com/<tu-usuario>/datos
 import requests
 
 # Consumir el valor de hoy en 2 líneas
-url = "https://raw.githubusercontent.com/<tu-usuario>/datos_economicos_chile/main/data/uf_hoy.json"
+url = "https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_hoy.json"
 datos = requests.get(url).json()
 
 print(f"Fecha: {datos['hoy']['fecha']}")
@@ -50,19 +50,19 @@ library(jsonlite)
 library(readr)
 
 # Lectura directa del JSON
-url_json <- "https://raw.githubusercontent.com/<tu-usuario>/datos_economicos_chile/main/data/uf_hoy.json"
+url_json <- "https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_hoy.json"
 uf_hoy <- fromJSON(url_json)
 cat("UF hoy:", uf_hoy$hoy$valor_clp, "\n")
 
 # Lectura directa de la serie anual en CSV
-url_csv <- "https://raw.githubusercontent.com/<tu-usuario>/datos_economicos_chile/main/data/uf_ultimo_ano.csv"
+url_csv <- "https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_ultimo_ano.csv"
 serie_anual <- read_csv(url_csv)
 head(serie_anual)
 ```
 
 ### 3. Desde JavaScript / Web
 ```javascript
-fetch("https://raw.githubusercontent.com/<tu-usuario>/datos_economicos_chile/main/data/uf_hoy.json")
+fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_hoy.json")
   .then(res => res.json())
   .then(data => {
     console.log("UF Hoy:", data.hoy.valor_clp);
@@ -111,7 +111,7 @@ Para subir este proyecto a tu GitHub:
 3. Conéctalo con tu repositorio en GitHub y haz push:
    ```bash
    git branch -M main
-   git remote add origin https://github.com/<tu-usuario>/datos_economicos_chile.git
+   git remote add origin https://github.com/jpqb/datos_economicos_chile.git
    git push -u origin main
    ```
 4. En GitHub, ve a **Settings > Actions > General > Workflow permissions** y asegúrate de marcar:
