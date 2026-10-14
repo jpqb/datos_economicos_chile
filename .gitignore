@@ -1,0 +1,29 @@
+# Entornos virtuales de Python
+.venv/
+venv/
+env/
+ENV/
+
+# Archivos de caché compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Configuración de entornos y credenciales sensibles
+.env
+.env.*
+!.env.example
+
+# IDEs y editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# NOTA: La carpeta 'data/' NO se ignora porque forma parte del modelo
+# de publicación de datos abiertos (Git-scraping / Flat Data).
