@@ -31,9 +31,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: "Ejecutar extractor oficial de la UF"
+      - name: "Ejecutar extractor macroeconómico multivariable"
         run: |
-          python src/extraer_uf.py
+          python src/extraer_indicadores.py
 
       - name: "Publicar cambios en el repositorio (Git Commit & Push)"
         run: |
@@ -46,7 +46,7 @@ jobs:
             echo "ℹ️ No se detectaron cambios en los datos. El repositorio ya está al día."
           else
             FECHA_ACTUAL=$(date +'%Y-%m-%d')
-            git commit -m "chore(datos): actualización oficial UF al $FECHA_ACTUAL [skip ci]"
+            git commit -m "chore(datos): actualización oficial de variables macroeconómicas al $FECHA_ACTUAL [skip ci]"
             git push
             echo "✅ Datos actualizados y publicados exitosamente en GitHub."
           fi

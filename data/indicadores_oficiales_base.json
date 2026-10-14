@@ -1,0 +1,40 @@
+{
+  "tpm": {
+    "nombre": "Tasa de Política Monetaria (TPM)",
+    "valor_actual": 4.50,
+    "unidad": "%",
+    "fecha_resolucion": "2026-09-08",
+    "cierre_semana_previa": 4.50,
+    "fuente_oficial": "Banco Central de Chile",
+    "documento_oficial": "Comunicado Reunión de Política Monetaria (RPM) Septiembre 2026",
+    "proxima_reunion": "2026-10-26 y 2026-10-27"
+  },
+  "ipc": {
+    "nombre": "Índice de Precios al Consumidor (IPC)",
+    "variacion_mensual_pct": 0.4,
+    "variacion_anual_pct": 4.1,
+    "acumulado_ano_pct": 4.0,
+    "mes_referencia": "Septiembre 2026",
+    "fecha_publicacion": "2026-10-08",
+    "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
+    "documento_oficial": "Boletín Estadístico Mensual IPC Septiembre 2026"
+  },
+  "desempleo": {
+    "nombre": "Tasa de Desocupación Nacional",
+    "valor_actual": 9.6,
+    "unidad": "%",
+    "trimestre_movil": "Junio - Agosto 2026",
+    "fecha_publicacion": "2026-09-30",
+    "variacion_12_meses_pp": 1.0,
+    "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
+    "documento_oficial": "Encuesta Nacional de Empleo (ENE)"
+  },
+  "imacec": {
+    "nombre": "Índice Mensual de Actividad Económica (IMACEC)",
+    "variacion_anual_pct": 2.3,
+    "mes_referencia": "Agosto 2026",
+    "fecha_publicacion": "2026-10-01",
+    "fuente_oficial": "Banco Central de Chile",
+    "documento_oficial": "Cuentas Nacionales y Actividad Económica"
+  }
+}

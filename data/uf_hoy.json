@@ -2,17 +2,15 @@
   "metadatos": {
     "unidad": "Unidad de Fomento (UF)",
     "moneda": "CLP (Pesos Chilenos)",
-    "pais": "Chile",
     "fuente_oficial": "Servicio de Impuestos Internos (SII) y Banco Central de Chile",
     "licencia": "Datos Públicos Abiertos",
-    "fecha_extraccion_utc": "2026-10-14T22:46:02.395245+00:00",
-    "nota": "Valor oficial exacto para el día de hoy."
+    "fecha_extraccion_utc": "2026-10-14T23:56:18.162489+00:00"
   },
   "hoy": {
     "fecha": "2026-10-14",
     "valor_clp": 41157.43,
-    "variacion_diaria_clp": 5.3,
-    "variacion_diaria_pct": 0.0129
+    "variacion_diaria_clp": 35283.92,
+    "variacion_diaria_pct": 0.1043
   },
   "proyecciones_publicadas_dias_siguientes": [
     {
