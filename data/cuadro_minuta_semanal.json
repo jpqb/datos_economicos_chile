@@ -18,15 +18,15 @@
     },
     {
       "variable": "Dólar Observado (USD/CLP) ($ CLP)",
-      "cierre_semanal": "984,93",
-      "variacion_ww": "▲ 12,33",
+      "cierre_semanal": "982,70",
+      "variacion_ww": "▲ 10,10",
       "fuente_oficial": "Servicio de Impuestos Internos / Banco Central",
       "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/",
       "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
     },
     {
       "variable": "Euro Observado (EUR/CLP) ($ CLP)",
-      "cierre_semanal": "1.103,02",
+      "cierre_semanal": "1.102,39",
       "variacion_ww": "▲ 17,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
       "url_fuente_oficial": "https://www.bcentral.cl",
@@ -34,7 +34,7 @@
     },
     {
       "variable": "Yuan Chino (CNY/CLP) ($ CLP)",
-      "cierre_semanal": "145,16",
+      "cierre_semanal": "147,11",
       "variacion_ww": "▲ 2,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
       "url_fuente_oficial": "https://www.bcentral.cl",
@@ -50,7 +50,7 @@
     },
     {
       "variable": "Cobre (LME / Cochilco) (US$/lb)",
-      "cierre_semanal": "6,54",
+      "cierre_semanal": "6,56",
       "variacion_ww": "▲ 0,08",
       "fuente_oficial": "Comisión Chilena del Cobre (Cochilco) / LME",
       "url_fuente_oficial": "https://www.cochilco.cl",
@@ -58,7 +58,7 @@
     },
     {
       "variable": "Petróleo Brent (US$/bbl)",
-      "cierre_semanal": "103,96",
+      "cierre_semanal": "106,14",
       "variacion_ww": "▲ 1,67",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",
@@ -66,7 +66,7 @@
     },
     {
       "variable": "Petróleo WTI (US$/bbl)",
-      "cierre_semanal": "94,08",
+      "cierre_semanal": "96,44",
       "variacion_ww": "▲ 2,36",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",
