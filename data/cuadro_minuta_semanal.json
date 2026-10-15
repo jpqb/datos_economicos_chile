@@ -58,7 +58,7 @@
     },
     {
       "variable": "Petróleo Brent (US$/bbl)",
-      "cierre_semanal": "105,65",
+      "cierre_semanal": "105,64",
       "variacion_ww": "▲ 1,67",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",
@@ -66,7 +66,7 @@
     },
     {
       "variable": "Petróleo WTI (US$/bbl)",
-      "cierre_semanal": "94,76",
+      "cierre_semanal": "94,77",
       "variacion_ww": "▲ 2,36",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",

@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-15T00:05:17.416170+00:00",
+    "fecha_actualizacion_utc": "2026-10-15T00:07:54.846066+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii": {
@@ -68,7 +68,7 @@
     },
     "petroleo_brent": {
       "nombre": "Petróleo Brent",
-      "valor": 105.65,
+      "valor": 105.64,
       "unidad": "US$/bbl",
       "var_ww": "▲ 1,67",
       "fuente": "Mercado Spot / FRED",
@@ -76,7 +76,7 @@
     },
     "petroleo_wti": {
       "nombre": "Petróleo WTI",
-      "valor": 94.76,
+      "valor": 94.77,
       "unidad": "US$/bbl",
       "var_ww": "▲ 2,36",
       "fuente": "Mercado Spot / FRED",
