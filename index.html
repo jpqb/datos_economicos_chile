@@ -76,14 +76,14 @@
           <div class="flex items-center gap-2">
             <h3 class="font-bold text-slate-900 text-lg flex items-center space-x-2">
               <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i>
-              <span>Evolución Histórica por Variable</span>
+              <span>Evolución Histórica por Variable (Año 2026)</span>
             </h3>
             <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-md">
               10 Variables
             </span>
           </div>
           <p class="text-xs text-slate-500 mt-0.5">
-            Selecciona cualquier indicador para visualizar su trayectoria histórica y su fuente oficial de emisión.
+            Trayectoria histórica oficial detallada con año y fecha exacta. Pasa el cursor sobre la curva para inspeccionar el valor individual de cada día.
           </p>
         </div>
 
@@ -146,8 +146,8 @@
               <i data-lucide="file-spreadsheet" class="w-5 h-5 text-indigo-600"></i>
               <span>Cuadro de Variables Macroeconómicas y Financieras</span>
             </h3>
-            <span class="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-md">
-              Minuta Semanal UCEN
+            <span class="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-md">
+              Cierre Semanal Oficial
             </span>
           </div>
           <p class="text-xs text-slate-500 mt-1">
@@ -276,7 +276,7 @@
   <!-- Footer -->
   <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-      <p>© 2026 Datos Económicos de Chile • Jean Paul Quinteros Brisso</p>
+      <p>© 2026 Datos Económicos de Chile • Jean Paul Quinteros Brisso (<a href="mailto:jpquinterosbrisso@gmail.com" class="text-blue-600 hover:underline">jpquinterosbrisso@gmail.com</a>)</p>
       <p>Fuentes oficiales directas: SII, Banco Central de Chile, INE, Cochilco, FRED.</p>
     </div>
   </footer>
@@ -479,7 +479,7 @@
         data: {
           labels: datos.map(d => {
             const p = d.fecha.split("-");
-            return `${p[2]}/${p[1]}`;
+            return `${p[2]}/${p[1]}/${p[0]}`; // Detalla día, mes y año (ej: 14/10/2026)
           }),
           datasets: [{
             label: `${objVar.nombre} (${unidad})`,
@@ -489,22 +489,46 @@
             fill: true,
             backgroundColor: gradient,
             pointRadius: datos.length > 50 ? 0 : 3,
-            pointHoverRadius: 6,
+            pointHoverRadius: 7,
+            pointHoverBackgroundColor: '#2563eb',
+            pointHoverBorderColor: '#ffffff',
+            pointHoverBorderWidth: 2,
+            pointHitRadius: 30, // Gran área de captura táctil y de mouse
             tension: 0.2
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false, // Permite ver el dato con solo mover el cursor horizontalmente
+          },
+          hover: {
+            mode: 'index',
+            intersect: false,
+          },
           plugins: {
             legend: { display: false },
             tooltip: {
+              enabled: true,
               backgroundColor: '#0f172a',
-              padding: 10,
+              padding: 12,
+              cornerRadius: 10,
+              titleFont: { size: 12, weight: 'bold' },
+              bodyFont: { size: 13, weight: '600' },
               callbacks: {
+                title: function(items) {
+                  if (!items.length) return '';
+                  const d = datos[items[0].dataIndex];
+                  const p = d.fecha.split('-');
+                  const fObj = new Date(p[0], p[1] - 1, p[2]);
+                  const fTexto = fObj.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                  return fTexto.charAt(0).toUpperCase() + fTexto.slice(1);
+                },
                 label: function(ctx) {
                   const val = ctx.parsed.y;
-                  if (unidad === "CLP") return `${objVar.nombre}: $${val.toLocaleString("es-CL", {minimumFractionDigits: 2})}`;
+                  if (unidad === "CLP") return `${objVar.nombre}: $${val.toLocaleString("es-CL", {minimumFractionDigits: 2})} CLP`;
                   if (unidad === "US$/lb" || unidad === "US$/bbl") return `${objVar.nombre}: US$ ${val.toFixed(2)}`;
                   if (unidad === "%") return `${objVar.nombre}: ${val.toFixed(2)}%`;
                   return `${objVar.nombre}: ${val}`;
@@ -513,7 +537,10 @@
             }
           },
           scales: {
-            x: { grid: { display: false }, ticks: { maxTicksLimit: 12, font: { size: 10 } } },
+            x: { 
+              grid: { display: false }, 
+              ticks: { maxTicksLimit: 10, font: { size: 10 } } 
+            },
             y: { 
               grid: { color: '#f1f5f9' }, 
               ticks: { 
