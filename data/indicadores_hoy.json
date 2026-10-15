@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-15T00:52:09.104577+00:00",
+    "fecha_actualizacion_utc": "2026-10-15T08:20:30.974144+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii": {
@@ -28,9 +28,9 @@
   "indicadores": {
     "uf": {
       "nombre": "Unidad de Fomento",
-      "valor": 41157.43,
+      "valor": 41162.73,
       "unidad": "CLP",
-      "var_ww": "▲ 42,89",
+      "var_ww": "▲ 39,99",
       "fuente": "Servicio de Impuestos Internos (SII)",
       "url_fuente": "https://www.sii.cl/valores_y_fechas/"
     },
@@ -52,7 +52,7 @@
     },
     "yuan": {
       "nombre": "Yuan Chino",
-      "valor": 147.44,
+      "valor": 145.16,
       "unidad": "CLP",
       "var_ww": "▲ 2,00",
       "fuente": "Banco Central / FRED",
@@ -60,7 +60,7 @@
     },
     "cobre": {
       "nombre": "Cobre (LME)",
-      "valor": 6.61,
+      "valor": 6.54,
       "unidad": "US$/lb",
       "var_ww": "▲ 0,08",
       "fuente": "Comisión Chilena del Cobre (Cochilco) / LME",
@@ -68,7 +68,7 @@
     },
     "petroleo_brent": {
       "nombre": "Petróleo Brent",
-      "valor": 105.23,
+      "valor": 103.96,
       "unidad": "US$/bbl",
       "var_ww": "▲ 1,67",
       "fuente": "Mercado Spot / FRED",
@@ -76,7 +76,7 @@
     },
     "petroleo_wti": {
       "nombre": "Petróleo WTI",
-      "valor": 94.43,
+      "valor": 94.08,
       "unidad": "US$/bbl",
       "var_ww": "▲ 2,36",
       "fuente": "Mercado Spot / FRED",

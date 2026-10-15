@@ -1,8 +1,8 @@
 {
   "metadatos": {
     "titulo": "Cuadro de Variables Macroeconómicas y Financieras",
-    "fecha_emision": "2026-10-14",
-    "semana_analizada": "2026-10-07 al 2026-10-14",
+    "fecha_emision": "2026-10-15",
+    "semana_analizada": "2026-10-08 al 2026-10-15",
     "proveedor": "Repositorio Oficial de Datos Económicos de Chile (UCEN)",
     "url_proveedor": "https://jpqb.github.io/datos_economicos_chile/",
     "licencia": "Datos Públicos Abiertos"
@@ -34,7 +34,7 @@
     },
     {
       "variable": "Yuan Chino (CNY/CLP) ($ CLP)",
-      "cierre_semanal": "147,44",
+      "cierre_semanal": "145,16",
       "variacion_ww": "▲ 2,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
       "url_fuente_oficial": "https://www.bcentral.cl",
@@ -42,15 +42,15 @@
     },
     {
       "variable": "Unidad de Fomento (UF) ($ CLP)",
-      "cierre_semanal": "41.157,43",
-      "variacion_ww": "▲ 42,89",
+      "cierre_semanal": "41.162,73",
+      "variacion_ww": "▲ 39,99",
       "fuente_oficial": "Servicio de Impuestos Internos (SII)",
       "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/",
       "lectura_analitica": "La UF mantiene su reajuste diario legal conforme a la variación del IPC reportado por el INE."
     },
     {
       "variable": "Cobre (LME / Cochilco) (US$/lb)",
-      "cierre_semanal": "6,61",
+      "cierre_semanal": "6,54",
       "variacion_ww": "▲ 0,08",
       "fuente_oficial": "Comisión Chilena del Cobre (Cochilco) / LME",
       "url_fuente_oficial": "https://www.cochilco.cl",
@@ -58,7 +58,7 @@
     },
     {
       "variable": "Petróleo Brent (US$/bbl)",
-      "cierre_semanal": "105,23",
+      "cierre_semanal": "103,96",
       "variacion_ww": "▲ 1,67",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",
@@ -66,7 +66,7 @@
     },
     {
       "variable": "Petróleo WTI (US$/bbl)",
-      "cierre_semanal": "94,43",
+      "cierre_semanal": "94,08",
       "variacion_ww": "▲ 2,36",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",
