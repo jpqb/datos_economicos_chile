@@ -207,7 +207,8 @@
     </div>
 
     <!-- 4. Centro de Descarga de Datos Históricos (Mes, Trimestre y Año) -->
-    <div id="seccion-descargas" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+    <!-- 4. Centro de Descarga de Datos Históricos (Multiselección de Categorías, Años y Periodos) -->
+    <div id="seccion-descargas" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
         <div>
           <div class="flex items-center gap-2">
@@ -220,54 +221,158 @@
             </span>
           </div>
           <p class="text-xs text-slate-500 mt-1">
-            Filtra y exporta series oficiales en <strong>CSV (formato Excel / R / Stata / Python)</strong> o <strong>JSON</strong> estructurado. Generación directa e instantánea desde el navegador.
+            Selecciona una o más categorías/variables y combina libremente con años y periodos. Exportación instantánea en <strong>CSV (Excel / Stata / R / Python)</strong> o <strong>JSON</strong>.
           </p>
+        </div>
+        <!-- Botones de Acción de Descarga -->
+        <div class="flex items-center gap-2">
+          <button onclick="ejecutarDescarga('csv')" class="inline-flex items-center space-x-1.5 text-xs font-bold py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm transition">
+            <i data-lucide="sheet" class="w-4 h-4"></i>
+            <span>Descargar CSV</span>
+          </button>
+          <button onclick="ejecutarDescarga('json')" class="inline-flex items-center space-x-1.5 text-xs font-bold py-2.5 px-4 bg-slate-800 hover:bg-slate-900 text-white rounded-lg shadow-sm transition">
+            <i data-lucide="code" class="w-4 h-4"></i>
+            <span>Descargar JSON</span>
+          </button>
         </div>
       </div>
 
-      <!-- Controles de Filtrado de Descarga -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-        <!-- 1. Variable -->
-        <div class="space-y-1.5">
-          <label class="font-semibold text-slate-700 block">Variable / Indicador:</label>
-          <select id="dl-variable" class="w-full bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 font-medium hover:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
-            <option value="todas">📦 Todas las Variables (Dataset Consolidado)</option>
-            <option value="uf">🇨🇱 Unidad de Fomento (UF)</option>
-            <option value="dolar">💵 Dólar Observado (USD/CLP)</option>
-            <option value="euro">💶 Euro Observado (EUR/CLP)</option>
-            <option value="yuan">💴 Yuan Chino (CNY/CLP)</option>
-            <option value="cobre">🪙 Cobre (LME US$/lb)</option>
-            <option value="petroleo_brent">🛢️ Petróleo Brent (US$/bbl)</option>
-            <option value="petroleo_wti">⛽ Petróleo WTI (US$/bbl)</option>
-            <option value="tpm">🏛️ TPM (Banco Central %)</option>
-            <option value="ipc">📈 Inflación Mensual IPC (%)</option>
-            <option value="desempleo">👥 Tasa Desempleo (%)</option>
-          </select>
+      <!-- 1. Selección Múltiple de Variables / Categorías -->
+      <div class="space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <label class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+            <i data-lucide="check-square" class="w-4 h-4 text-emerald-600"></i>
+            <span>1. Variables y Categorías (Selecciona una o más):</span>
+          </label>
+          <!-- Presets rápidos por categoría -->
+          <div class="inline-flex flex-wrap items-center gap-1.5 text-[11px]">
+            <button onclick="seleccionarPresetVariables('todas')" class="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">Todas (10)</button>
+            <button onclick="seleccionarPresetVariables('divisas')" class="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold transition">Solo Divisas (4)</button>
+            <button onclick="seleccionarPresetVariables('commodities')" class="px-2 py-0.5 rounded-md bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold transition">Solo Commodities (3)</button>
+            <button onclick="seleccionarPresetVariables('macro')" class="px-2 py-0.5 rounded-md bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold transition">Solo Indicadores (3)</button>
+            <button onclick="seleccionarPresetVariables('ninguna')" class="px-2 py-0.5 rounded-md bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold transition">Limpiar</button>
+          </div>
         </div>
 
-        <!-- 2. Año -->
-        <div class="space-y-1.5">
-          <label class="font-semibold text-slate-700 block">Año:</label>
-          <select id="dl-ano" class="w-full bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 font-medium hover:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
-            <option value="todos">📅 Todos los Años (2016 – 2026)</option>
-            <option value="2026">2026</option>
-            <option value="2025">2025</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
-            <option value="2019">2019</option>
-            <option value="2018">2018</option>
-            <option value="2017">2017</option>
-            <option value="2016">2016</option>
-          </select>
+        <!-- Chips interactivos con checkboxes para variables -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs">
+          <!-- Divisas -->
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="uf" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>🇨🇱 UF</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="dolar" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>💵 Dólar Obs.</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="euro" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>💶 Euro Obs.</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="yuan" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>💴 Yuan Chino</span>
+          </label>
+          <!-- Commodities -->
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="cobre" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>🪙 Cobre LME</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="petroleo_brent" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>🛢️ Petróleo Brent</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="petroleo_wti" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>⛽ Petróleo WTI</span>
+          </label>
+          <!-- Indicadores Oficiales -->
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="tpm" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>🏛️ TPM BCCh</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="ipc" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>📈 Inflación IPC</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="desempleo" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>👥 Desempleo</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 2. Filtros de Tiempo: Años y Periodos -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-1">
+        <!-- Selector de Años (Multiselección) -->
+        <div class="space-y-2 p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="flex items-center justify-between">
+            <label class="font-bold text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-blue-600"></i>
+              <span>2. Años (Selecciona uno, varios o todos):</span>
+            </label>
+            <div class="flex items-center gap-1 text-[10px]">
+              <button onclick="seleccionarPresetAnos('todos')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700">Todos</button>
+              <button onclick="seleccionarPresetAnos('2026')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700">2026</button>
+              <button onclick="seleccionarPresetAnos('3y')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700">Últimos 3</button>
+              <button onclick="seleccionarPresetAnos('5y')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700">Últimos 5</button>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-1">
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2016" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2016</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2017" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2017</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2018" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2018</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2019" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2019</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2020" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2020</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2021" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2021</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2022" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2022</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2023" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2023</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2024" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2024</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2025" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2025</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2026" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2026</span>
+            </label>
+          </div>
         </div>
 
-        <!-- 3. Periodo (Trimestre o Mes) -->
-        <div class="space-y-1.5">
-          <label class="font-semibold text-slate-700 block">Periodo Temporal:</label>
-          <select id="dl-periodo" class="w-full bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 font-medium hover:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
+        <!-- Selector de Periodo (Trimestre o Mes) -->
+        <div class="space-y-2 p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between">
+          <label class="font-bold text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <span>3. Periodo Temporal (Trimestre o Mes):</span>
+          </label>
+          <select id="dl-periodo" onchange="actualizarResumenDescarga()" class="w-full bg-white border border-slate-300 text-slate-800 rounded-lg p-2 font-medium hover:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
             <optgroup label="Año / Trimestres">
               <option value="todos">Año Completo / Rango Completo</option>
               <option value="T1">Trimestre 1 (Ene - Mar)</option>
@@ -290,30 +395,17 @@
               <option value="12">Diciembre</option>
             </optgroup>
           </select>
-        </div>
-
-        <!-- 4. Acciones de Descarga -->
-        <div class="space-y-1.5 flex flex-col justify-end">
-          <span class="font-semibold text-slate-700 block">Descargar Archivo:</span>
-          <div class="flex items-center gap-2">
-            <button onclick="ejecutarDescarga('csv')" class="flex-1 inline-flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm transition">
-              <i data-lucide="sheet" class="w-4 h-4"></i>
-              <span>Descargar CSV</span>
-            </button>
-            <button onclick="ejecutarDescarga('json')" class="flex-1 inline-flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-3 bg-slate-800 hover:bg-slate-900 text-white rounded-lg shadow-sm transition">
-              <i data-lucide="code" class="w-4 h-4"></i>
-              <span>Descargar JSON</span>
-            </button>
-          </div>
+          <span class="text-[10.5px] text-slate-400">Filtra las fechas correspondientes para todos los años marcados.</span>
         </div>
       </div>
 
       <!-- Resumen dinámico del filtro seleccionado -->
-      <div id="dl-preview" class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 flex items-center justify-between">
-        <span class="flex items-center gap-1.5">
-          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
-          <span>Los archivos CSV se generan con delimitador estándar (;) y codificación UTF-8 con BOM para doble clic directo en Microsoft Excel, LibreOffice, Stata y R sin desconfiguración de caracteres.</span>
-        </span>
+      <div id="dl-preview" class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
+          <span id="dl-preview-texto" class="font-medium">10 variables seleccionadas • 11 años (2016-2026) • Año completo</span>
+        </div>
+        <span class="text-[11px] text-slate-400">CSV delimitado por punto y coma (;) con UTF-8 BOM para Excel</span>
       </div>
     </div>
 
@@ -469,6 +561,7 @@
       await cargarCuadroMinuta();
       await cargarIndicadoresHoy();
       await cargarSeriesHistoricas();
+      actualizarResumenDescarga();
     }
 
     async function cargarCuadroMinuta() {
@@ -827,22 +920,95 @@
       renderizarGrafico(objVar, datos);
     }
 
+    function obtenerVariablesSeleccionadas() {
+      const chks = document.querySelectorAll("input[name='chk-var']:checked");
+      return Array.from(chks).map(c => c.value);
+    }
+
+    function obtenerAnosSeleccionados() {
+      const chks = document.querySelectorAll("input[name='chk-ano']:checked");
+      return Array.from(chks).map(c => c.value);
+    }
+
+    function seleccionarPresetVariables(preset) {
+      const divisas = ["uf", "dolar", "euro", "yuan"];
+      const commodities = ["cobre", "petroleo_brent", "petroleo_wti"];
+      const macro = ["tpm", "ipc", "desempleo"];
+
+      document.querySelectorAll("input[name='chk-var']").forEach(chk => {
+        if (preset === "todas") chk.checked = true;
+        else if (preset === "ninguna") chk.checked = false;
+        else if (preset === "divisas") chk.checked = divisas.includes(chk.value);
+        else if (preset === "commodities") chk.checked = commodities.includes(chk.value);
+        else if (preset === "macro") chk.checked = macro.includes(chk.value);
+      });
+      actualizarResumenDescarga();
+    }
+
+    function seleccionarPresetAnos(preset) {
+      document.querySelectorAll("input[name='chk-ano']").forEach(chk => {
+        const y = parseInt(chk.value, 10);
+        if (preset === "todos") chk.checked = true;
+        else if (preset === "2026") chk.checked = (y === 2026);
+        else if (preset === "3y") chk.checked = (y >= 2024);
+        else if (preset === "5y") chk.checked = (y >= 2022);
+      });
+      actualizarResumenDescarga();
+    }
+
+    function actualizarResumenDescarga() {
+      const vars = obtenerVariablesSeleccionadas();
+      const anos = obtenerAnosSeleccionados();
+      const per = document.getElementById("dl-periodo") ? document.getElementById("dl-periodo").value : "todos";
+
+      const lblPreview = document.getElementById("dl-preview-texto");
+      if (!lblPreview) return;
+
+      if (vars.length === 0) {
+        lblPreview.textContent = "⚠️ Ninguna variable seleccionada. Por favor marca al menos una variable.";
+        lblPreview.className = "font-medium text-rose-600";
+        return;
+      }
+      if (anos.length === 0) {
+        lblPreview.textContent = "⚠️ Ningún año seleccionado. Por favor marca al menos un año.";
+        lblPreview.className = "font-medium text-rose-600";
+        return;
+      }
+
+      lblPreview.className = "font-medium text-slate-800";
+      let textoPer = "Año completo";
+      if (per.startsWith("T")) textoPer = `Trimestre ${per.replace("T", "")}`;
+      else if (per !== "todos") textoPer = `Mes ${per}`;
+
+      const textoAnos = anos.length === 11 ? "10 años (2016-2026)" : `${anos.length} año(s) [${anos.join(', ')}]`;
+      lblPreview.textContent = `${vars.length} variable(s) seleccionada(s) • ${textoAnos} • ${textoPer}`;
+    }
+
     function ejecutarDescarga(formato) {
       if (!seriesHistoricasCheadas) {
         alert("Las series históricas se están sincronizando. Intenta en un segundo.");
         return;
       }
 
-      const varSel = document.getElementById("dl-variable").value;
-      const anoSel = document.getElementById("dl-ano").value;
-      const perSel = document.getElementById("dl-periodo").value;
+      const variablesSel = obtenerVariablesSeleccionadas();
+      const anosSel = obtenerAnosSeleccionados();
+      const perSel = document.getElementById("dl-periodo") ? document.getElementById("dl-periodo").value : "todos";
+
+      if (variablesSel.length === 0) {
+        alert("Por favor selecciona al menos una variable o categoría para descargar.");
+        return;
+      }
+      if (anosSel.length === 0) {
+        alert("Por favor selecciona al menos un año.");
+        return;
+      }
 
       function pasaFiltroFecha(fechaStr) {
         const partes = fechaStr.split("-");
         const y = partes[0];
         const m = partes[1];
 
-        if (anoSel !== "todos" && y !== anoSel) return false;
+        if (!anosSel.includes(y)) return false;
         if (perSel === "todos") return true;
         if (perSel === "T1") return ["01", "02", "03"].includes(m);
         if (perSel === "T2") return ["04", "05", "06"].includes(m);
@@ -851,14 +1017,49 @@
         return m === perSel;
       }
 
-      const nombreBase = `datos_economicos_chile_${varSel}_${anoSel}_${perSel}`;
+      const nombreBase = `datos_economicos_chile_${variablesSel.length === 1 ? variablesSel[0] : 'seleccion_' + variablesSel.length + 'vars'}_${anosSel.length === 1 ? anosSel[0] : anosSel[0] + '_' + anosSel[anosSel.length - 1]}_${perSel}`;
 
-      if (varSel === "todas") {
-        // Dataset consolidado multivariable
+      if (variablesSel.length === 1) {
+        // 1 sola variable seleccionada
+        const k = variablesSel[0];
+        const obj = seriesHistoricasCheadas[k];
+        if (!obj || !obj.serie) {
+          alert("Variable seleccionada no disponible.");
+          return;
+        }
+        const serieFiltrada = obj.serie.filter(pt => pasaFiltroFecha(pt.fecha));
+
+        if (serieFiltrada.length === 0) {
+          alert("No se encontraron observaciones para los filtros seleccionados.");
+          return;
+        }
+
+        if (formato === "json") {
+          const exportJson = {
+            metadatos: {
+              variable: obj.nombre,
+              unidad: obj.unidad,
+              fuente_oficial: obj.fuente_oficial,
+              url_fuente: obj.url_fuente,
+              anos_seleccionados: anosSel,
+              periodo: perSel,
+              total_registros: serieFiltrada.length
+            },
+            serie: serieFiltrada
+          };
+          descargarBlob(JSON.stringify(exportJson, null, 2), `${nombreBase}.json`, "application/json");
+        } else {
+          let csv = "\uFEFFFecha;Valor;Variable;Unidad;Fuente_Oficial\n";
+          serieFiltrada.forEach(pt => {
+            csv += `${pt.fecha};${pt.valor};"${obj.nombre}";"${obj.unidad}";"${obj.fuente_oficial}"\n`;
+          });
+          descargarBlob(csv, `${nombreBase}.csv`, "text/csv;charset=utf-8;");
+        }
+
+      } else {
+        // Múltiples variables seleccionadas
         const mapaFechas = {};
-        const llaves = ["uf", "dolar", "euro", "yuan", "cobre", "petroleo_brent", "petroleo_wti", "tpm", "ipc", "desempleo"];
-
-        llaves.forEach(k => {
+        variablesSel.forEach(k => {
           const obj = seriesHistoricasCheadas[k];
           if (obj && obj.serie) {
             obj.serie.forEach(pt => {
@@ -883,55 +1084,25 @@
               proveedor: "Datos Económicos de Chile (UCEN)",
               licencia: "Datos Abiertos / Dominio Público",
               fecha_exportacion: new Date().toISOString(),
-              filtro_ano: anoSel,
-              filtro_periodo: perSel,
+              variables: variablesSel.map(k => ({ key: k, nombre: seriesHistoricasCheadas[k]?.nombre, unidad: seriesHistoricasCheadas[k]?.unidad })),
+              anos_seleccionados: anosSel,
+              periodo: perSel,
               total_registros: filasConsolidadas.length
             },
             datos: filasConsolidadas
           };
           descargarBlob(JSON.stringify(exportJson, null, 2), `${nombreBase}.json`, "application/json");
         } else {
-          // CSV con UTF-8 BOM y punto y coma (;) para apertura directa en Excel
-          let csv = "\uFEFFFecha;UF;Dolar_Obs;Euro_Obs;Yuan_Chino;Cobre_LME_US_lb;Petroleo_Brent;Petroleo_WTI;TPM_pct;IPC_mensual_pct;Desempleo_pct\n";
+          // Columnas dinámicas según las variables elegidas
+          const columnas = ["Fecha", ...variablesSel.map(k => {
+            const obj = seriesHistoricasCheadas[k];
+            return obj ? obj.nombre.replace(/[\(\)\/\$]/g, "").trim().replace(/\s+/g, "_") : k;
+          })];
+
+          let csv = "\uFEFF" + columnas.join(";") + "\n";
           filasConsolidadas.forEach(f => {
-            csv += `${f.fecha};${f.uf ?? ""};${f.dolar ?? ""};${f.euro ?? ""};${f.yuan ?? ""};${f.cobre ?? ""};${f.petroleo_brent ?? ""};${f.petroleo_wti ?? ""};${f.tpm ?? ""};${f.ipc ?? ""};${f.desempleo ?? ""}\n`;
-          });
-          descargarBlob(csv, `${nombreBase}.csv`, "text/csv;charset=utf-8;");
-        }
-
-      } else {
-        // Variable individual
-        const obj = seriesHistoricasCheadas[varSel];
-        if (!obj || !obj.serie) {
-          alert("Variable seleccionada no disponible.");
-          return;
-        }
-
-        const serieFiltrada = obj.serie.filter(pt => pasaFiltroFecha(pt.fecha));
-
-        if (serieFiltrada.length === 0) {
-          alert("No se encontraron observaciones para los filtros seleccionados.");
-          return;
-        }
-
-        if (formato === "json") {
-          const exportJson = {
-            metadatos: {
-              variable: obj.nombre,
-              unidad: obj.unidad,
-              fuente_oficial: obj.fuente_oficial,
-              url_fuente: obj.url_fuente,
-              filtro_ano: anoSel,
-              filtro_periodo: perSel,
-              total_registros: serieFiltrada.length
-            },
-            serie: serieFiltrada
-          };
-          descargarBlob(JSON.stringify(exportJson, null, 2), `${nombreBase}.json`, "application/json");
-        } else {
-          let csv = "\uFEFFFecha;Valor;Variable;Unidad;Fuente_Oficial\n";
-          serieFiltrada.forEach(pt => {
-            csv += `${pt.fecha};${pt.valor};"${obj.nombre}";"${obj.unidad}";"${obj.fuente_oficial}"\n`;
+            const rowVals = [f.fecha, ...variablesSel.map(k => (f[k] !== undefined ? f[k] : ""))];
+            csv += rowVals.join(";") + "\n";
           });
           descargarBlob(csv, `${nombreBase}.csv`, "text/csv;charset=utf-8;");
         }
