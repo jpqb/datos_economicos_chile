@@ -84,7 +84,7 @@
     </div>
 
     <!-- 2. Gráfico Interactivo de Evolución Multivariable -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+    <div id="seccion-grafico" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5 transition-all duration-300">
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
         <div>
           <div class="flex items-center gap-2">
@@ -165,7 +165,7 @@
             </span>
           </div>
           <p class="text-xs text-slate-500 mt-1">
-            Convención direccional estricta (▲ Alza, ▼ Baja, ▬ Estable) y citas con enlace a cada fuente oficial.
+            Haz clic en cualquier fila para filtrar automáticamente el gráfico histórico. Convención direccional (▲ Alza, ▼ Baja, ▬ Estable) y enlaces oficiales.
           </p>
         </div>
         <div class="flex items-center gap-2 self-start sm:self-auto">
@@ -187,7 +187,7 @@
             <tr>
               <th class="py-3 px-4">Variable / Indicador</th>
               <th class="py-3 px-4">Cierre Semanal</th>
-              <th class="py-3 px-4">Var. vs. Sem. Previa (w/w)</th>
+              <th class="py-3 px-4">Var. Temporal</th>
               <th class="py-3 px-4">Fuente Oficial Específica</th>
               <th class="py-3 px-4">Lectura Analítica / Tendencia</th>
             </tr>
@@ -200,7 +200,7 @@
         </table>
       </div>
       <p class="text-[11px] text-slate-400 italic">
-        *Nota metodológica: Variaciones semanales (w/w) calculadas respecto al cierre de la semana previa disponible. Convención direccional: ▲ Alza / Aceleración, ▼ Baja / Desaceleración, ▬ Estable / Sin cambios.
+        *Pasa el cursor sobre la etiqueta de variación para conocer la periodicidad exacta (semanal w/w, mensual m/m o RPM). Haz clic en una fila para proyectar su curva en el gráfico.
       </p>
     </div>
 
@@ -211,90 +211,120 @@
         <span>Directorio de Fuentes Oficiales y Gobernanza de Datos</span>
       </h3>
       <p class="text-xs text-slate-600">
-        Cada dato publicado en este repositorio cuenta con trazabilidad directa a su institución emisora legal:
+        Cada dato publicado en este repositorio cuenta con trazabilidad institucional directa a su organismo emisor legal primario:
       </p>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1 text-xs">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1 text-xs">
         
-        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2">
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
           <div>
-            <span class="font-bold text-slate-900">Servicio de Impuestos Internos (SII)</span>
-            <p class="text-[11px] text-slate-500 mt-0.5">Publicación oficial de la tabla diaria de la UF y del Dólar Observado.</p>
-          </div>
-          <a href="https://www.sii.cl/valores_y_fechas/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1">
-            <span>Visitar portal SII</span>
-            <i data-lucide="external-link" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2">
-          <div>
-            <span class="font-bold text-slate-900">Banco Central de Chile (BCCh)</span>
-            <p class="text-[11px] text-slate-500 mt-0.5">Tasa de Política Monetaria (TPM), paridades de divisas (EUR, CNY) e IMACEC.</p>
-          </div>
-          <a href="https://www.bcentral.cl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1">
-            <span>Visitar Banco Central</span>
-            <i data-lucide="external-link" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2">
-          <div>
-            <span class="font-bold text-slate-900">Instituto Nacional de Estadísticas (INE)</span>
-            <p class="text-[11px] text-slate-500 mt-0.5">Índice de Precios al Consumidor (IPC) y Encuesta Nacional de Empleo (ENE).</p>
-          </div>
-          <a href="https://www.ine.gob.cl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1">
-            <span>Visitar portal INE</span>
-            <i data-lucide="external-link" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2">
-          <div>
-            <span class="font-bold text-slate-900">Comisión Chilena del Cobre (Cochilco)</span>
-            <p class="text-[11px] text-slate-500 mt-0.5">Cotización spot de la libra de cobre físico en el London Metal Exchange (LME).</p>
-          </div>
-          <a href="https://www.cochilco.cl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1">
-            <span>Visitar Cochilco</span>
-            <i data-lucide="external-link" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2">
-          <div>
-            <span class="font-bold text-slate-900">Federal Reserve Bank of St. Louis (FRED)</span>
-            <p class="text-[11px] text-slate-500 mt-0.5">Series mundiales de Petróleo crudo (Brent / WTI) y tipos de cambio spot.</p>
-          </div>
-          <a href="https://fred.stlouisfed.org" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1">
-            <span>Visitar portal FRED</span>
-            <i data-lucide="external-link" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2">
-          <div>
-            <span class="font-bold text-slate-900">Repositorio Abierto GitHub</span>
-            <p class="text-[11px] text-slate-500 mt-0.5">Código abierto, workflows de GitHub Actions y persistencia diaria.</p>
-          </div>
-          <a href="https://github.com/jpqb/datos_economicos_chile" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1">
-            <span>Ver código en GitHub</span>
-            <i data-lucide="external-link" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div class="p-3.5 bg-emerald-50/70 rounded-xl border border-emerald-200 flex flex-col justify-between space-y-2">
-          <div>
-            <div class="flex items-center gap-1.5">
-              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-700"></i>
-              <span class="font-bold text-slate-900">Garantía de Disponibilidad (SLA 99.9%)</span>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="building-2" class="w-4 h-4 text-blue-600"></i>
+              <span>Servicio de Impuestos Internos (SII)</span>
             </div>
-            <p class="text-[11px] text-slate-600 mt-1">
-              El <strong>Service Level Agreement (SLA)</strong> certifica un 99,9% de tiempo en línea sin caídas. Al distribuirse como archivos estáticos en la CDN global de GitHub (Flat Data), nunca se satura por consultas recurrentes.
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Organismo fiscalizador tributario del Estado de Chile. Por mandato legal y normativo, publica y certifica diariamente los valores oficiales de la <strong>Unidad de Fomento (UF)</strong> conforme al IPC, y el tipo de cambio oficial del <strong>Dólar Observado</strong> para valorizaciones tributarias y contables.
             </p>
           </div>
-          <span class="text-emerald-700 font-semibold text-[11px] flex items-center gap-1">
+          <a href="https://www.sii.cl/valores_y_fechas/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Portal Oficial SII (Valores y Fechas)</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="landmark" class="w-4 h-4 text-indigo-600"></i>
+              <span>Banco Central de Chile (BCCh)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Institución autónoma de rango constitucional encargada de velar por la estabilidad monetaria y financiera nacional. Determina la <strong>Tasa de Política Monetaria (TPM)</strong> en sus reuniones oficiales (RPM) y emite las paridades cambiarias de divisas de reserva (EUR, CNY, USD) y el IMACEC.
+            </p>
+          </div>
+          <a href="https://www.bcentral.cl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Base de Datos Estadísticos (BDE) BCCh</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="bar-chart-3" class="w-4 h-4 text-amber-600"></i>
+              <span>Instituto Nacional de Estadísticas (INE)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Órgano técnico rector de las estadísticas públicas nacionales de Chile. Diseña, recopila y publica mensualmente el <strong>Índice de Precios al Consumidor (IPC)</strong> que rige la inflación oficial, así como la <strong>Encuesta Nacional de Empleo (ENE)</strong> que cuantifica la tasa de desempleo por trimestre móvil.
+            </p>
+          </div>
+          <a href="https://www.ine.gob.cl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Portal Estadístico Oficial INE</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="layers" class="w-4 h-4 text-amber-700"></i>
+              <span>Comisión Chilena del Cobre (Cochilco)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Agencia técnica especializada del Estado de Chile asesora en materias mineras. Monitorea y certifica diariamente la cotización spot internacional de la <strong>libra de cobre físico Grado A</strong> transada en la Bolsa de Metales de Londres (LME), termómetro vital para el fisco y la balanza comercial.
+            </p>
+          </div>
+          <a href="https://www.cochilco.cl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Estadísticas Mineras de Cochilco</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="globe" class="w-4 h-4 text-emerald-600"></i>
+              <span>Federal Reserve Bank of St. Louis (FRED)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              División de investigación y datos de la Reserva Federal de EE.UU. Es uno de los repositorios macroeconómicos más confiables del mundo; consolida las cotizaciones spot y de contratos de crudo de referencia mundial (<strong>Petróleo Brent y Petróleo WTI</strong>) e índices de paridad multilateral.
+            </p>
+          </div>
+          <a href="https://fred.stlouisfed.org" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Plataforma Federal Reserve Economic Data</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="github" class="w-4 h-4 text-slate-900"></i>
+              <span>Infraestructura Abierta GitHub (Flat Data)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Plataforma global donde opera el código fuente, la auditoría y los flujos desatendidos de <strong>GitHub Actions</strong> (dos ejecuciones diarias). Los datos se publican como archivos JSON estáticos inmutables en la red perimetral CDN mundial, garantizando reproducibilidad total.
+            </p>
+          </div>
+          <a href="https://github.com/jpqb/datos_economicos_chile" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Repositorio y Flujos de Automatización</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-emerald-50/70 rounded-xl border border-emerald-200 flex flex-col justify-between space-y-2.5 sm:col-span-2 lg:col-span-3">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-700"></i>
+              <span>Garantía de Nivel de Servicio (SLA 99.9% de Alta Disponibilidad)</span>
+            </div>
+            <p class="text-[11px] text-slate-700 mt-1.5 leading-relaxed">
+              El <strong>Service Level Agreement (SLA 99.9%)</strong> asegura que el servicio permanece accesible de manera ininterrumpida. A diferencia de APIs dinámicas que sufren caídas por saturación de servidores o límites de cuotas de consulta (rate limits), esta arquitectura estática alojada en la nube CDN global de GitHub permite que aplicaciones externas, modelos analíticos y la Minuta Semanal consuman datos con latencia mínima y confiabilidad absoluta.
+            </p>
+          </div>
+          <span class="text-emerald-700 font-semibold text-[11px] flex items-center gap-1 pt-1">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Alta disponibilidad garantizada</span>
+            <span>Certificación de alta disponibilidad y disponibilidad continua</span>
           </span>
         </div>
 
@@ -305,9 +335,8 @@
 
   <!-- Footer -->
   <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-center">
       <p>© 2026 Datos Económicos de Chile • Jean Paul Quinteros Brisso (<a href="mailto:jpquinterosbrisso@gmail.com" class="text-blue-600 hover:underline">jpquinterosbrisso@gmail.com</a>)</p>
-      <p>Fuentes oficiales directas: SII, Banco Central de Chile, INE, Cochilco, FRED.</p>
     </div>
   </footer>
 
@@ -345,24 +374,49 @@
         tbody.innerHTML = "";
 
         data.indicadores.forEach(ind => {
+          const clave = detectarClaveVariable(ind.variable);
+          const tipInfo = obtenerTooltipTabla(ind.variable);
+
           const tr = document.createElement("tr");
-          tr.className = "hover:bg-slate-50/80 transition";
+          tr.className = "hover:bg-blue-50/60 transition cursor-pointer group";
+          tr.title = `Haz clic para proyectar ${ind.variable} en el gráfico histórico`;
+          if (clave) {
+            tr.onclick = (e) => {
+              if (e.target.closest("a")) return;
+              seleccionarVariableYScroll(clave);
+            };
+          }
 
           let colorBadge = "bg-slate-100 text-slate-700";
           if (ind.variacion_ww.includes("▲")) colorBadge = "bg-emerald-50 text-emerald-700 border border-emerald-200";
           if (ind.variacion_ww.includes("▼")) colorBadge = "bg-rose-50 text-rose-700 border border-rose-200";
 
           const enlaceFuente = ind.url_fuente_oficial 
-            ? `<a href="${ind.url_fuente_oficial}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline flex items-center gap-1">${ind.fuente_oficial} <i data-lucide="external-link" class="w-3 h-3 inline"></i></a>`
+            ? `<a href="${ind.url_fuente_oficial}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="text-blue-600 hover:underline flex items-center gap-1">${ind.fuente_oficial} <i data-lucide="external-link" class="w-3 h-3 inline"></i></a>`
             : ind.fuente_oficial;
 
           tr.innerHTML = `
-            <td class="py-3 px-4 font-semibold text-slate-900">${ind.variable}</td>
+            <td class="py-3 px-4 font-semibold text-slate-900">
+              <div class="flex items-center justify-between gap-2">
+                <span class="group-hover:text-blue-600 transition">${ind.variable}</span>
+                <i data-lucide="trending-up" class="w-3.5 h-3.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></i>
+              </div>
+            </td>
             <td class="py-3 px-4 font-bold text-slate-950">${ind.cierre_semanal}</td>
             <td class="py-3 px-4">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold ${colorBadge}">
-                ${ind.variacion_ww}
-              </span>
+              <div class="relative group/tip inline-flex">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold ${colorBadge} cursor-help gap-1">
+                  <span>${ind.variacion_ww}</span>
+                  <i data-lucide="help-circle" class="w-2.5 h-2.5 opacity-60"></i>
+                </span>
+                <div class="absolute bottom-full left-0 mb-1.5 w-60 p-2.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-2xl opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-50 leading-relaxed border border-slate-700">
+                  <div class="font-bold text-blue-400 mb-0.5 flex items-center gap-1">
+                    <i data-lucide="clock" class="w-3 h-3"></i>
+                    <span>${tipInfo.titulo}</span>
+                  </div>
+                  <p class="text-slate-300 text-[10.5px]">${tipInfo.desc}</p>
+                </div>
+              </div>
             </td>
             <td class="py-3 px-4 text-slate-600">${enlaceFuente}</td>
             <td class="py-3 px-4 text-slate-600 text-[11px] leading-relaxed max-w-xs">${ind.lectura_analitica}</td>
@@ -394,38 +448,128 @@
 
         const indMap = data.indicadores;
         const cardsConfig = [
-          { key: "uf", titulo: "UF", valor: `$${indMap.uf.valor.toLocaleString("es-CL", {minimumFractionDigits: 2})}`, sub: "Pesos Chilenos", var: indMap.uf.var_ww, icon: "badge-percent", fuente: indMap.uf.fuente, url: indMap.uf.url_fuente },
-          { key: "dolar", titulo: "Dólar Obs.", valor: `$${indMap.dolar.valor.toFixed(2)}`, sub: "USD / CLP", var: indMap.dolar.var_ww, icon: "dollar-sign", fuente: indMap.dolar.fuente, url: indMap.dolar.url_fuente },
-          { key: "euro", titulo: "Euro Obs.", valor: `$${indMap.euro.valor.toFixed(2)}`, sub: "EUR / CLP", var: indMap.euro.var_ww, icon: "euro", fuente: indMap.euro.fuente, url: indMap.euro.url_fuente },
-          { key: "cobre", titulo: "Cobre (LME)", valor: `US$ ${indMap.cobre.valor.toFixed(2)}`, sub: "Por libra física", var: indMap.cobre.var_ww, icon: "layers", fuente: indMap.cobre.fuente, url: indMap.cobre.url_fuente },
-          { key: "petroleo_brent", titulo: "Petróleo Brent", valor: `US$ ${indMap.petroleo_brent.valor.toFixed(2)}`, sub: "Por barril", var: indMap.petroleo_brent.var_ww, icon: "droplet", fuente: indMap.petroleo_brent.fuente, url: indMap.petroleo_brent.url_fuente },
-          { key: "tpm", titulo: "TPM", valor: `${indMap.tpm.valor}%`, sub: "Tasa Banco Central", var: "▬ Estable", icon: "percent", fuente: indMap.tpm.fuente, url: indMap.tpm.url_fuente },
-          { key: "ipc_mensual", titulo: "IPC Mensual", valor: `+${indMap.ipc_mensual.valor}%`, sub: "Septiembre 2026", var: "INE Oficial", icon: "trending-up", fuente: indMap.ipc_mensual.fuente, url: indMap.ipc_mensual.url_fuente },
-          { key: "desempleo", titulo: "Desempleo", valor: `${indMap.desempleo.valor}%`, sub: "Trimestre Jun-Ago", var: "ENE - INE", icon: "users", fuente: indMap.desempleo.fuente, url: indMap.desempleo.url_fuente },
-          { key: "yuan", titulo: "Yuan Chino", valor: `$${indMap.yuan.valor.toFixed(2)}`, sub: "CNY / CLP", var: indMap.yuan.var_ww, icon: "coins", fuente: indMap.yuan.fuente, url: indMap.yuan.url_fuente },
-          { key: "petroleo_wti", titulo: "Petróleo WTI", valor: `US$ ${indMap.petroleo_wti.valor.toFixed(2)}`, sub: "Por barril", var: indMap.petroleo_wti.var_ww, icon: "fuel", fuente: indMap.petroleo_wti.fuente, url: indMap.petroleo_wti.url_fuente },
+          { 
+            key: "uf", serieKey: "uf", titulo: "UF", 
+            valor: `$${indMap.uf.valor.toLocaleString("es-CL", {minimumFractionDigits: 2})}`, 
+            sub: "Pesos Chilenos", var: indMap.uf.var_ww, icon: "badge-percent", 
+            fuente: indMap.uf.fuente, url: indMap.uf.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Reajuste diario oficial acumulado en los últimos 7 días corridos, calculado según la variación legal del IPC."
+          },
+          { 
+            key: "dolar", serieKey: "dolar", titulo: "Dólar Obs.", 
+            valor: `$${indMap.dolar.valor.toFixed(2)}`, 
+            sub: "USD / CLP", var: indMap.dolar.var_ww, icon: "dollar-sign", 
+            fuente: indMap.dolar.fuente, url: indMap.dolar.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Variación absoluta y porcentual en 7 días del tipo de cambio oficial reportado por el SII y Banco Central."
+          },
+          { 
+            key: "euro", serieKey: "euro", titulo: "Euro Obs.", 
+            valor: `$${indMap.euro.valor.toFixed(2)}`, 
+            sub: "EUR / CLP", var: indMap.euro.var_ww, icon: "euro", 
+            fuente: indMap.euro.fuente, url: indMap.euro.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Variación a 7 días de la paridad cambiaria EUR/CLP fijada por el Banco Central de Chile y FRED."
+          },
+          { 
+            key: "cobre", serieKey: "cobre", titulo: "Cobre (LME)", 
+            valor: `US$ ${indMap.cobre.valor.toFixed(2)}`, 
+            sub: "Por libra física", var: indMap.cobre.var_ww, icon: "layers", 
+            fuente: indMap.cobre.fuente, url: indMap.cobre.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Comportamiento en 7 días de la libra de cobre físico Grado A transado en la Bolsa de Metales de Londres."
+          },
+          { 
+            key: "petroleo_brent", serieKey: "petroleo_brent", titulo: "Petróleo Brent", 
+            valor: `US$ ${indMap.petroleo_brent.valor.toFixed(2)}`, 
+            sub: "Por barril", var: indMap.petroleo_brent.var_ww, icon: "droplet", 
+            fuente: indMap.petroleo_brent.fuente, url: indMap.petroleo_brent.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Variación a 7 días del crudo de referencia europea (Mar del Norte / FRED)."
+          },
+          { 
+            key: "tpm", serieKey: "tpm", titulo: "TPM", 
+            valor: `${indMap.tpm.valor}%`, 
+            sub: "Tasa Banco Central", var: "▬ Estable", icon: "percent", 
+            fuente: indMap.tpm.fuente, url: indMap.tpm.url_fuente,
+            tipTitulo: "Variación por Reunión (RPM)",
+            tipDesc: "Tasa de Política Monetaria acordada por el Consejo del Banco Central en su última reunión oficial."
+          },
+          { 
+            key: "ipc_mensual", serieKey: "ipc", titulo: "IPC Mensual", 
+            valor: `+${indMap.ipc_mensual.valor}%`, 
+            sub: "Septiembre 2026", var: "INE Oficial", icon: "trending-up", 
+            fuente: indMap.ipc_mensual.fuente, url: indMap.ipc_mensual.url_fuente,
+            tipTitulo: "Variación Mensual (m/m)",
+            tipDesc: "Variación porcentual mensual oficial del Índice de Precios al Consumidor reportada por el INE."
+          },
+          { 
+            key: "desempleo", serieKey: "desempleo", titulo: "Desempleo", 
+            valor: `${indMap.desempleo.valor}%`, 
+            sub: "Trimestre Jun-Ago", var: "ENE - INE", icon: "users", 
+            fuente: indMap.desempleo.fuente, url: indMap.desempleo.url_fuente,
+            tipTitulo: "Variación por Trimestre Móvil",
+            tipDesc: "Tasa de desocupación estimada para el último trimestre móvil por la Encuesta Nacional de Empleo (ENE)."
+          },
+          { 
+            key: "yuan", serieKey: "yuan", titulo: "Yuan Chino", 
+            valor: `$${indMap.yuan.valor.toFixed(2)}`, 
+            sub: "CNY / CLP", var: indMap.yuan.var_ww, icon: "coins", 
+            fuente: indMap.yuan.fuente, url: indMap.yuan.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Variación a 7 días del Yuan chino respecto al peso chileno (Banco Central / FRED)."
+          },
+          { 
+            key: "petroleo_wti", serieKey: "petroleo_wti", titulo: "Petróleo WTI", 
+            valor: `US$ ${indMap.petroleo_wti.valor.toFixed(2)}`, 
+            sub: "Por barril", var: indMap.petroleo_wti.var_ww, icon: "fuel", 
+            fuente: indMap.petroleo_wti.fuente, url: indMap.petroleo_wti.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Variación a 7 días del crudo West Texas Intermediate estadounidense de referencia spot."
+          },
         ];
 
         cardsConfig.forEach(c => {
           const cardEl = document.createElement("div");
-          cardEl.className = "p-4 bg-white border border-slate-200/90 rounded-2xl shadow-sm hover:border-blue-400 hover:shadow-md transition flex flex-col justify-between";
+          cardEl.className = "p-4 bg-white border border-slate-200/90 rounded-2xl shadow-sm hover:border-blue-500 hover:shadow-md transition cursor-pointer group flex flex-col justify-between";
+          cardEl.title = `Haz clic para proyectar ${c.titulo} en el gráfico histórico`;
+          cardEl.onclick = (e) => {
+            if (e.target.closest("a")) return;
+            seleccionarVariableYScroll(c.serieKey);
+          };
 
-          let colorVar = "text-slate-500 bg-slate-50";
-          if (c.var.includes("▲")) colorVar = "text-emerald-700 bg-emerald-50";
-          if (c.var.includes("▼")) colorVar = "text-rose-700 bg-rose-50";
+          let colorVar = "text-slate-600 bg-slate-100";
+          if (c.var.includes("▲")) colorVar = "text-emerald-700 bg-emerald-50 border border-emerald-200";
+          if (c.var.includes("▼")) colorVar = "text-rose-700 bg-rose-50 border border-rose-200";
 
           cardEl.innerHTML = `
             <div>
               <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
-                <span>${c.titulo}</span>
-                <i data-lucide="${c.icon}" class="w-4 h-4 text-slate-400"></i>
+                <span class="group-hover:text-blue-600 transition flex items-center gap-1">
+                  ${c.titulo}
+                  <i data-lucide="trending-up" class="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                </span>
+                <i data-lucide="${c.icon}" class="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition"></i>
               </div>
               <div class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1 tracking-tight">${c.valor}</div>
               <div class="text-[11px] text-slate-400 font-medium">${c.sub}</div>
             </div>
             <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
-              <span class="font-semibold px-2 py-0.5 rounded ${colorVar}">${c.var}</span>
-              <a href="${c.url}" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-blue-600 truncate max-w-[80px]" title="Fuente: ${c.fuente}">
+              <div class="relative group/tip inline-flex">
+                <span class="font-semibold px-2 py-0.5 rounded ${colorVar} cursor-help flex items-center gap-1">
+                  <span>${c.var}</span>
+                  <i data-lucide="help-circle" class="w-2.5 h-2.5 opacity-60"></i>
+                </span>
+                <div class="absolute bottom-full left-0 mb-2 w-56 p-2.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-2xl opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-50 leading-relaxed border border-slate-700">
+                  <div class="font-bold text-blue-400 mb-0.5 flex items-center gap-1">
+                    <i data-lucide="clock" class="w-3 h-3"></i>
+                    <span>${c.tipTitulo}</span>
+                  </div>
+                  <p class="text-slate-300 text-[10.5px]">${c.tipDesc}</p>
+                </div>
+              </div>
+              <a href="${c.url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="text-slate-400 hover:text-blue-600 truncate max-w-[80px]" title="Fuente: ${c.fuente}">
                 ${c.fuente.split('(')[0].trim()}
               </a>
             </div>
@@ -436,6 +580,71 @@
 
       } catch (err) {
         console.error("Error al cargar indicadores hoy:", err);
+      }
+    }
+
+    function detectarClaveVariable(nombre) {
+      if (!nombre) return null;
+      const s = nombre.toLowerCase();
+      if (s.includes("uf") || s.includes("fomento")) return "uf";
+      if (s.includes("dólar") || s.includes("dolar") || s.includes("usd")) return "dolar";
+      if (s.includes("euro") || s.includes("eur")) return "euro";
+      if (s.includes("yuan") || s.includes("cny")) return "yuan";
+      if (s.includes("cobre")) return "cobre";
+      if (s.includes("brent")) return "petroleo_brent";
+      if (s.includes("wti")) return "petroleo_wti";
+      if (s.includes("tpm") || s.includes("política") || s.includes("politica")) return "tpm";
+      if (s.includes("ipc") || s.includes("inflación") || s.includes("inflacion")) return "ipc";
+      if (s.includes("desempleo") || s.includes("empleo")) return "desempleo";
+      return null;
+    }
+
+    function obtenerTooltipTabla(variable) {
+      const s = (variable || "").toLowerCase();
+      if (s.includes("tpm")) {
+        return {
+          titulo: "Variación por Reunión (RPM)",
+          desc: "Decisión del Consejo del Banco Central de Chile acordada en la Reunión de Política Monetaria."
+        };
+      }
+      if (s.includes("ipc")) {
+        return {
+          titulo: "Variación Mensual (m/m)",
+          desc: "Variación porcentual mensual oficial del Índice de Precios al Consumidor calculada por el INE."
+        };
+      }
+      if (s.includes("desempleo")) {
+        return {
+          titulo: "Variación Trimestre Móvil",
+          desc: "Tasa de desocupación estimada para el último trimestre móvil por la Encuesta Nacional de Empleo (ENE)."
+        };
+      }
+      if (s.includes("uf")) {
+        return {
+          titulo: "Variación Semanal (w/w)",
+          desc: "Reajuste diario acumulado en 7 días corridos conforme a la fórmula legal indexada al IPC."
+        };
+      }
+      return {
+        titulo: "Variación Semanal (w/w)",
+        desc: "Variación porcentual calculada respecto al cierre del ciclo semanal anterior disponible."
+      };
+    }
+
+    function seleccionarVariableYScroll(key) {
+      if (!key) return;
+      variableActual = key;
+      const select = document.getElementById("select-variable");
+      if (select) select.value = key;
+      actualizarGrafico();
+
+      const seccion = document.getElementById("seccion-grafico");
+      if (seccion) {
+        seccion.scrollIntoView({ behavior: "smooth", block: "center" });
+        seccion.classList.add("ring-2", "ring-blue-500", "shadow-lg");
+        setTimeout(() => {
+          seccion.classList.remove("ring-2", "ring-blue-500", "shadow-lg");
+        }, 1200);
       }
     }
 
