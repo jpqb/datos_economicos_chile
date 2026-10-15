@@ -34,7 +34,7 @@
     },
     {
       "variable": "Yuan Chino (CNY/CLP) ($ CLP)",
-      "cierre_semanal": "147,22",
+      "cierre_semanal": "147,44",
       "variacion_ww": "▲ 2,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
       "url_fuente_oficial": "https://www.bcentral.cl",
@@ -58,7 +58,7 @@
     },
     {
       "variable": "Petróleo Brent (US$/bbl)",
-      "cierre_semanal": "105,64",
+      "cierre_semanal": "105,23",
       "variacion_ww": "▲ 1,67",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",
@@ -66,7 +66,7 @@
     },
     {
       "variable": "Petróleo WTI (US$/bbl)",
-      "cierre_semanal": "94,77",
+      "cierre_semanal": "94,43",
       "variacion_ww": "▲ 2,36",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",

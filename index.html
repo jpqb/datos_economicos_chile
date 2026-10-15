@@ -90,14 +90,14 @@
           <div class="flex items-center gap-2">
             <h3 class="font-bold text-slate-900 text-lg flex items-center space-x-2">
               <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i>
-              <span>Evolución Histórica por Variable (Año 2026)</span>
+              <span>Evolución Histórica por Variable (2016 – 2026)</span>
             </h3>
             <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-md">
-              10 Variables
+              10 Años Oficiales
             </span>
           </div>
           <p class="text-xs text-slate-500 mt-0.5">
-            Trayectoria histórica oficial detallada con año y fecha exacta. Pasa el cursor sobre la curva para inspeccionar el valor individual de cada día.
+            Trayectoria histórica oficial consolidada. Pasa el cursor sobre la curva para inspeccionar el valor individual de cada fecha o utiliza los rangos predefinidos.
           </p>
         </div>
 
@@ -127,7 +127,9 @@
           <div class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-50 text-xs font-semibold">
             <button onclick="filtrarRango(30)" id="btn-30" class="px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">30D</button>
             <button onclick="filtrarRango(90)" id="btn-90" class="px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">90D</button>
-            <button onclick="filtrarRango('todos')" id="btn-todos" class="px-2.5 py-1 rounded-md bg-white shadow-sm text-blue-600 font-bold transition">Todo</button>
+            <button onclick="filtrarRango('1y')" id="btn-1y" class="px-2.5 py-1 rounded-md bg-white shadow-sm text-blue-600 font-bold transition">1A</button>
+            <button onclick="filtrarRango('5y')" id="btn-5y" class="px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">5A</button>
+            <button onclick="filtrarRango('todos')" id="btn-todos" class="px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">10A (Todo)</button>
           </div>
         </div>
       </div>
@@ -204,7 +206,118 @@
       </p>
     </div>
 
-    <!-- 4. Directorio de Fuentes Oficiales y Gobernanza -->
+    <!-- 4. Centro de Descarga de Datos Históricos (Mes, Trimestre y Año) -->
+    <div id="seccion-descargas" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-bold text-slate-900 text-lg flex items-center space-x-2">
+              <i data-lucide="download-cloud" class="w-5 h-5 text-emerald-600"></i>
+              <span>Centro de Descarga de Datos Históricos (2016 – 2026)</span>
+            </h3>
+            <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md">
+              10 Años Disponibles
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">
+            Filtra y exporta series oficiales en <strong>CSV (formato Excel / R / Stata / Python)</strong> o <strong>JSON</strong> estructurado. Generación directa e instantánea desde el navegador.
+          </p>
+        </div>
+      </div>
+
+      <!-- Controles de Filtrado de Descarga -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+        <!-- 1. Variable -->
+        <div class="space-y-1.5">
+          <label class="font-semibold text-slate-700 block">Variable / Indicador:</label>
+          <select id="dl-variable" class="w-full bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 font-medium hover:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
+            <option value="todas">📦 Todas las Variables (Dataset Consolidado)</option>
+            <option value="uf">🇨🇱 Unidad de Fomento (UF)</option>
+            <option value="dolar">💵 Dólar Observado (USD/CLP)</option>
+            <option value="euro">💶 Euro Observado (EUR/CLP)</option>
+            <option value="yuan">💴 Yuan Chino (CNY/CLP)</option>
+            <option value="cobre">🪙 Cobre (LME US$/lb)</option>
+            <option value="petroleo_brent">🛢️ Petróleo Brent (US$/bbl)</option>
+            <option value="petroleo_wti">⛽ Petróleo WTI (US$/bbl)</option>
+            <option value="tpm">🏛️ TPM (Banco Central %)</option>
+            <option value="ipc">📈 Inflación Mensual IPC (%)</option>
+            <option value="desempleo">👥 Tasa Desempleo (%)</option>
+          </select>
+        </div>
+
+        <!-- 2. Año -->
+        <div class="space-y-1.5">
+          <label class="font-semibold text-slate-700 block">Año:</label>
+          <select id="dl-ano" class="w-full bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 font-medium hover:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
+            <option value="todos">📅 Todos los Años (2016 – 2026)</option>
+            <option value="2026">2026 (En curso)</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020 (Shock Covid)</option>
+            <option value="2019">2019</option>
+            <option value="2018">2018</option>
+            <option value="2017">2017</option>
+            <option value="2016">2016</option>
+          </select>
+        </div>
+
+        <!-- 3. Periodo (Trimestre o Mes) -->
+        <div class="space-y-1.5">
+          <label class="font-semibold text-slate-700 block">Periodo Temporal:</label>
+          <select id="dl-periodo" class="w-full bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 font-medium hover:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
+            <optgroup label="Año / Trimestres">
+              <option value="todos">Año Completo / Rango Completo</option>
+              <option value="T1">Trimestre 1 (Ene - Mar)</option>
+              <option value="T2">Trimestre 2 (Abr - Jun)</option>
+              <option value="T3">Trimestre 3 (Jul - Sep)</option>
+              <option value="T4">Trimestre 4 (Oct - Dic)</option>
+            </optgroup>
+            <optgroup label="Mes Específico">
+              <option value="01">Enero</option>
+              <option value="02">Febrero</option>
+              <option value="03">Marzo</option>
+              <option value="04">Abril</option>
+              <option value="05">Mayo</option>
+              <option value="06">Junio</option>
+              <option value="07">Julio</option>
+              <option value="08">Agosto</option>
+              <option value="09">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- 4. Acciones de Descarga -->
+        <div class="space-y-1.5 flex flex-col justify-end">
+          <span class="font-semibold text-slate-700 block">Descargar Archivo:</span>
+          <div class="flex items-center gap-2">
+            <button onclick="ejecutarDescarga('csv')" class="flex-1 inline-flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm transition">
+              <i data-lucide="sheet" class="w-4 h-4"></i>
+              <span>Descargar CSV</span>
+            </button>
+            <button onclick="ejecutarDescarga('json')" class="flex-1 inline-flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-3 bg-slate-800 hover:bg-slate-900 text-white rounded-lg shadow-sm transition">
+              <i data-lucide="code" class="w-4 h-4"></i>
+              <span>Descargar JSON</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen dinámico del filtro seleccionado -->
+      <div id="dl-preview" class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 flex items-center justify-between">
+        <span class="flex items-center gap-1.5">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+          <span>Los archivos CSV se generan con delimitador estándar (;) y codificación UTF-8 con BOM para doble clic directo en Microsoft Excel, LibreOffice, Stata y R sin desconfiguración de caracteres.</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- 5. Directorio de Fuentes Oficiales y Gobernanza -->
     <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
       <h3 class="font-bold text-slate-900 text-base flex items-center space-x-2">
         <i data-lucide="shield-check" class="w-5 h-5 text-emerald-600"></i>
@@ -345,7 +458,7 @@
     let chartInstance = null;
     let seriesHistoricasCheadas = null;
     let variableActual = "uf";
-    let rangoActual = "todos";
+    let rangoActual = "1y";
     let datosMinutaCacheados = null;
 
     const formatoCLP = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", minimumFractionDigits: 2 });
@@ -693,23 +806,148 @@
       const lnk = document.getElementById("lnk-fuente-grafico");
       lnk.href = objVar.url_fuente || "#";
 
-      // Aplicar filtro de rango temporal inteligente (adaptativo a series diarias o mensuales)
+      // Aplicar filtro de rango temporal adaptativo a 10 años
       if (rangoActual !== "todos") {
-        const dias = parseInt(rangoActual, 10);
-        if (datos.length <= 20) {
-          // Variables de periodicidad mensual / por reunión (IPC, Desempleo, TPM)
-          if (dias === 30) {
-            datos = datos.slice(-2); // Último mes y previo (para contrastar la variación del mes)
-          } else if (dias === 90) {
-            datos = datos.slice(-4); // Último trimestre (4 observaciones mensuales)
-          }
+        if (rangoActual === "1y") {
+          datos = datos.length <= 150 ? datos.slice(-12) : datos.slice(-365);
+        } else if (rangoActual === "5y") {
+          datos = datos.length <= 150 ? datos.slice(-60) : datos.slice(-365 * 5);
         } else {
-          // Variables de frecuencia diaria (UF, Dólar, Euro, Cobre, Petróleo, Yuan)
-          datos = datos.slice(-dias);
+          const dias = parseInt(rangoActual, 10);
+          if (datos.length <= 150) {
+            if (dias === 30) datos = datos.slice(-2);
+            else if (dias === 90) datos = datos.slice(-4);
+            else datos = datos.slice(-dias);
+          } else {
+            datos = datos.slice(-dias);
+          }
         }
       }
 
       renderizarGrafico(objVar, datos);
+    }
+
+    function ejecutarDescarga(formato) {
+      if (!seriesHistoricasCheadas) {
+        alert("Las series históricas se están sincronizando. Intenta en un segundo.");
+        return;
+      }
+
+      const varSel = document.getElementById("dl-variable").value;
+      const anoSel = document.getElementById("dl-ano").value;
+      const perSel = document.getElementById("dl-periodo").value;
+
+      function pasaFiltroFecha(fechaStr) {
+        const partes = fechaStr.split("-");
+        const y = partes[0];
+        const m = partes[1];
+
+        if (anoSel !== "todos" && y !== anoSel) return false;
+        if (perSel === "todos") return true;
+        if (perSel === "T1") return ["01", "02", "03"].includes(m);
+        if (perSel === "T2") return ["04", "05", "06"].includes(m);
+        if (perSel === "T3") return ["07", "08", "09"].includes(m);
+        if (perSel === "T4") return ["10", "11", "12"].includes(m);
+        return m === perSel;
+      }
+
+      const nombreBase = `datos_economicos_chile_${varSel}_${anoSel}_${perSel}`;
+
+      if (varSel === "todas") {
+        // Dataset consolidado multivariable
+        const mapaFechas = {};
+        const llaves = ["uf", "dolar", "euro", "yuan", "cobre", "petroleo_brent", "petroleo_wti", "tpm", "ipc", "desempleo"];
+
+        llaves.forEach(k => {
+          const obj = seriesHistoricasCheadas[k];
+          if (obj && obj.serie) {
+            obj.serie.forEach(pt => {
+              if (pasaFiltroFecha(pt.fecha)) {
+                if (!mapaFechas[pt.fecha]) mapaFechas[pt.fecha] = { fecha: pt.fecha };
+                mapaFechas[pt.fecha][k] = pt.valor;
+              }
+            });
+          }
+        });
+
+        const filasConsolidadas = Object.values(mapaFechas).sort((a, b) => a.fecha.localeCompare(b.fecha));
+
+        if (filasConsolidadas.length === 0) {
+          alert("No se encontraron observaciones para los filtros seleccionados.");
+          return;
+        }
+
+        if (formato === "json") {
+          const exportJson = {
+            metadatos: {
+              proveedor: "Datos Económicos de Chile (UCEN)",
+              licencia: "Datos Abiertos / Dominio Público",
+              fecha_exportacion: new Date().toISOString(),
+              filtro_ano: anoSel,
+              filtro_periodo: perSel,
+              total_registros: filasConsolidadas.length
+            },
+            datos: filasConsolidadas
+          };
+          descargarBlob(JSON.stringify(exportJson, null, 2), `${nombreBase}.json`, "application/json");
+        } else {
+          // CSV con UTF-8 BOM y punto y coma (;) para apertura directa en Excel
+          let csv = "\uFEFFFecha;UF;Dolar_Obs;Euro_Obs;Yuan_Chino;Cobre_LME_US_lb;Petroleo_Brent;Petroleo_WTI;TPM_pct;IPC_mensual_pct;Desempleo_pct\n";
+          filasConsolidadas.forEach(f => {
+            csv += `${f.fecha};${f.uf ?? ""};${f.dolar ?? ""};${f.euro ?? ""};${f.yuan ?? ""};${f.cobre ?? ""};${f.petroleo_brent ?? ""};${f.petroleo_wti ?? ""};${f.tpm ?? ""};${f.ipc ?? ""};${f.desempleo ?? ""}\n`;
+          });
+          descargarBlob(csv, `${nombreBase}.csv`, "text/csv;charset=utf-8;");
+        }
+
+      } else {
+        // Variable individual
+        const obj = seriesHistoricasCheadas[varSel];
+        if (!obj || !obj.serie) {
+          alert("Variable seleccionada no disponible.");
+          return;
+        }
+
+        const serieFiltrada = obj.serie.filter(pt => pasaFiltroFecha(pt.fecha));
+
+        if (serieFiltrada.length === 0) {
+          alert("No se encontraron observaciones para los filtros seleccionados.");
+          return;
+        }
+
+        if (formato === "json") {
+          const exportJson = {
+            metadatos: {
+              variable: obj.nombre,
+              unidad: obj.unidad,
+              fuente_oficial: obj.fuente_oficial,
+              url_fuente: obj.url_fuente,
+              filtro_ano: anoSel,
+              filtro_periodo: perSel,
+              total_registros: serieFiltrada.length
+            },
+            serie: serieFiltrada
+          };
+          descargarBlob(JSON.stringify(exportJson, null, 2), `${nombreBase}.json`, "application/json");
+        } else {
+          let csv = "\uFEFFFecha;Valor;Variable;Unidad;Fuente_Oficial\n";
+          serieFiltrada.forEach(pt => {
+            csv += `${pt.fecha};${pt.valor};"${obj.nombre}";"${obj.unidad}";"${obj.fuente_oficial}"\n`;
+          });
+          descargarBlob(csv, `${nombreBase}.csv`, "text/csv;charset=utf-8;");
+        }
+      }
+    }
+
+    function descargarBlob(contenido, nombreArchivo, mimeType) {
+      const blob = new Blob([contenido], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = nombreArchivo;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
 
     function renderizarGrafico(objVar, datos) {

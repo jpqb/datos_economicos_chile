@@ -220,7 +220,7 @@ def ejecutar_pipeline_multivariable():
     df_uf_prev = df_uf[df_uf["fecha"] <= hace_7_dias]
     uf_prev = float(df_uf_prev.iloc[-1]["valor"]) if not df_uf_prev.empty else uf_actual
 
-    # Exportar serie limpia de UF sin proyecciones
+    # Exportar serie limpia de UF del año sin proyecciones
     df_uf_export = df_uf.copy()
     df_uf_export["ano"] = ano_actual
     df_uf_export["fuente"] = FUENTES_OFICIALES["sii"]["nombre"]
@@ -251,41 +251,60 @@ def ejecutar_pipeline_multivariable():
     with open(ruta_data / "uf_hoy.json", "w", encoding="utf-8") as f:
         json.dump(resumen_uf_legacy, f, ensure_ascii=False, indent=2)
 
+    # Combinar con histórico 10 años (2016-2025)
+    archivo_cache_uf = ruta_data / "cache" / "historico_uf_2016_2025.csv"
+    if archivo_cache_uf.exists():
+        df_uf_hist = pd.read_csv(archivo_cache_uf)
+    else:
+        df_uf_hist = pd.DataFrame(columns=["fecha", "valor"])
+
+    df_uf_10y = pd.concat([df_uf_hist, df_uf[["fecha", "valor"]]], ignore_index=True)
+    df_uf_10y = df_uf_10y.sort_values("fecha").drop_duplicates("fecha").reset_index(drop=True)
+
     series_historicas["uf"] = {
         "nombre": "Unidad de Fomento (UF)",
         "unidad": "CLP",
         "fuente_oficial": FUENTES_OFICIALES["sii"]["nombre"],
         "url_fuente": FUENTES_OFICIALES["sii"]["url"],
-        "serie": [{"fecha": r["fecha"], "valor": r["valor_clp"]} for _, r in df_uf_export.iterrows()]
+        "serie": [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_uf_10y.iterrows()]
     }
 
     # --- C. Dólar Observado (USD/CLP) ---
     df_dolar = extraer_matriz_sii("dolar", ano_actual)
-    hist_dolar_mercado = obtener_serie_historica_yahoo("CLP=X")
+    hist_dolar_mercado = obtener_serie_historica_yahoo("CLP=X", rango="10y")
 
     if not df_dolar.empty:
-        # Combinar matriz oficial con último cierre de mercado si está más actualizado
         dolar_actual = hist_dolar_mercado[-1]["valor"] if hist_dolar_mercado else float(df_dolar.iloc[-1]["valor"])
         df_dolar_prev = df_dolar[df_dolar["fecha"] <= hace_7_dias]
         dolar_prev = float(df_dolar_prev.iloc[-1]["valor"]) if not df_dolar_prev.empty else (dolar_actual - 12.33)
-        serie_dolar_final = [{"fecha": r["fecha"], "valor": r["valor"]} for _, r in df_dolar.iterrows()]
-        if hist_dolar_mercado and hist_dolar_mercado[-1]["fecha"] > serie_dolar_final[-1]["fecha"]:
-            serie_dolar_final.append(hist_dolar_mercado[-1])
+        serie_dolar_2026 = [{"fecha": r["fecha"], "valor": r["valor"]} for _, r in df_dolar.iterrows()]
+        if hist_dolar_mercado and hist_dolar_mercado[-1]["fecha"] > serie_dolar_2026[-1]["fecha"]:
+            serie_dolar_2026.append(hist_dolar_mercado[-1])
     else:
         dolar_actual = hist_dolar_mercado[-1]["valor"] if hist_dolar_mercado else 984.93
         dolar_prev = dolar_actual - 12.33
-        serie_dolar_final = hist_dolar_mercado
+        serie_dolar_2026 = hist_dolar_mercado[-250:] if hist_dolar_mercado else []
+
+    # Combinar histórico SII 2016-2025 con datos 2026
+    archivo_cache_dolar = ruta_data / "cache" / "historico_dolar_2016_2025.csv"
+    if archivo_cache_dolar.exists():
+        df_dolar_hist = pd.read_csv(archivo_cache_dolar)
+    else:
+        df_dolar_hist = pd.DataFrame(columns=["fecha", "valor"])
+
+    df_dolar_10y = pd.concat([df_dolar_hist, pd.DataFrame(serie_dolar_2026)], ignore_index=True)
+    df_dolar_10y = df_dolar_10y.sort_values("fecha").drop_duplicates("fecha").reset_index(drop=True)
 
     series_historicas["dolar"] = {
         "nombre": "Dólar Observado (USD/CLP)",
         "unidad": "CLP",
         "fuente_oficial": "Servicio de Impuestos Internos / Banco Central",
         "url_fuente": FUENTES_OFICIALES["sii"]["url"],
-        "serie": serie_dolar_final
+        "serie": [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_dolar_10y.iterrows()]
     }
 
     # --- D. Euro Observado (EUR/CLP) ---
-    hist_eur = obtener_serie_historica_yahoo("EURCLP=X")
+    hist_eur = obtener_serie_historica_yahoo("EURCLP=X", rango="10y")
     eur_actual = hist_eur[-1]["valor"] if hist_eur else 1103.17
     eur_prev = round(eur_actual - 17.00, 2)
     series_historicas["euro"] = {
@@ -297,8 +316,7 @@ def ejecutar_pipeline_multivariable():
     }
 
     # --- E. Yuan Chino (CNY/CLP) ---
-    hist_cny_usd = obtener_serie_historica_yahoo("CNY=X")
-    # Calcular paridad cruzada histórica: USD/CLP / USD/CNY
+    hist_cny_usd = obtener_serie_historica_yahoo("CNY=X", rango="10y")
     dict_cny_usd = {item["fecha"]: item["valor"] for item in hist_cny_usd}
     serie_yuan = []
     for d in series_historicas["dolar"]["serie"]:
@@ -321,7 +339,7 @@ def ejecutar_pipeline_multivariable():
     }
 
     # --- F. Commodities (Cobre, Petróleo Brent y WTI) ---
-    hist_cobre = obtener_serie_historica_yahoo("HG=F")
+    hist_cobre = obtener_serie_historica_yahoo("HG=F", rango="10y")
     cobre_actual = hist_cobre[-1]["valor"] if hist_cobre else 6.61
     cobre_prev = round(cobre_actual - 0.08, 2)
     series_historicas["cobre"] = {
@@ -332,7 +350,7 @@ def ejecutar_pipeline_multivariable():
         "serie": hist_cobre if hist_cobre else [{"fecha": fecha_hoy, "valor": cobre_actual}]
     }
 
-    hist_brent = obtener_serie_historica_yahoo("BZ=F")
+    hist_brent = obtener_serie_historica_yahoo("BZ=F", rango="10y")
     brent_actual = hist_brent[-1]["valor"] if hist_brent else 105.67
     brent_prev = round(brent_actual - 1.67, 2)
     series_historicas["petroleo_brent"] = {
@@ -343,7 +361,7 @@ def ejecutar_pipeline_multivariable():
         "serie": hist_brent if hist_brent else [{"fecha": fecha_hoy, "valor": brent_actual}]
     }
 
-    hist_wti = obtener_serie_historica_yahoo("CL=F")
+    hist_wti = obtener_serie_historica_yahoo("CL=F", rango="10y")
     wti_actual = hist_wti[-1]["valor"] if hist_wti else 94.79
     wti_prev = round(wti_actual - 2.36, 2)
     series_historicas["petroleo_wti"] = {
@@ -356,30 +374,33 @@ def ejecutar_pipeline_multivariable():
 
     # --- G. Variables Periódicas (TPM, IPC, Desempleo) ---
     tpm_info = base_periodica["tpm"]
+    serie_tpm_10y = tpm_info.get("serie_historica_10y", tpm_info.get("serie_historica_2026", []))
     series_historicas["tpm"] = {
         "nombre": tpm_info["nombre"],
         "unidad": "%",
         "fuente_oficial": tpm_info["fuente_oficial"],
         "url_fuente": tpm_info["url_fuente"],
-        "serie": tpm_info["serie_historica_2026"]
+        "serie": serie_tpm_10y
     }
 
     ipc_info = base_periodica["ipc"]
+    serie_ipc_10y = ipc_info.get("serie_historica_10y", ipc_info.get("serie_historica_2026", []))
     series_historicas["ipc"] = {
         "nombre": "Inflación Mensual IPC",
         "unidad": "%",
         "fuente_oficial": ipc_info["fuente_oficial"],
         "url_fuente": ipc_info["url_fuente"],
-        "serie": ipc_info["serie_historica_2026"]
+        "serie": serie_ipc_10y
     }
 
     desempleo_info = base_periodica["desempleo"]
+    serie_desempleo_10y = desempleo_info.get("serie_historica_10y", desempleo_info.get("serie_historica_2026", []))
     series_historicas["desempleo"] = {
         "nombre": desempleo_info["nombre"],
         "unidad": "%",
         "fuente_oficial": desempleo_info["fuente_oficial"],
         "url_fuente": desempleo_info["url_fuente"],
-        "serie": desempleo_info["serie_historica_2026"]
+        "serie": serie_desempleo_10y
     }
 
     # ==============================================================================
