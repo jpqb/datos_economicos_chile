@@ -13,6 +13,7 @@
       "cierre_semanal": "4,5",
       "variacion_ww": "▬ Estable",
       "fuente_oficial": "Banco Central de Chile",
+      "url_fuente_oficial": "https://www.bcentral.cl/areas/politica-monetaria",
       "lectura_analitica": "El Consejo acordó mantener la tasa en 4,5% por unanimidad, enfocado en anclar expectativas inflacionarias."
     },
     {
@@ -20,20 +21,23 @@
       "cierre_semanal": "984,93",
       "variacion_ww": "▲ 12,33",
       "fuente_oficial": "Servicio de Impuestos Internos / Banco Central",
+      "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/",
       "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
     },
     {
       "variable": "Euro Observado (EUR/CLP) ($ CLP)",
-      "cierre_semanal": "1.103,17",
+      "cierre_semanal": "1.103,02",
       "variacion_ww": "▲ 17,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+      "url_fuente_oficial": "https://www.bcentral.cl",
       "lectura_analitica": "Movimiento alineado a la fortaleza de monedas de reserva internacional frente a divisas emergentes."
     },
     {
       "variable": "Yuan Chino (CNY/CLP) ($ CLP)",
-      "cierre_semanal": "147,28",
+      "cierre_semanal": "147,22",
       "variacion_ww": "▲ 2,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+      "url_fuente_oficial": "https://www.bcentral.cl",
       "lectura_analitica": "Paridad cruzada vinculada al pulso del sector exportador y la actividad fabril en China."
     },
     {
@@ -41,27 +45,31 @@
       "cierre_semanal": "41.157,43",
       "variacion_ww": "▲ 42,89",
       "fuente_oficial": "Servicio de Impuestos Internos (SII)",
+      "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/",
       "lectura_analitica": "La UF mantiene su reajuste diario legal conforme a la variación del IPC reportado por el INE."
     },
     {
       "variable": "Cobre (LME / Cochilco) (US$/lb)",
       "cierre_semanal": "6,61",
       "variacion_ww": "▲ 0,08",
-      "fuente_oficial": "Cochilco / London Metal Exchange (LME)",
+      "fuente_oficial": "Comisión Chilena del Cobre (Cochilco) / LME",
+      "url_fuente_oficial": "https://www.cochilco.cl",
       "lectura_analitica": "Comportamiento del metal rojo sujeto a demanda de fundiciones y niveles de inventario en bodegas."
     },
     {
       "variable": "Petróleo Brent (US$/bbl)",
-      "cierre_semanal": "105,67",
+      "cierre_semanal": "105,65",
       "variacion_ww": "▲ 1,67",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
+      "url_fuente_oficial": "https://fred.stlouisfed.org",
       "lectura_analitica": "Sensibilidad a tensiones geopolíticas y cuotas de bombeo de la OPEP+."
     },
     {
       "variable": "Petróleo WTI (US$/bbl)",
-      "cierre_semanal": "94,79",
+      "cierre_semanal": "94,76",
       "variacion_ww": "▲ 2,36",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
+      "url_fuente_oficial": "https://fred.stlouisfed.org",
       "lectura_analitica": "Referencia estadounidense condicionada por inventarios de crudo en Cushing."
     },
     {
@@ -69,13 +77,15 @@
       "cierre_semanal": "0.4% m/m; 4.1% a/a",
       "variacion_ww": "▬ Estable",
       "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
-      "lectura_analitica": "IPC de Septiembre 2026 con 0,4% mensual y 4,1% a doce meses, denotando persistencia inflacionaria."
+      "url_fuente_oficial": "https://www.ine.gob.cl/estadisticas/economia/indices-de-precios-e-inflacion/indice-de-precios-al-consumidor",
+      "lectura_analitica": "IPC de Septiembre 2026 con 0.4% mensual y 4.1% a doce meses."
     },
     {
       "variable": "Tasa de Desocupación Nacional (último registro oficial ENE - INE) (%)",
       "cierre_semanal": "9,6",
       "variacion_ww": "▬ Estable",
-      "fuente_oficial": "INE (Encuesta Nacional de Empleo)",
+      "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
+      "url_fuente_oficial": "https://www.ine.gob.cl/estadisticas/sociales/mercado-laboral/empleo-y-desempleo",
       "lectura_analitica": "Desocupación situada en 9.6% en el trimestre móvil Junio - Agosto 2026."
     }
   ]

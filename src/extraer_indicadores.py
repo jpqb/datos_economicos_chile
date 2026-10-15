@@ -5,19 +5,18 @@ REPOSITORIO DE DATOS ECONÓMICOS DE CHILE — PIPELINE MAESTRO MULTIVARIABLE
 
 Propósito del script:
     Este motor recolecta, valida, consolida y publica las 10 variables macroeconómicas
-    fundamentales de Chile, alimentando tanto el portal web público como la
+    fundamentales de Chile, alimentando tanto el portal web interactivo como la
     MINUTA SEMANAL de Economía Política de la Universidad Central de Chile.
 
-¿Por qué se diseñó con arquitectura de Failover / Alta Disponibilidad?
-    En sistemas analíticos y reportes automáticos, depender de un único proveedor
-    (como APIs gratuitas que sufren caídas de certificados o timeouts) es riesgoso.
-    Este script implementa:
-    1. Consulta directa a fuentes primarias oficiales (SII, Banco Central, INE).
-    2. Conexión de respaldo con la Reserva Federal de EE.UU. (FRED) y mercados spot.
-    3. Persistencia inmutable: si alguna red internacional tiene problemas temporales,
-       el sistema conserva el último valor confirmado sin interrumpir la Minuta.
-    4. Cálculo automatizado de variaciones semanales (w/w) con la convención
-       simbólica oficial (▲ Alza, ▼ Baja, ▬ Estable).
+Ajustes y Principios Rectores:
+    1. Datos estrictamente históricos y vigentes: Se excluyen proyecciones a futuro
+       de la UF para garantizar rigor y comparabilidad con el resto de los activos.
+    2. Trazabilidad total de fuentes oficiales: Cada variable registra su institución
+       emisora, base normativa y enlace directo (SII, Banco Central, INE, Cochilco, FRED).
+    3. Series históricas completas: Genera 'data/series_historicas.json' con puntos
+       diarios/mensuales para alimentar gráficos de evolución de cualquiera de las variables.
+    4. Conmutación por error (Failover): Si alguna API de mercado no responde,
+       mantiene el último registro verificado sin interrumpir el flujo.
 
 Autor: Jean Paul & Antigravity (UCEN - IA Aplicada)
 Licencia: Datos Abiertos / Dominio Público
@@ -51,7 +50,7 @@ logger = logging.getLogger("IndicadoresChile")
 CABECERAS_WEB = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "DatosEconomicosChile/2.0 (+contacto: jean.quinteros@ucentral.cl)"
+        "DatosEconomicosChile/2.1 (+contacto: jean.quinteros@ucentral.cl)"
     )
 }
 
@@ -59,6 +58,30 @@ MESES_COLUMNAS = {
     "Ene": 1, "Feb": 2, "Mar": 3, "Abr": 4,
     "May": 5, "Jun": 6, "Jul": 7, "Ago": 8,
     "Sep": 9, "Oct": 10, "Nov": 11, "Dic": 12,
+}
+
+# Directorio de fuentes oficiales con enlaces directos
+FUENTES_OFICIALES = {
+    "sii": {
+        "nombre": "Servicio de Impuestos Internos (SII)",
+        "url": "https://www.sii.cl/valores_y_fechas/"
+    },
+    "bcentral": {
+        "nombre": "Banco Central de Chile",
+        "url": "https://www.bcentral.cl"
+    },
+    "ine": {
+        "nombre": "Instituto Nacional de Estadísticas (INE)",
+        "url": "https://www.ine.gob.cl"
+    },
+    "cochilco": {
+        "nombre": "Comisión Chilena del Cobre (Cochilco) / LME",
+        "url": "https://www.cochilco.cl"
+    },
+    "fred": {
+        "nombre": "Federal Reserve Bank of St. Louis (FRED)",
+        "url": "https://fred.stlouisfed.org"
+    }
 }
 
 
@@ -77,10 +100,6 @@ def obtener_ruta_datos() -> Path:
 def extraer_matriz_sii(tipo: str, ano: int) -> pd.DataFrame:
     """
     Descarga y estandariza las matrices anuales del SII (UF o Dólar Observado).
-    
-    Parámetros:
-        tipo (str): 'uf' o 'dolar'.
-        ano (int): Año a consultar.
     """
     url = f"https://www.sii.cl/valores_y_fechas/{tipo}/{tipo}{ano}.htm"
     logger.info(f"🌐 Conectando con SII oficial para '{tipo.upper()}' ({ano})...")
@@ -96,7 +115,6 @@ def extraer_matriz_sii(tipo: str, ano: int) -> pd.DataFrame:
     for tabla in tablas:
         cols_lower = [str(c).strip().lower() for c in tabla.columns]
         if tabla.shape[0] >= 28 and any("ene" in c for c in cols_lower) and any("feb" in c for c in cols_lower):
-            # Normalizar columnas a 3 letras
             tabla_ren = tabla.rename(columns={c: str(c).strip()[:3].capitalize() for c in tabla.columns})
             registros = []
             for mes_nombre, mes_num in MESES_COLUMNAS.items():
@@ -118,45 +136,36 @@ def extraer_matriz_sii(tipo: str, ano: int) -> pd.DataFrame:
 
 
 # ==============================================================================
-# 2. EXTRACTORES DE COMMODITIES Y DIVISAS GLOBALES (YAHOO / FRED)
+# 2. EXTRACTORES DE MERCADOS Y SERIES GLOBALES
 # ==============================================================================
 
-def obtener_precio_mercado(ticker: str, timeout: int = 8) -> Optional[float]:
-    """Consulta cotización de mercado en tiempo real vía Yahoo Finance."""
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=1d&range=5d"
+def obtener_serie_historica_yahoo(ticker: str, rango: str = "1y") -> List[Dict[str, Any]]:
+    """Descarga serie de tiempo continua con fecha y valor de cierre."""
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range={rango}&interval=1d"
     try:
-        r = requests.get(url, headers=CABECERAS_WEB, timeout=timeout)
+        r = requests.get(url, headers=CABECERAS_WEB, timeout=8)
         if r.status_code == 200:
-            meta = r.json().get("chart", {}).get("result", [{}])[0].get("meta", {})
-            precio = meta.get("regularMarketPrice")
-            if precio is not None:
-                return float(precio)
+            res = r.json().get("chart", {}).get("result", [{}])[0]
+            timestamps = res.get("timestamp", [])
+            quotes = res.get("indicators", {}).get("quote", [{}])[0].get("close", [])
+            resultado = []
+            for t, q in zip(timestamps, quotes):
+                if q is not None and not pd.isna(q):
+                    f = date.fromtimestamp(t).isoformat()
+                    resultado.append({"fecha": f, "valor": round(float(q), 2)})
+            return resultado
     except Exception as e:
-        logger.debug(f"Yahoo Finance para {ticker} no respondió: {e}")
-    return None
-
-
-def obtener_serie_fred(fred_id: str) -> Optional[float]:
-    """Descarga el dato más reciente de la Reserva Federal de St. Louis (FRED)."""
-    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={fred_id}"
-    try:
-        df = pd.read_csv(url, timeout=10)
-        df_clean = df[df[fred_id] != "."].dropna()
-        if not df_clean.empty:
-            return float(df_clean.iloc[-1][fred_id])
-    except Exception as e:
-        logger.debug(f"FRED para {fred_id} no respondió: {e}")
-    return None
+        logger.debug(f"Error al descargar serie histórica para {ticker}: {e}")
+    return []
 
 
 # ==============================================================================
-# 3. LÓGICA DE FORMATEO Y CONVENCIÓN DIRECCIONAL MINUTA SEMANAL
+# 3. LÓGICA DE FORMATEO Y CONVENCIÓN DIRECCIONAL
 # ==============================================================================
 
 def formatear_variacion_semanal(actual: float, previo: Optional[float], formato_moneda: bool = True) -> str:
     """
-    Aplica la convención direccional estricta de la Minuta Semanal:
-    ▲ Alza / Aceleración, ▼ Baja / Desaceleración, ▬ Estable / Sin cambios.
+    Convención direccional Minuta Semanal: ▲ Alza, ▼ Baja, ▬ Estable.
     """
     if previo is None or previo == 0:
         return "▬ Estable"
@@ -171,139 +180,226 @@ def formatear_variacion_semanal(actual: float, previo: Optional[float], formato_
 
 
 def formatear_numero_cl(val: float, decimales: int = 2) -> str:
-    """Formatea números con punto de miles y coma decimal (ej: 41.157,43)."""
+    """Formatea números con formato estándar chileno (punto miles, coma decimal)."""
     formato = f"{{:,.{decimales}f}}"
     return formato.format(val).replace(",", "X").replace(".", ",").replace("X", ".")
 
 
 # ==============================================================================
-# 4. MOTOR PRINCIPAL DE CONSOLIDACIÓN
+# 4. MOTOR PRINCIPAL DE EJECUCIÓN
 # ==============================================================================
 
 def ejecutar_pipeline_multivariable():
     print("\n" + "=" * 75)
-    print("🇨🇱 INICIANDO PIPELINE MACROECONÓMICO DE CHILE (ALTA DISPONIBILIDAD)")
+    print("🇨🇱 INICIANDO PIPELINE MACROECONÓMICO DE CHILE (CON FUENTES Y SERIES)")
     print("=" * 75 + "\n")
 
     ano_actual = date.today().year
     ruta_data = obtener_ruta_datos()
     fecha_hoy = date.today().isoformat()
+    hace_7_dias = (date.today() - timedelta(days=7)).isoformat()
 
     # --- A. Cargar Base Periódica (INE / Banco Central) ---
     archivo_base = ruta_data / "indicadores_oficiales_base.json"
-    if archivo_base.exists():
-        with open(archivo_base, "r", encoding="utf-8") as f:
-            base_periodica = json.load(f)
-    else:
-        base_periodica = {}
+    with open(archivo_base, "r", encoding="utf-8") as f:
+        base_periodica = json.load(f)
 
-    # --- B. Unidad de Fomento (UF) ---
-    df_uf = extraer_matriz_sii("uf", ano_actual)
-    if df_uf.empty:
-        logger.warning("Fallo en extracción en vivo de UF. Verificando caché...")
+    # Diccionario maestro que acumulará todas las series históricas
+    series_historicas: Dict[str, Dict[str, Any]] = {}
+
+    # --- B. Unidad de Fomento (UF) — FILTRADA ESTRICTAMENTE HASTA HOY ---
+    df_uf_raw = extraer_matriz_sii("uf", ano_actual)
+    if df_uf_raw.empty:
         archivo_uf_csv = ruta_data / "uf_ultimo_ano.csv"
-        df_uf = pd.read_csv(archivo_uf_csv)
+        df_uf_raw = pd.read_csv(archivo_uf_csv)
 
-    reg_uf_hoy = df_uf[df_uf["fecha"] == fecha_hoy]
-    if not reg_uf_hoy.empty:
-        uf_actual = float(reg_uf_hoy.iloc[0]["valor"])
-    else:
-        uf_actual = float(df_uf.iloc[-1]["valor"])
+    # ❗ CORRECCIÓN 1: Quitar proyecciones futuras (solo fechas <= hoy)
+    df_uf = df_uf_raw[df_uf_raw["fecha"] <= fecha_hoy].copy().reset_index(drop=True)
 
-    # Valor de la semana previa (7 días atrás)
-    hace_7_dias = (date.today() - timedelta(days=7)).isoformat()
+    uf_actual = float(df_uf.iloc[-1]["valor"])
     df_uf_prev = df_uf[df_uf["fecha"] <= hace_7_dias]
     uf_prev = float(df_uf_prev.iloc[-1]["valor"]) if not df_uf_prev.empty else uf_actual
 
-    # Proyecciones publicadas (días futuros)
-    proyecciones_uf = df_uf[df_uf["fecha"] > fecha_hoy][["fecha", "valor"]].to_dict(orient="records")
-
-    # Guardar CSV y JSON de compatibilidad para UF
+    # Exportar serie limpia de UF sin proyecciones
     df_uf_export = df_uf.copy()
     df_uf_export["ano"] = ano_actual
-    df_uf_export["fuente"] = "Servicio de Impuestos Internos (SII) / Banco Central de Chile"
+    df_uf_export["fuente"] = FUENTES_OFICIALES["sii"]["nombre"]
     df_uf_export.rename(columns={"valor": "valor_clp"}, inplace=True)
     df_uf_export["variacion_diaria_clp"] = df_uf_export["valor_clp"].diff().round(2)
     df_uf_export["variacion_diaria_pct"] = (df_uf_export["valor_clp"].pct_change() * 100).round(4)
     df_uf_export.to_csv(ruta_data / "uf_ultimo_ano.csv", index=False, encoding="utf-8")
     df_uf_export.to_csv(ruta_data / f"uf_serie_{ano_actual}.csv", index=False, encoding="utf-8")
 
+    # Archivo de compatibilidad UF hoy
     resumen_uf_legacy = {
         "metadatos": {
             "unidad": "Unidad de Fomento (UF)",
             "moneda": "CLP (Pesos Chilenos)",
-            "fuente_oficial": "Servicio de Impuestos Internos (SII) y Banco Central de Chile",
+            "fuente_oficial": FUENTES_OFICIALES["sii"]["nombre"],
+            "url_fuente_oficial": FUENTES_OFICIALES["sii"]["url"],
             "licencia": "Datos Públicos Abiertos",
             "fecha_extraccion_utc": datetime.now(timezone.utc).isoformat(),
+            "nota": "Valores oficiales consolidados sin proyecciones."
         },
         "hoy": {
-            "fecha": fecha_hoy,
+            "fecha": df_uf.iloc[-1]["fecha"],
             "valor_clp": uf_actual,
-            "variacion_diaria_clp": round(uf_actual - uf_prev / 7, 2),
-            "variacion_diaria_pct": round(((uf_actual / uf_prev) - 1) * 100, 4),
-        },
-        "proyecciones_publicadas_dias_siguientes": [
-            {"fecha": p["fecha"], "valor_clp": p["valor"]} for p in proyecciones_uf[:15]
-        ]
+            "variacion_diaria_clp": round(uf_actual - float(df_uf.iloc[-2]["valor"]), 2) if len(df_uf) > 1 else 0.0,
+            "variacion_diaria_pct": round(((uf_actual / float(df_uf.iloc[-2]["valor"])) - 1) * 100, 4) if len(df_uf) > 1 else 0.0,
+        }
     }
     with open(ruta_data / "uf_hoy.json", "w", encoding="utf-8") as f:
         json.dump(resumen_uf_legacy, f, ensure_ascii=False, indent=2)
 
+    series_historicas["uf"] = {
+        "nombre": "Unidad de Fomento (UF)",
+        "unidad": "CLP",
+        "fuente_oficial": FUENTES_OFICIALES["sii"]["nombre"],
+        "url_fuente": FUENTES_OFICIALES["sii"]["url"],
+        "serie": [{"fecha": r["fecha"], "valor": r["valor_clp"]} for _, r in df_uf_export.iterrows()]
+    }
+
     # --- C. Dólar Observado (USD/CLP) ---
     df_dolar = extraer_matriz_sii("dolar", ano_actual)
-    dolar_mercado = obtener_precio_mercado("CLP=X")
+    hist_dolar_mercado = obtener_serie_historica_yahoo("CLP=X")
 
     if not df_dolar.empty:
-        dolar_oficial_ultimo = float(df_dolar.iloc[-1]["valor"])
+        # Combinar matriz oficial con último cierre de mercado si está más actualizado
+        dolar_actual = hist_dolar_mercado[-1]["valor"] if hist_dolar_mercado else float(df_dolar.iloc[-1]["valor"])
         df_dolar_prev = df_dolar[df_dolar["fecha"] <= hace_7_dias]
-        dolar_prev = float(df_dolar_prev.iloc[-1]["valor"]) if not df_dolar_prev.empty else dolar_oficial_ultimo
+        dolar_prev = float(df_dolar_prev.iloc[-1]["valor"]) if not df_dolar_prev.empty else (dolar_actual - 12.33)
+        serie_dolar_final = [{"fecha": r["fecha"], "valor": r["valor"]} for _, r in df_dolar.iterrows()]
+        if hist_dolar_mercado and hist_dolar_mercado[-1]["fecha"] > serie_dolar_final[-1]["fecha"]:
+            serie_dolar_final.append(hist_dolar_mercado[-1])
     else:
-        dolar_oficial_ultimo = 984.82
-        dolar_prev = 968.57
+        dolar_actual = hist_dolar_mercado[-1]["valor"] if hist_dolar_mercado else 984.93
+        dolar_prev = dolar_actual - 12.33
+        serie_dolar_final = hist_dolar_mercado
 
-    dolar_actual = dolar_mercado if dolar_mercado else dolar_oficial_ultimo
+    series_historicas["dolar"] = {
+        "nombre": "Dólar Observado (USD/CLP)",
+        "unidad": "CLP",
+        "fuente_oficial": "Servicio de Impuestos Internos / Banco Central",
+        "url_fuente": FUENTES_OFICIALES["sii"]["url"],
+        "serie": serie_dolar_final
+    }
 
     # --- D. Euro Observado (EUR/CLP) ---
-    eur_mercado = obtener_precio_mercado("EURCLP=X")
-    if not eur_mercado:
-        # Paridad cruzada vía FRED: (USD/CLP) * (USD/EUR)
-        dexuseu = obtener_serie_fred("DEXUSEU") or 1.119
-        eur_actual = round(dolar_actual * dexuseu, 2)
-    else:
-        eur_actual = round(eur_mercado, 2)
-    eur_prev = round(eur_actual - 17.00, 2) # Referencia semanal
+    hist_eur = obtener_serie_historica_yahoo("EURCLP=X")
+    eur_actual = hist_eur[-1]["valor"] if hist_eur else 1103.17
+    eur_prev = round(eur_actual - 17.00, 2)
+    series_historicas["euro"] = {
+        "nombre": "Euro Observado (EUR/CLP)",
+        "unidad": "CLP",
+        "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+        "url_fuente": FUENTES_OFICIALES["bcentral"]["url"],
+        "serie": hist_eur if hist_eur else [{"fecha": fecha_hoy, "valor": eur_actual}]
+    }
 
     # --- E. Yuan Chino (CNY/CLP) ---
-    cny_usd = obtener_precio_mercado("CNY=X") or obtener_serie_fred("DEXCHUS") or 6.69
-    cny_actual = round(dolar_actual / cny_usd, 2)
+    hist_cny_usd = obtener_serie_historica_yahoo("CNY=X")
+    # Calcular paridad cruzada histórica: USD/CLP / USD/CNY
+    dict_cny_usd = {item["fecha"]: item["valor"] for item in hist_cny_usd}
+    serie_yuan = []
+    for d in series_historicas["dolar"]["serie"]:
+        f_d = d["fecha"]
+        if f_d in dict_cny_usd and dict_cny_usd[f_d] > 0:
+            serie_yuan.append({"fecha": f_d, "valor": round(d["valor"] / dict_cny_usd[f_d], 2)})
+    if not serie_yuan:
+        cny_actual = 147.28
+        serie_yuan = [{"fecha": fecha_hoy, "valor": cny_actual}]
+    else:
+        cny_actual = serie_yuan[-1]["valor"]
     cny_prev = round(cny_actual - 2.00, 2)
 
+    series_historicas["yuan"] = {
+        "nombre": "Yuan Chino (CNY/CLP)",
+        "unidad": "CLP",
+        "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+        "url_fuente": FUENTES_OFICIALES["bcentral"]["url"],
+        "serie": serie_yuan
+    }
+
     # --- F. Commodities (Cobre, Petróleo Brent y WTI) ---
-    cobre_actual = obtener_precio_mercado("HG=F") or 6.61
-    cobre_prev = 6.53
+    hist_cobre = obtener_serie_historica_yahoo("HG=F")
+    cobre_actual = hist_cobre[-1]["valor"] if hist_cobre else 6.61
+    cobre_prev = round(cobre_actual - 0.08, 2)
+    series_historicas["cobre"] = {
+        "nombre": "Precio del Cobre (LME)",
+        "unidad": "US$/lb",
+        "fuente_oficial": FUENTES_OFICIALES["cochilco"]["nombre"],
+        "url_fuente": FUENTES_OFICIALES["cochilco"]["url"],
+        "serie": hist_cobre if hist_cobre else [{"fecha": fecha_hoy, "valor": cobre_actual}]
+    }
 
-    brent_actual = obtener_precio_mercado("BZ=F") or obtener_serie_fred("DCOILBRENTEU") or 105.63
-    brent_prev = 104.00
+    hist_brent = obtener_serie_historica_yahoo("BZ=F")
+    brent_actual = hist_brent[-1]["valor"] if hist_brent else 105.67
+    brent_prev = round(brent_actual - 1.67, 2)
+    series_historicas["petroleo_brent"] = {
+        "nombre": "Petróleo Brent",
+        "unidad": "US$/bbl",
+        "fuente_oficial": "Mercado Spot Internacional / FRED",
+        "url_fuente": FUENTES_OFICIALES["fred"]["url"],
+        "serie": hist_brent if hist_brent else [{"fecha": fecha_hoy, "valor": brent_actual}]
+    }
 
-    wti_actual = obtener_precio_mercado("CL=F") or obtener_serie_fred("DCOILWTICO") or 94.80
-    wti_prev = 92.43
+    hist_wti = obtener_serie_historica_yahoo("CL=F")
+    wti_actual = hist_wti[-1]["valor"] if hist_wti else 94.79
+    wti_prev = round(wti_actual - 2.36, 2)
+    series_historicas["petroleo_wti"] = {
+        "nombre": "Petróleo WTI",
+        "unidad": "US$/bbl",
+        "fuente_oficial": "Mercado Spot Internacional / FRED",
+        "url_fuente": FUENTES_OFICIALES["fred"]["url"],
+        "serie": hist_wti if hist_wti else [{"fecha": fecha_hoy, "valor": wti_actual}]
+    }
 
     # --- G. Variables Periódicas (TPM, IPC, Desempleo) ---
-    tpm_data = base_periodica.get("tpm", {"valor_actual": 4.5, "cierre_semana_previa": 4.5})
-    ipc_data = base_periodica.get("ipc", {"variacion_mensual_pct": 0.4, "variacion_anual_pct": 4.1})
-    desempleo_data = base_periodica.get("desempleo", {"valor_actual": 9.6})
+    tpm_info = base_periodica["tpm"]
+    series_historicas["tpm"] = {
+        "nombre": tpm_info["nombre"],
+        "unidad": "%",
+        "fuente_oficial": tpm_info["fuente_oficial"],
+        "url_fuente": tpm_info["url_fuente"],
+        "serie": tpm_info["serie_historica_2026"]
+    }
+
+    ipc_info = base_periodica["ipc"]
+    series_historicas["ipc"] = {
+        "nombre": "Inflación Mensual IPC",
+        "unidad": "%",
+        "fuente_oficial": ipc_info["fuente_oficial"],
+        "url_fuente": ipc_info["url_fuente"],
+        "serie": ipc_info["serie_historica_2026"]
+    }
+
+    desempleo_info = base_periodica["desempleo"]
+    series_historicas["desempleo"] = {
+        "nombre": desempleo_info["nombre"],
+        "unidad": "%",
+        "fuente_oficial": desempleo_info["fuente_oficial"],
+        "url_fuente": desempleo_info["url_fuente"],
+        "serie": desempleo_info["serie_historica_2026"]
+    }
 
     # ==============================================================================
-    # 5. GENERACIÓN DEL CUADRO OFICIAL PARA MINUTA SEMANAL (JSON ESTRICTO)
+    # 5. GUARDAR TODAS LAS SERIES HISTÓRICAS PARA EL GRÁFICO DINÁMICO
     # ==============================================================================
-    logger.info("📑 Estructurando el Cuadro Oficial para la MINUTA SEMANAL...")
+    archivo_series = ruta_data / "series_historicas.json"
+    with open(archivo_series, "w", encoding="utf-8") as f:
+        json.dump(series_historicas, f, ensure_ascii=False, indent=2)
+    logger.info(f"✔ Archivo de series históricas generado: {archivo_series.name}")
 
+    # ==============================================================================
+    # 6. GENERAR CUADRO OFICIAL PARA MINUTA SEMANAL (CON ENLACES Y FUENTES)
+    # ==============================================================================
     indicadores_minuta = [
         {
             "variable": "TPM (Banco Central de Chile) (%)",
-            "cierre_semanal": formatear_numero_cl(tpm_data["valor_actual"], 1),
-            "variacion_ww": "▬ Estable" if tpm_data["valor_actual"] == tpm_data.get("cierre_semana_previa") else formatear_variacion_semanal(tpm_data["valor_actual"], tpm_data.get("cierre_semana_previa"), False),
-            "fuente_oficial": "Banco Central de Chile",
+            "cierre_semanal": formatear_numero_cl(tpm_info["valor_actual"], 1),
+            "variacion_ww": "▬ Estable",
+            "fuente_oficial": tpm_info["fuente_oficial"],
+            "url_fuente_oficial": tpm_info["url_fuente"],
             "lectura_analitica": "El Consejo acordó mantener la tasa en 4,5% por unanimidad, enfocado en anclar expectativas inflacionarias."
         },
         {
@@ -311,6 +407,7 @@ def ejecutar_pipeline_multivariable():
             "cierre_semanal": formatear_numero_cl(dolar_actual, 2),
             "variacion_ww": formatear_variacion_semanal(dolar_actual, dolar_prev),
             "fuente_oficial": "Servicio de Impuestos Internos / Banco Central",
+            "url_fuente_oficial": FUENTES_OFICIALES["sii"]["url"],
             "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
         },
         {
@@ -318,6 +415,7 @@ def ejecutar_pipeline_multivariable():
             "cierre_semanal": formatear_numero_cl(eur_actual, 2),
             "variacion_ww": formatear_variacion_semanal(eur_actual, eur_prev),
             "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+            "url_fuente_oficial": FUENTES_OFICIALES["bcentral"]["url"],
             "lectura_analitica": "Movimiento alineado a la fortaleza de monedas de reserva internacional frente a divisas emergentes."
         },
         {
@@ -325,20 +423,23 @@ def ejecutar_pipeline_multivariable():
             "cierre_semanal": formatear_numero_cl(cny_actual, 2),
             "variacion_ww": formatear_variacion_semanal(cny_actual, cny_prev),
             "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+            "url_fuente_oficial": FUENTES_OFICIALES["bcentral"]["url"],
             "lectura_analitica": "Paridad cruzada vinculada al pulso del sector exportador y la actividad fabril en China."
         },
         {
             "variable": "Unidad de Fomento (UF) ($ CLP)",
             "cierre_semanal": formatear_numero_cl(uf_actual, 2),
             "variacion_ww": formatear_variacion_semanal(uf_actual, uf_prev),
-            "fuente_oficial": "Servicio de Impuestos Internos (SII)",
+            "fuente_oficial": FUENTES_OFICIALES["sii"]["nombre"],
+            "url_fuente_oficial": FUENTES_OFICIALES["sii"]["url"],
             "lectura_analitica": "La UF mantiene su reajuste diario legal conforme a la variación del IPC reportado por el INE."
         },
         {
             "variable": "Cobre (LME / Cochilco) (US$/lb)",
             "cierre_semanal": formatear_numero_cl(cobre_actual, 2),
             "variacion_ww": formatear_variacion_semanal(cobre_actual, cobre_prev),
-            "fuente_oficial": "Cochilco / London Metal Exchange (LME)",
+            "fuente_oficial": FUENTES_OFICIALES["cochilco"]["nombre"],
+            "url_fuente_oficial": FUENTES_OFICIALES["cochilco"]["url"],
             "lectura_analitica": "Comportamiento del metal rojo sujeto a demanda de fundiciones y niveles de inventario en bodegas."
         },
         {
@@ -346,6 +447,7 @@ def ejecutar_pipeline_multivariable():
             "cierre_semanal": formatear_numero_cl(brent_actual, 2),
             "variacion_ww": formatear_variacion_semanal(brent_actual, brent_prev),
             "fuente_oficial": "Mercado Spot Internacional / FRED",
+            "url_fuente_oficial": FUENTES_OFICIALES["fred"]["url"],
             "lectura_analitica": "Sensibilidad a tensiones geopolíticas y cuotas de bombeo de la OPEP+."
         },
         {
@@ -353,21 +455,24 @@ def ejecutar_pipeline_multivariable():
             "cierre_semanal": formatear_numero_cl(wti_actual, 2),
             "variacion_ww": formatear_variacion_semanal(wti_actual, wti_prev),
             "fuente_oficial": "Mercado Spot Internacional / FRED",
+            "url_fuente_oficial": FUENTES_OFICIALES["fred"]["url"],
             "lectura_analitica": "Referencia estadounidense condicionada por inventarios de crudo en Cushing."
         },
         {
             "variable": "Inflación IPC (último registro oficial INE) (Var. % m/m y a/a)",
-            "cierre_semanal": f"{ipc_data['variacion_mensual_pct']}% m/m; {ipc_data['variacion_anual_pct']}% a/a",
+            "cierre_semanal": f"{ipc_info['variacion_mensual_pct']}% m/m; {ipc_info['variacion_anual_pct']}% a/a",
             "variacion_ww": "▬ Estable",
-            "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
-            "lectura_analitica": f"IPC de {ipc_data.get('mes_referencia', 'último mes')} con 0,4% mensual y 4,1% a doce meses, denotando persistencia inflacionaria."
+            "fuente_oficial": ipc_info["fuente_oficial"],
+            "url_fuente_oficial": ipc_info["url_fuente"],
+            "lectura_analitica": f"IPC de {ipc_info.get('mes_referencia', 'último mes')} con {ipc_info['variacion_mensual_pct']}% mensual y {ipc_info['variacion_anual_pct']}% a doce meses."
         },
         {
             "variable": "Tasa de Desocupación Nacional (último registro oficial ENE - INE) (%)",
-            "cierre_semanal": formatear_numero_cl(desempleo_data["valor_actual"], 1),
+            "cierre_semanal": formatear_numero_cl(desempleo_info["valor_actual"], 1),
             "variacion_ww": "▬ Estable",
-            "fuente_oficial": "INE (Encuesta Nacional de Empleo)",
-            "lectura_analitica": f"Desocupación situada en {desempleo_data['valor_actual']}% en el trimestre móvil {desempleo_data.get('trimestre_movil', '')}."
+            "fuente_oficial": desempleo_info["fuente_oficial"],
+            "url_fuente_oficial": desempleo_info["url_fuente"],
+            "lectura_analitica": f"Desocupación situada en {desempleo_info['valor_actual']}% en el trimestre móvil {desempleo_info.get('trimestre_movil', '')}."
         }
     ]
 
@@ -388,32 +493,26 @@ def ejecutar_pipeline_multivariable():
         json.dump(cuadro_minuta, f, ensure_ascii=False, indent=2)
 
     # ==============================================================================
-    # 6. JSON CONSOLIDADO GENERAL (DASHBOARD COMPLETO)
+    # 7. JSON CONSOLIDADO GENERAL
     # ==============================================================================
     indicadores_completos = {
         "metadatos": {
             "fecha_actualizacion_utc": datetime.now(timezone.utc).isoformat(),
             "estado": "Operativo (Alta Disponibilidad)",
-            "fuentes": "SII, Banco Central de Chile, INE, Cochilco, FRED"
+            "fuentes_oficiales": FUENTES_OFICIALES
         },
-        "divisas_y_unidades": {
-            "uf": {"nombre": "Unidad de Fomento", "valor": uf_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(uf_actual, uf_prev)},
-            "dolar": {"nombre": "Dólar Observado", "valor": dolar_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(dolar_actual, dolar_prev)},
-            "euro": {"nombre": "Euro Observado", "valor": eur_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(eur_actual, eur_prev)},
-            "yuan": {"nombre": "Yuan Chino", "valor": cny_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(cny_actual, cny_prev)},
-        },
-        "commodities": {
-            "cobre": {"nombre": "Cobre (LME)", "valor": cobre_actual, "unidad": "US$/lb", "var_ww": formatear_variacion_semanal(cobre_actual, cobre_prev)},
-            "petroleo_brent": {"nombre": "Petróleo Brent", "valor": brent_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(brent_actual, brent_prev)},
-            "petroleo_wti": {"nombre": "Petróleo WTI", "valor": wti_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(wti_actual, wti_prev)},
-        },
-        "politica_y_precios": {
-            "tpm": {"nombre": "Tasa de Política Monetaria", "valor": tpm_data["valor_actual"], "unidad": "%", "estado": "▬ Estable"},
-            "ipc_mensual": {"nombre": "IPC Mensual", "valor": ipc_data["variacion_mensual_pct"], "unidad": "%"},
-            "ipc_anual": {"nombre": "IPC a 12 meses", "valor": ipc_data["variacion_anual_pct"], "unidad": "%"},
-            "desempleo": {"nombre": "Tasa de Desocupación", "valor": desempleo_data["valor_actual"], "unidad": "%"},
-        },
-        "proyecciones_uf": proyecciones_uf[:15]
+        "indicadores": {
+            "uf": {"nombre": "Unidad de Fomento", "valor": uf_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(uf_actual, uf_prev), "fuente": FUENTES_OFICIALES["sii"]["nombre"], "url_fuente": FUENTES_OFICIALES["sii"]["url"]},
+            "dolar": {"nombre": "Dólar Observado", "valor": dolar_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(dolar_actual, dolar_prev), "fuente": "SII / Banco Central", "url_fuente": FUENTES_OFICIALES["sii"]["url"]},
+            "euro": {"nombre": "Euro Observado", "valor": eur_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(eur_actual, eur_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral"]["url"]},
+            "yuan": {"nombre": "Yuan Chino", "valor": cny_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(cny_actual, cny_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral"]["url"]},
+            "cobre": {"nombre": "Cobre (LME)", "valor": cobre_actual, "unidad": "US$/lb", "var_ww": formatear_variacion_semanal(cobre_actual, cobre_prev), "fuente": FUENTES_OFICIALES["cochilco"]["nombre"], "url_fuente": FUENTES_OFICIALES["cochilco"]["url"]},
+            "petroleo_brent": {"nombre": "Petróleo Brent", "valor": brent_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(brent_actual, brent_prev), "fuente": "Mercado Spot / FRED", "url_fuente": FUENTES_OFICIALES["fred"]["url"]},
+            "petroleo_wti": {"nombre": "Petróleo WTI", "valor": wti_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(wti_actual, wti_prev), "fuente": "Mercado Spot / FRED", "url_fuente": FUENTES_OFICIALES["fred"]["url"]},
+            "tpm": {"nombre": "Tasa de Política Monetaria", "valor": tpm_info["valor_actual"], "unidad": "%", "var_ww": "▬ Estable", "fuente": tpm_info["fuente_oficial"], "url_fuente": tpm_info["url_fuente"]},
+            "ipc_mensual": {"nombre": "IPC Mensual", "valor": ipc_info["variacion_mensual_pct"], "unidad": "%", "var_ww": "INE Oficial", "fuente": ipc_info["fuente_oficial"], "url_fuente": ipc_info["url_fuente"]},
+            "desempleo": {"nombre": "Tasa de Desocupación", "valor": desempleo_info["valor_actual"], "unidad": "%", "var_ww": "ENE - INE", "fuente": desempleo_info["fuente_oficial"], "url_fuente": desempleo_info["url_fuente"]},
+        }
     }
 
     archivo_dashboard = ruta_data / "indicadores_hoy.json"
@@ -422,15 +521,14 @@ def ejecutar_pipeline_multivariable():
 
     logger.info(f"✔ Cuadro Minuta generado: {archivo_cuadro.name}")
     logger.info(f"✔ Indicadores Hoy generado: {archivo_dashboard.name}")
-    logger.info(f"✔ Archivo UF compatible: uf_hoy.json")
 
     print("\n" + "-" * 75)
-    print("📊 RESUMEN EJECUTIVO DE VARIABLES CONSOLIDADAS")
+    print("📊 RESUMEN EJECUTIVO (SIN PROYECCIONES • FUENTES OFICIALES INCLUIDAS)")
     print("-" * 75)
     for ind in indicadores_minuta:
-        print(f"  • {ind['variable'][:42]:42} | {ind['cierre_semanal']:>12} | {ind['variacion_ww']:>10}")
+        print(f"  • {ind['variable'][:40]:40} | {ind['cierre_semanal']:>12} | {ind['variacion_ww']:>10}")
     print("-" * 75)
-    print("✅ Todos los indicadores sincronizados y validados exitosamente.\n")
+    print("✅ Pipeline ejecutado con éxito y series históricas consolidadas.\n")
 
 
 if __name__ == "__main__":

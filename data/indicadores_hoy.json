@@ -1,138 +1,110 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-14T23:56:24.228504+00:00",
+    "fecha_actualizacion_utc": "2026-10-15T00:05:17.416170+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
-    "fuentes": "SII, Banco Central de Chile, INE, Cochilco, FRED"
+    "fuentes_oficiales": {
+      "sii": {
+        "nombre": "Servicio de Impuestos Internos (SII)",
+        "url": "https://www.sii.cl/valores_y_fechas/"
+      },
+      "bcentral": {
+        "nombre": "Banco Central de Chile",
+        "url": "https://www.bcentral.cl"
+      },
+      "ine": {
+        "nombre": "Instituto Nacional de Estadísticas (INE)",
+        "url": "https://www.ine.gob.cl"
+      },
+      "cochilco": {
+        "nombre": "Comisión Chilena del Cobre (Cochilco) / LME",
+        "url": "https://www.cochilco.cl"
+      },
+      "fred": {
+        "nombre": "Federal Reserve Bank of St. Louis (FRED)",
+        "url": "https://fred.stlouisfed.org"
+      }
+    }
   },
-  "divisas_y_unidades": {
+  "indicadores": {
     "uf": {
       "nombre": "Unidad de Fomento",
       "valor": 41157.43,
       "unidad": "CLP",
-      "var_ww": "▲ 42,89"
+      "var_ww": "▲ 42,89",
+      "fuente": "Servicio de Impuestos Internos (SII)",
+      "url_fuente": "https://www.sii.cl/valores_y_fechas/"
     },
     "dolar": {
       "nombre": "Dólar Observado",
       "valor": 984.93,
       "unidad": "CLP",
-      "var_ww": "▲ 12,33"
+      "var_ww": "▲ 12,33",
+      "fuente": "SII / Banco Central",
+      "url_fuente": "https://www.sii.cl/valores_y_fechas/"
     },
     "euro": {
       "nombre": "Euro Observado",
-      "valor": 1103.17,
+      "valor": 1103.02,
       "unidad": "CLP",
-      "var_ww": "▲ 17,00"
+      "var_ww": "▲ 17,00",
+      "fuente": "Banco Central / FRED",
+      "url_fuente": "https://www.bcentral.cl"
     },
     "yuan": {
       "nombre": "Yuan Chino",
-      "valor": 147.28,
+      "valor": 147.22,
       "unidad": "CLP",
-      "var_ww": "▲ 2,00"
-    }
-  },
-  "commodities": {
+      "var_ww": "▲ 2,00",
+      "fuente": "Banco Central / FRED",
+      "url_fuente": "https://www.bcentral.cl"
+    },
     "cobre": {
       "nombre": "Cobre (LME)",
-      "valor": 6.612,
+      "valor": 6.61,
       "unidad": "US$/lb",
-      "var_ww": "▲ 0,08"
+      "var_ww": "▲ 0,08",
+      "fuente": "Comisión Chilena del Cobre (Cochilco) / LME",
+      "url_fuente": "https://www.cochilco.cl"
     },
     "petroleo_brent": {
       "nombre": "Petróleo Brent",
-      "valor": 105.67,
+      "valor": 105.65,
       "unidad": "US$/bbl",
-      "var_ww": "▲ 1,67"
+      "var_ww": "▲ 1,67",
+      "fuente": "Mercado Spot / FRED",
+      "url_fuente": "https://fred.stlouisfed.org"
     },
     "petroleo_wti": {
       "nombre": "Petróleo WTI",
-      "valor": 94.79,
+      "valor": 94.76,
       "unidad": "US$/bbl",
-      "var_ww": "▲ 2,36"
-    }
-  },
-  "politica_y_precios": {
+      "var_ww": "▲ 2,36",
+      "fuente": "Mercado Spot / FRED",
+      "url_fuente": "https://fred.stlouisfed.org"
+    },
     "tpm": {
       "nombre": "Tasa de Política Monetaria",
       "valor": 4.5,
       "unidad": "%",
-      "estado": "▬ Estable"
+      "var_ww": "▬ Estable",
+      "fuente": "Banco Central de Chile",
+      "url_fuente": "https://www.bcentral.cl/areas/politica-monetaria"
     },
     "ipc_mensual": {
       "nombre": "IPC Mensual",
       "valor": 0.4,
-      "unidad": "%"
-    },
-    "ipc_anual": {
-      "nombre": "IPC a 12 meses",
-      "valor": 4.1,
-      "unidad": "%"
+      "unidad": "%",
+      "var_ww": "INE Oficial",
+      "fuente": "Instituto Nacional de Estadísticas (INE)",
+      "url_fuente": "https://www.ine.gob.cl/estadisticas/economia/indices-de-precios-e-inflacion/indice-de-precios-al-consumidor"
     },
     "desempleo": {
       "nombre": "Tasa de Desocupación",
       "valor": 9.6,
-      "unidad": "%"
+      "unidad": "%",
+      "var_ww": "ENE - INE",
+      "fuente": "Instituto Nacional de Estadísticas (INE)",
+      "url_fuente": "https://www.ine.gob.cl/estadisticas/sociales/mercado-laboral/empleo-y-desempleo"
     }
-  },
-  "proyecciones_uf": [
-    {
-      "fecha": "2026-10-15",
-      "valor": 41162.73
-    },
-    {
-      "fecha": "2026-10-16",
-      "valor": 41168.03
-    },
-    {
-      "fecha": "2026-10-17",
-      "valor": 41173.33
-    },
-    {
-      "fecha": "2026-10-18",
-      "valor": 41178.64
-    },
-    {
-      "fecha": "2026-10-19",
-      "valor": 41183.94
-    },
-    {
-      "fecha": "2026-10-20",
-      "valor": 41189.24
-    },
-    {
-      "fecha": "2026-10-21",
-      "valor": 41194.55
-    },
-    {
-      "fecha": "2026-10-22",
-      "valor": 41199.85
-    },
-    {
-      "fecha": "2026-10-23",
-      "valor": 41205.16
-    },
-    {
-      "fecha": "2026-10-24",
-      "valor": 41210.47
-    },
-    {
-      "fecha": "2026-10-25",
-      "valor": 41215.77
-    },
-    {
-      "fecha": "2026-10-26",
-      "valor": 41221.08
-    },
-    {
-      "fecha": "2026-10-27",
-      "valor": 41226.39
-    },
-    {
-      "fecha": "2026-10-28",
-      "valor": 41231.7
-    },
-    {
-      "fecha": "2026-10-29",
-      "valor": 41237.01
-    }
-  ]
+  }
 }
