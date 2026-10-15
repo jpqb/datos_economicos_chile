@@ -29,8 +29,22 @@
         <span class="text-2xl">🇨🇱</span>
         <div>
           <h1 class="font-bold text-slate-900 leading-tight flex items-center gap-2">
-            <span>Datos Económicos Chile</span>
-            <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">SLA 99.9%</span>
+            <span>Datos Económicos de Chile</span>
+            <div class="relative group cursor-pointer inline-flex">
+              <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>SLA 99.9%</span>
+                <i data-lucide="info" class="w-3 h-3 text-emerald-700"></i>
+              </span>
+              <!-- Nota explicativa flotante del SLA -->
+              <div class="absolute left-0 top-full mt-1.5 w-72 p-3 bg-slate-900 text-white text-[11px] rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 leading-relaxed border border-slate-700">
+                <p class="font-bold text-emerald-400 mb-1 flex items-center gap-1">
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                  <span>¿Qué es el SLA 99.9%?</span>
+                </p>
+                Es el <strong>Acuerdo de Nivel de Servicio</strong> que garantiza 99,9% de tiempo en línea sin caídas por saturación. Los datos se publican como archivos estáticos en la red global CDN de GitHub (Flat Data), eliminando dependencias de servidores web que sufren caídas.
+              </div>
+            </div>
           </h1>
           <p class="text-xs text-slate-500 font-medium">Proveedor de Datos Abiertos • Economía de Chile</p>
         </div>
@@ -54,7 +68,7 @@
         <div>
           <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
             <i data-lucide="activity" class="w-5 h-5 text-blue-600"></i>
-            <span>Tablero Macroeconómico Oficial</span>
+            <span>Tablero Macroeconómico</span>
           </h2>
           <p class="text-xs text-slate-500">Valores consolidados y fuentes emisoras oficiales primarias.</p>
         </div>
@@ -268,6 +282,22 @@
           </a>
         </div>
 
+        <div class="p-3.5 bg-emerald-50/70 rounded-xl border border-emerald-200 flex flex-col justify-between space-y-2">
+          <div>
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-700"></i>
+              <span class="font-bold text-slate-900">Garantía de Disponibilidad (SLA 99.9%)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1">
+              El <strong>Service Level Agreement (SLA)</strong> certifica un 99,9% de tiempo en línea sin caídas. Al distribuirse como archivos estáticos en la CDN global de GitHub (Flat Data), nunca se satura por consultas recurrentes.
+            </p>
+          </div>
+          <span class="text-emerald-700 font-semibold text-[11px] flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Alta disponibilidad garantizada</span>
+          </span>
+        </div>
+
       </div>
     </div>
 
@@ -454,11 +484,20 @@
       const lnk = document.getElementById("lnk-fuente-grafico");
       lnk.href = objVar.url_fuente || "#";
 
-      // Aplicar filtro de rango temporal
-      if (rangoActual === 30) {
-        datos = datos.slice(-30);
-      } else if (rangoActual === 90) {
-        datos = datos.slice(-90);
+      // Aplicar filtro de rango temporal inteligente (adaptativo a series diarias o mensuales)
+      if (rangoActual !== "todos") {
+        const dias = parseInt(rangoActual, 10);
+        if (datos.length <= 20) {
+          // Variables de periodicidad mensual / por reunión (IPC, Desempleo, TPM)
+          if (dias === 30) {
+            datos = datos.slice(-2); // Último mes y previo (para contrastar la variación del mes)
+          } else if (dias === 90) {
+            datos = datos.slice(-4); // Último trimestre (4 observaciones mensuales)
+          }
+        } else {
+          // Variables de frecuencia diaria (UF, Dólar, Euro, Cobre, Petróleo, Yuan)
+          datos = datos.slice(-dias);
+        }
       }
 
       renderizarGrafico(objVar, datos);
