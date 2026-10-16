@@ -18,8 +18,8 @@
     },
     {
       "variable": "Dólar Observado (USD/CLP) ($ CLP)",
-      "cierre_semanal": "984,86",
-      "variacion_ww": "▲ 12,26",
+      "cierre_semanal": "984,09",
+      "variacion_ww": "▲ 4,24",
       "fuente_oficial": "Banco Central de Chile",
       "url_fuente_oficial": "https://www.bcentral.cl",
       "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
@@ -34,7 +34,7 @@
     },
     {
       "variable": "Yuan Chino (CNY/CLP) ($ CLP)",
-      "cierre_semanal": "147,21",
+      "cierre_semanal": "147,76",
       "variacion_ww": "▲ 2,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
       "url_fuente_oficial": "https://www.bcentral.cl",
@@ -58,7 +58,7 @@
     },
     {
       "variable": "Petróleo Brent (US$/bbl)",
-      "cierre_semanal": "105,74",
+      "cierre_semanal": "105,57",
       "variacion_ww": "▲ 1,67",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",
@@ -66,7 +66,7 @@
     },
     {
       "variable": "Petróleo WTI (US$/bbl)",
-      "cierre_semanal": "96,17",
+      "cierre_semanal": "96,00",
       "variacion_ww": "▲ 2,36",
       "fuente_oficial": "Mercado Spot Internacional / FRED",
       "url_fuente_oficial": "https://fred.stlouisfed.org",

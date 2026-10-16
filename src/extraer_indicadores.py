@@ -269,21 +269,27 @@ def ejecutar_pipeline_multivariable():
         "serie": [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_uf_10y.iterrows()]
     }
 
-    # --- C. Dólar Observado (USD/CLP) ---
-    df_dolar = extraer_matriz_sii("dolar", ano_actual)
-    hist_dolar_mercado = obtener_serie_historica_yahoo("CLP=X", rango="10y")
+    # --- C. Dólar Observado (USD/CLP) — OFICIAL BANCO CENTRAL DE CHILE ---
+    df_dolar_sii = extraer_matriz_sii("dolar", ano_actual)
+    puntos_bcch_oficial = base_periodica.get("dolar_bcch_oficial", [])
+    df_bcch = pd.DataFrame(puntos_bcch_oficial)
 
-    if not df_dolar.empty:
-        dolar_actual = hist_dolar_mercado[-1]["valor"] if hist_dolar_mercado else float(df_dolar.iloc[-1]["valor"])
-        df_dolar_prev = df_dolar[df_dolar["fecha"] <= hace_7_dias]
-        dolar_prev = float(df_dolar_prev.iloc[-1]["valor"]) if not df_dolar_prev.empty else (dolar_actual - 12.33)
-        serie_dolar_2026 = [{"fecha": r["fecha"], "valor": r["valor"]} for _, r in df_dolar.iterrows()]
-        if hist_dolar_mercado and hist_dolar_mercado[-1]["fecha"] > serie_dolar_2026[-1]["fecha"]:
-            serie_dolar_2026.append(hist_dolar_mercado[-1])
+    if not df_dolar_sii.empty and not df_bcch.empty:
+        df_dolar_2026 = pd.concat([df_dolar_sii, df_bcch], ignore_index=True)
+    elif not df_bcch.empty:
+        df_dolar_2026 = df_bcch
+    elif not df_dolar_sii.empty:
+        df_dolar_2026 = df_dolar_sii
     else:
-        dolar_actual = hist_dolar_mercado[-1]["valor"] if hist_dolar_mercado else 984.93
-        dolar_prev = dolar_actual - 12.33
-        serie_dolar_2026 = hist_dolar_mercado[-250:] if hist_dolar_mercado else []
+        hist_dolar_mercado = obtener_serie_historica_yahoo("CLP=X", rango="1y")
+        df_dolar_2026 = pd.DataFrame(hist_dolar_mercado)
+
+    df_dolar_2026 = df_dolar_2026.drop_duplicates("fecha", keep="last").sort_values("fecha").reset_index(drop=True)
+
+    dolar_actual = float(df_dolar_2026.iloc[-1]["valor"])
+    df_dolar_prev = df_dolar_2026[df_dolar_2026["fecha"] <= hace_7_dias]
+    dolar_prev = float(df_dolar_prev.iloc[-1]["valor"]) if not df_dolar_prev.empty else dolar_actual
+    serie_dolar_2026 = [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_dolar_2026.iterrows()]
 
     # Combinar histórico SII 2016-2025 con datos 2026
     archivo_cache_dolar = ruta_data / "cache" / "historico_dolar_2016_2025.csv"
