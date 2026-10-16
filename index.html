@@ -626,10 +626,10 @@
       try {
         let res;
         try {
-          res = await fetch("data/cuadro_minuta_semanal.json");
+          res = await fetch("data/cuadro_minuta_semanal.json?v=" + Date.now(), { cache: "no-store" });
           if (!res.ok) throw new Error();
         } catch {
-          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/cuadro_minuta_semanal.json");
+          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/cuadro_minuta_semanal.json?v=" + Date.now(), { cache: "no-store" });
         }
         const data = await res.json();
         datosMinutaCacheados = data;
@@ -698,10 +698,10 @@
       try {
         let res;
         try {
-          res = await fetch("data/indicadores_hoy.json");
+          res = await fetch("data/indicadores_hoy.json?v=" + Date.now(), { cache: "no-store" });
           if (!res.ok) throw new Error();
         } catch {
-          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/indicadores_hoy.json");
+          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/indicadores_hoy.json?v=" + Date.now(), { cache: "no-store" });
         }
         const data = await res.json();
 
@@ -922,10 +922,10 @@
       try {
         let res;
         try {
-          res = await fetch("data/series_historicas.json");
+          res = await fetch("data/series_historicas.json?v=" + Date.now(), { cache: "no-store" });
           if (!res.ok) throw new Error();
         } catch {
-          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/series_historicas.json");
+          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/series_historicas.json?v=" + Date.now(), { cache: "no-store" });
         }
         seriesHistoricasCheadas = await res.json();
         actualizarBotonesRango();
