@@ -29,8 +29,9 @@ Consume los datos directamente vía HTTP sin necesidad de API keys:
 | Archivo | Formato | Contenido | URL Cruda de Consumo |
 | :--- | :---: | :--- | :--- |
 | **`data/cuadro_minuta_semanal.json`** | JSON | **Las 10 variables de la Minuta Semanal UCEN** con cierre semanal, variación *w/w*, fuente oficial y lectura analítica. | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/cuadro_minuta_semanal.json` |
-| **`data/indicadores_hoy.json`** | JSON | Tablero consolidado con divisas, commodities, tasas y proyecciones de UF. | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/indicadores_hoy.json` |
-| **`data/uf_hoy.json`** | JSON | Valor de hoy de la UF, variación y proyecciones futuras (hasta 15 días). | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_hoy.json` |
+| **`data/series_historicas.json`** | JSON | **Series de tiempo continuas a 10 años (2016-2026)** de las 10 variables macroeconómicas con metadatos y fuentes. | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/series_historicas.json` |
+| **`data/indicadores_hoy.json`** | JSON | Tablero consolidado de valores vigentes, fuentes y variaciones de divisas, commodities y tasas. | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/indicadores_hoy.json` |
+| **`data/uf_hoy.json`** | JSON | Valor oficial de hoy de la UF, reajuste diario y metadatos legales. | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_hoy.json` |
 | **`data/uf_ultimo_ano.csv`** | CSV | Serie anual continua de la UF en formato tabular limpio (*tidy*). | `https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/uf_ultimo_ano.csv` |
 
 ---
