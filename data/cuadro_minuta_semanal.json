@@ -82,11 +82,11 @@
     },
     {
       "variable": "Tasa de Desocupación Nacional (último registro oficial ENE - INE) (%)",
-      "cierre_semanal": "8,5",
+      "cierre_semanal": "9,6",
       "variacion_ww": "▬ Estable",
       "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
       "url_fuente_oficial": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
-      "lectura_analitica": "Desocupación situada en 8.5% en el trimestre móvil Julio - Septiembre 2026."
+      "lectura_analitica": "Desocupación situada en 9.6% en el trimestre móvil Junio - Agosto 2026."
     }
   ]
 }

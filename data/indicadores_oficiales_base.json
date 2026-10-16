@@ -116,11 +116,11 @@
   },
   "desempleo": {
     "nombre": "Tasa de Desocupación Nacional",
-    "valor_actual": 8.5,
+    "valor_actual": 9.6,
     "unidad": "%",
-    "trimestre_movil": "Julio - Septiembre 2026",
+    "trimestre_movil": "Junio - Agosto 2026",
     "fecha_publicacion": "2026-09-30",
-    "variacion_12_meses_pp": -0.2,
+    "variacion_12_meses_pp": 1.0,
     "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
     "url_fuente": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
     "documento_oficial": "Encuesta Nacional de Empleo (ENE)",
@@ -167,7 +167,7 @@
       {"fecha": "2025-10-31", "valor": 8.9}, {"fecha": "2025-11-30", "valor": 8.7}, {"fecha": "2025-12-31", "valor": 8.5},
       {"fecha": "2026-01-31", "valor": 8.4}, {"fecha": "2026-02-28", "valor": 8.5}, {"fecha": "2026-03-31", "valor": 8.7},
       {"fecha": "2026-04-30", "valor": 8.5}, {"fecha": "2026-05-31", "valor": 8.9}, {"fecha": "2026-06-30", "valor": 9.1},
-      {"fecha": "2026-07-31", "valor": 9.3}, {"fecha": "2026-08-31", "valor": 8.9}, {"fecha": "2026-09-30", "valor": 8.5}
+      {"fecha": "2026-07-31", "valor": 9.3}, {"fecha": "2026-08-31", "valor": 9.6}
     ]
   },
   "imacec": {

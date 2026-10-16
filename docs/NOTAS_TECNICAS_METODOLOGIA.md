@@ -155,7 +155,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Generada mediante la **Encuesta Nacional de Empleo (ENE)** aplicada a más de 35.000 hogares en todo Chile. Cuantifica a las personas en edad de trabajar que no tienen empleo, buscaron activamente trabajo durante las 4 semanas previas y están disponibles para trabajar de inmediato:
   $$\text{Tasa de Desocupación} = \frac{\text{Personas Desocupadas}}{\text{Fuerza de Trabajo}} \times 100$$
-- **Periodicidad:** **Trimestre móvil** (ej. Julio – Septiembre 2026, tasa 8,5%). Se publica el **último día hábil de cada mes** a las **09:00 hrs**.
+- **Periodicidad:** **Trimestre móvil** (ej. Junio – Agosto 2026, tasa oficial vigente: 9,6%). Se publica el **último día hábil de cada mes** a las **09:00 hrs** con un mes de rezago (por ejemplo, el boletín del trimestre Julio – Septiembre se difunde formalmente el 30 de octubre).
 - **⚠️ Advertencia de Discrepancia:** No refleja un mes aislado, sino un promedio móvil trimestral para neutralizar la alta volatilidad estacional del mercado laboral (empleo agrícola, construcción y turismo).
 - **Enlace Directo Oficial Verificado:** [Estadísticas de Ocupación y Desocupación (ENE) - INE](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion)
 

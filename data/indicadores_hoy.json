@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-16T01:49:12.156854+00:00",
+    "fecha_actualizacion_utc": "2026-10-16T02:30:04.346803+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii_uf": {
@@ -120,7 +120,7 @@
     },
     "desempleo": {
       "nombre": "Tasa de Desocupación",
-      "valor": 8.5,
+      "valor": 9.6,
       "unidad": "%",
       "var_ww": "ENE - INE",
       "fuente": "Instituto Nacional de Estadísticas (INE)",
