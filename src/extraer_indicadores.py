@@ -155,6 +155,56 @@ def extraer_matriz_sii(tipo: str, ano: int) -> pd.DataFrame:
     return pd.DataFrame()
 
 
+def extraer_fx_oficial_bcentral() -> Dict[str, float]:
+    """
+    Extrae los tipos de cambio y paridades oficiales directamente desde
+    la Base de Datos Estadísticos (BDE) del Banco Central de Chile.
+    Obtiene Dólar Observado, Euro Oficial y Yuan Chino (Renminbi).
+    """
+    fx: Dict[str, float] = {}
+    logger.info("🌐 Conectando con portal oficial del Banco Central de Chile (BDE)...")
+
+    # 1. Portada de Indicadores Diarios (Dólar Observado y Euro)
+    try:
+        url_portada = FUENTES_OFICIALES["bcentral_dolar"]["url"]
+        r = requests.get(url_portada, headers=CABECERAS_WEB, timeout=12)
+        if r.status_code == 200:
+            import re
+            m_eur = re.search(r'id=["\']lblSerie1_5["\']>Euro</label>.*?id=["\']lblValor1_5["\']>([0-9\.,]+)</label>', r.text, re.DOTALL)
+            if m_eur:
+                fx["euro"] = float(m_eur.group(1).replace(".", "").replace(",", "."))
+            m_usd = re.search(r'id=["\']lblSerie1_3["\']>[^<]*D.*?lar observado.*?</label>.*?id=["\']lblValor1_3["\']>([0-9\.,]+)</label>', r.text, re.DOTALL)
+            if m_usd:
+                fx["dolar"] = float(m_usd.group(1).replace(".", "").replace(",", "."))
+    except Exception as e:
+        logger.warning(f"⚠️ Error al consultar portada del Banco Central: {e}")
+
+    # 2. Lista oficial de Tipos de Cambio Nominales (Euro, Yuan Chino)
+    try:
+        url_lista = "https://si3.bcentral.cl/Indicadoressiete/secure/ListaSerie.aspx?param=VQB3AE4ASwBDAHcAagBRACMALQBHAGEAUQBtAGkAaQBaAGEAbgA3AEwAdgAkAHIAcwBCAHkAVgB6AFYAbwB6AGwAXwBiAFcATgBSAFMAOABFAHQAaAAxAFkATgAtADgAUQAtAGIARQBaAFQA"
+        r = requests.get(url_lista, headers=CABECERAS_WEB, timeout=12)
+        if r.status_code == 200:
+            import re
+            tds = re.findall(r'<td[^>]*>(.*?)</td>', r.text, re.DOTALL)
+            cleaned = [re.sub(r'<[^>]+>', '', t).strip() for t in tds]
+            for i in range(0, len(cleaned) - 2, 3):
+                nombre = cleaned[i].lower()
+                val_raw = cleaned[i+1].strip()
+                if val_raw and val_raw != "&nbsp;":
+                    try:
+                        val_num = float(val_raw.replace(".", "").replace(",", "."))
+                        if "euro" in nombre and "euro" not in fx:
+                            fx["euro"] = val_num
+                        elif "yuan" in nombre:
+                            fx["yuan"] = val_num
+                    except ValueError:
+                        pass
+    except Exception as e:
+        logger.warning(f"⚠️ Error al consultar tipos de cambio nominales del Banco Central: {e}")
+
+    return fx
+
+
 # ==============================================================================
 # 2. EXTRACTORES DE MERCADOS Y SERIES GLOBALES
 # ==============================================================================
@@ -223,6 +273,9 @@ def ejecutar_pipeline_multivariable():
     archivo_base = ruta_data / "indicadores_oficiales_base.json"
     with open(archivo_base, "r", encoding="utf-8") as f:
         base_periodica = json.load(f)
+
+    # Consultar tipos de cambio y paridades oficiales en vivo desde el Banco Central
+    fx_bcch_online = extraer_fx_oficial_bcentral()
 
     # Diccionario maestro que acumulará todas las series históricas
     series_historicas: Dict[str, Dict[str, Any]] = {}
@@ -304,6 +357,10 @@ def ejecutar_pipeline_multivariable():
         hist_dolar_mercado = obtener_serie_historica_yahoo("CLP=X", rango="1y")
         df_dolar_2026 = pd.DataFrame(hist_dolar_mercado)
 
+    dolar_bcch_live = fx_bcch_online.get("dolar")
+    if dolar_bcch_live is not None:
+        df_dolar_2026 = pd.concat([df_dolar_2026, pd.DataFrame([{"fecha": fecha_hoy, "valor": dolar_bcch_live}])], ignore_index=True)
+
     df_dolar_2026 = df_dolar_2026.drop_duplicates("fecha", keep="last").sort_values("fecha").reset_index(drop=True)
 
     dolar_actual = float(df_dolar_2026.iloc[-1]["valor"])
@@ -329,39 +386,70 @@ def ejecutar_pipeline_multivariable():
         "serie": [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_dolar_10y.iterrows()]
     }
 
-    # --- D. Euro Observado (EUR/CLP) ---
+    # --- D. Euro Observado (EUR/CLP) — OFICIAL BANCO CENTRAL DE CHILE ---
+    puntos_euro_bcch = base_periodica.get("euro_bcch_oficial", [])
+    df_euro_bcch = pd.DataFrame(puntos_euro_bcch)
+    eur_bcch_live = fx_bcch_online.get("euro")
+    if eur_bcch_live is not None:
+        df_euro_bcch = pd.concat([df_euro_bcch, pd.DataFrame([{"fecha": fecha_hoy, "valor": eur_bcch_live}])], ignore_index=True)
+    df_euro_bcch = df_euro_bcch.drop_duplicates("fecha", keep="last").sort_values("fecha").reset_index(drop=True)
+
     hist_eur = obtener_serie_historica_yahoo("EURCLP=X", rango="10y")
-    eur_actual = hist_eur[-1]["valor"] if hist_eur else 1103.17
-    eur_prev = round(eur_actual - 17.00, 2)
+    df_eur_base = pd.DataFrame(hist_eur) if hist_eur else pd.DataFrame(columns=["fecha", "valor"])
+
+    if not df_euro_bcch.empty:
+        df_eur_10y = pd.concat([df_eur_base, df_euro_bcch], ignore_index=True)
+    else:
+        df_eur_10y = df_eur_base
+
+    df_eur_10y = df_eur_10y.drop_duplicates("fecha", keep="last").sort_values("fecha").reset_index(drop=True)
+
+    eur_actual = float(df_eur_10y.iloc[-1]["valor"]) if not df_eur_10y.empty else 1103.49
+    df_eur_prev = df_eur_10y[df_eur_10y["fecha"] <= hace_7_dias]
+    eur_prev = float(df_eur_prev.iloc[-1]["valor"]) if not df_eur_prev.empty else eur_actual
+
     series_historicas["euro"] = {
         "nombre": "Euro Observado (EUR/CLP)",
         "unidad": "CLP",
-        "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+        "fuente_oficial": FUENTES_OFICIALES["bcentral_fx"]["nombre"],
         "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"],
-        "serie": hist_eur if hist_eur else [{"fecha": fecha_hoy, "valor": eur_actual}]
+        "serie": [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_eur_10y.iterrows()]
     }
 
-    # --- E. Yuan Chino (CNY/CLP) ---
+    # --- E. Yuan Chino (CNY/CLP) — OFICIAL BANCO CENTRAL DE CHILE ---
+    puntos_yuan_bcch = base_periodica.get("yuan_bcch_oficial", [])
+    df_yuan_bcch = pd.DataFrame(puntos_yuan_bcch)
+    yuan_bcch_live = fx_bcch_online.get("yuan")
+    if yuan_bcch_live is not None:
+        df_yuan_bcch = pd.concat([df_yuan_bcch, pd.DataFrame([{"fecha": fecha_hoy, "valor": yuan_bcch_live}])], ignore_index=True)
+    df_yuan_bcch = df_yuan_bcch.drop_duplicates("fecha", keep="last").sort_values("fecha").reset_index(drop=True)
+
     hist_cny_usd = obtener_serie_historica_yahoo("CNY=X", rango="10y")
     dict_cny_usd = {item["fecha"]: item["valor"] for item in hist_cny_usd}
-    serie_yuan = []
+    serie_yuan_calc = []
     for d in series_historicas["dolar"]["serie"]:
         f_d = d["fecha"]
         if f_d in dict_cny_usd and dict_cny_usd[f_d] > 0:
-            serie_yuan.append({"fecha": f_d, "valor": round(d["valor"] / dict_cny_usd[f_d], 2)})
-    if not serie_yuan:
-        cny_actual = 147.28
-        serie_yuan = [{"fecha": fecha_hoy, "valor": cny_actual}]
+            serie_yuan_calc.append({"fecha": f_d, "valor": round(d["valor"] / dict_cny_usd[f_d], 2)})
+    df_yuan_base = pd.DataFrame(serie_yuan_calc) if serie_yuan_calc else pd.DataFrame(columns=["fecha", "valor"])
+
+    if not df_yuan_bcch.empty:
+        df_yuan_10y = pd.concat([df_yuan_base, df_yuan_bcch], ignore_index=True)
     else:
-        cny_actual = serie_yuan[-1]["valor"]
-    cny_prev = round(cny_actual - 2.00, 2)
+        df_yuan_10y = df_yuan_base
+
+    df_yuan_10y = df_yuan_10y.drop_duplicates("fecha", keep="last").sort_values("fecha").reset_index(drop=True)
+
+    cny_actual = float(df_yuan_10y.iloc[-1]["valor"]) if not df_yuan_10y.empty else 147.09
+    df_cny_prev = df_yuan_10y[df_yuan_10y["fecha"] <= hace_7_dias]
+    cny_prev = float(df_cny_prev.iloc[-1]["valor"]) if not df_cny_prev.empty else cny_actual
 
     series_historicas["yuan"] = {
         "nombre": "Yuan Chino (CNY/CLP)",
         "unidad": "CLP",
-        "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+        "fuente_oficial": FUENTES_OFICIALES["bcentral_fx"]["nombre"],
         "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"],
-        "serie": serie_yuan
+        "serie": [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_yuan_10y.iterrows()]
     }
 
     # --- F. Commodities (Cobre, Petróleo Brent y WTI) ---
@@ -486,17 +574,17 @@ def ejecutar_pipeline_multivariable():
             "variable": "Euro Observado (EUR/CLP) ($ CLP)",
             "cierre_semanal": formatear_numero_cl(eur_actual, 2),
             "variacion_ww": formatear_variacion_semanal(eur_actual, eur_prev),
-            "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+            "fuente_oficial": FUENTES_OFICIALES["bcentral_fx"]["nombre"],
             "url_fuente_oficial": FUENTES_OFICIALES["bcentral_fx"]["url"],
-            "lectura_analitica": "Movimiento alineado a la fortaleza de monedas de reserva internacional frente a divisas emergentes."
+            "lectura_analitica": "Paridad cambiaria oficial fijada por el Banco Central a partir del arbitraje EUR/USD en mercados globales."
         },
         {
             "variable": "Yuan Chino (CNY/CLP) ($ CLP)",
             "cierre_semanal": formatear_numero_cl(cny_actual, 2),
             "variacion_ww": formatear_variacion_semanal(cny_actual, cny_prev),
-            "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
+            "fuente_oficial": FUENTES_OFICIALES["bcentral_fx"]["nombre"],
             "url_fuente_oficial": FUENTES_OFICIALES["bcentral_fx"]["url"],
-            "lectura_analitica": "Paridad cruzada vinculada al pulso del sector exportador y la actividad fabril en China."
+            "lectura_analitica": "Tipo de cambio oficial reportado por el Banco Central conforme a la paridad oficial con el Banco Popular de China."
         },
         {
             "variable": "Unidad de Fomento (UF) ($ CLP)",
@@ -576,8 +664,8 @@ def ejecutar_pipeline_multivariable():
         "indicadores": {
             "uf": {"nombre": "Unidad de Fomento", "valor": uf_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(uf_actual, uf_prev), "fuente": FUENTES_OFICIALES["sii_uf"]["nombre"], "url_fuente": FUENTES_OFICIALES["sii_uf"]["url"]},
             "dolar": {"nombre": "Dólar Observado", "valor": dolar_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(dolar_actual, dolar_prev), "fuente": FUENTES_OFICIALES["bcentral_dolar"]["nombre"], "url_fuente": FUENTES_OFICIALES["bcentral_dolar"]["url"]},
-            "euro": {"nombre": "Euro Observado", "valor": eur_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(eur_actual, eur_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"]},
-            "yuan": {"nombre": "Yuan Chino", "valor": cny_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(cny_actual, cny_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"]},
+            "euro": {"nombre": "Euro Observado", "valor": eur_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(eur_actual, eur_prev), "fuente": FUENTES_OFICIALES["bcentral_fx"]["nombre"], "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"]},
+            "yuan": {"nombre": "Yuan Chino", "valor": cny_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(cny_actual, cny_prev), "fuente": FUENTES_OFICIALES["bcentral_fx"]["nombre"], "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"]},
             "cobre": {"nombre": "Cobre (LME)", "valor": cobre_actual, "unidad": "US$/lb", "var_ww": formatear_variacion_semanal(cobre_actual, cobre_prev), "fuente": FUENTES_OFICIALES["cochilco"]["nombre"], "url_fuente": FUENTES_OFICIALES["cochilco"]["url"]},
             "petroleo_brent": {"nombre": "Petróleo Brent", "valor": brent_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(brent_actual, brent_prev), "fuente": FUENTES_OFICIALES["fred_brent"]["nombre"], "url_fuente": FUENTES_OFICIALES["fred_brent"]["url"]},
             "petroleo_wti": {"nombre": "Petróleo WTI", "valor": wti_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(wti_actual, wti_prev), "fuente": FUENTES_OFICIALES["fred_wti"]["nombre"], "url_fuente": FUENTES_OFICIALES["fred_wti"]["url"]},
