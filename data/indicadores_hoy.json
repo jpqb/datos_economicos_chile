@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-16T02:52:04.639460+00:00",
+    "fecha_actualizacion_utc": "2026-10-16T08:12:54.374563+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii_uf": {
@@ -48,9 +48,9 @@
   "indicadores": {
     "uf": {
       "nombre": "Unidad de Fomento",
-      "valor": 41162.73,
+      "valor": 41168.03,
       "unidad": "CLP",
-      "var_ww": "▲ 39,99",
+      "var_ww": "▲ 37,09",
       "fuente": "Servicio de Impuestos Internos (SII)",
       "url_fuente": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm"
     },
@@ -58,7 +58,7 @@
       "nombre": "Dólar Observado",
       "valor": 984.09,
       "unidad": "CLP",
-      "var_ww": "▲ 4,24",
+      "var_ww": "▲ 2,48",
       "fuente": "Banco Central de Chile",
       "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx"
     },
@@ -72,7 +72,7 @@
     },
     "yuan": {
       "nombre": "Yuan Chino",
-      "valor": 147.54,
+      "valor": 147.1,
       "unidad": "CLP",
       "var_ww": "▲ 2,00",
       "fuente": "Banco Central / FRED",
