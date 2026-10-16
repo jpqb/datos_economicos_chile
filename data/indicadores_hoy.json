@@ -1,27 +1,43 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-16T00:24:43.510144+00:00",
+    "fecha_actualizacion_utc": "2026-10-16T00:55:10.089445+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
-      "sii": {
+      "sii_uf": {
         "nombre": "Servicio de Impuestos Internos (SII)",
-        "url": "https://www.sii.cl/valores_y_fechas/"
+        "url": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm"
       },
-      "bcentral": {
+      "bcentral_dolar": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl"
+        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado"
       },
-      "ine": {
-        "nombre": "Instituto Nacional de Estadísticas (INE)",
-        "url": "https://www.ine.gob.cl"
+      "bcentral_fx": {
+        "nombre": "Banco Central de Chile (BDE)",
+        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio"
+      },
+      "bcentral_tpm": {
+        "nombre": "Banco Central de Chile",
+        "url": "https://www.bcentral.cl/areas/politica-monetaria"
       },
       "cochilco": {
         "nombre": "Comisión Chilena del Cobre (Cochilco) / LME",
-        "url": "https://www.cochilco.cl"
+        "url": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx"
       },
-      "fred": {
-        "nombre": "Federal Reserve Bank of St. Louis (FRED)",
-        "url": "https://fred.stlouisfed.org"
+      "fred_brent": {
+        "nombre": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+        "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU"
+      },
+      "fred_wti": {
+        "nombre": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+        "url": "https://fred.stlouisfed.org/series/DCOILWTICO"
+      },
+      "ine_ipc": {
+        "nombre": "Instituto Nacional de Estadísticas (INE)",
+        "url": "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor"
+      },
+      "ine_desempleo": {
+        "nombre": "Instituto Nacional de Estadísticas (INE)",
+        "url": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion"
       }
     }
   },
@@ -32,7 +48,7 @@
       "unidad": "CLP",
       "var_ww": "▲ 39,99",
       "fuente": "Servicio de Impuestos Internos (SII)",
-      "url_fuente": "https://www.sii.cl/valores_y_fechas/"
+      "url_fuente": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm"
     },
     "dolar": {
       "nombre": "Dólar Observado",
@@ -40,7 +56,7 @@
       "unidad": "CLP",
       "var_ww": "▲ 4,24",
       "fuente": "Banco Central de Chile",
-      "url_fuente": "https://www.bcentral.cl"
+      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado"
     },
     "euro": {
       "nombre": "Euro Observado",
@@ -48,39 +64,39 @@
       "unidad": "CLP",
       "var_ww": "▲ 17,00",
       "fuente": "Banco Central / FRED",
-      "url_fuente": "https://www.bcentral.cl"
+      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio"
     },
     "yuan": {
       "nombre": "Yuan Chino",
-      "valor": 147.76,
+      "valor": 147.54,
       "unidad": "CLP",
       "var_ww": "▲ 2,00",
       "fuente": "Banco Central / FRED",
-      "url_fuente": "https://www.bcentral.cl"
+      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio"
     },
     "cobre": {
       "nombre": "Cobre (LME)",
-      "valor": 6.55,
+      "valor": 6.58,
       "unidad": "US$/lb",
-      "var_ww": "▲ 0,08",
+      "var_ww": "▼ 0,08",
       "fuente": "Comisión Chilena del Cobre (Cochilco) / LME",
-      "url_fuente": "https://www.cochilco.cl"
+      "url_fuente": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx"
     },
     "petroleo_brent": {
       "nombre": "Petróleo Brent",
-      "valor": 105.57,
+      "valor": 105.44,
       "unidad": "US$/bbl",
       "var_ww": "▲ 1,67",
-      "fuente": "Mercado Spot / FRED",
-      "url_fuente": "https://fred.stlouisfed.org"
+      "fuente": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+      "url_fuente": "https://fred.stlouisfed.org/series/DCOILBRENTEU"
     },
     "petroleo_wti": {
       "nombre": "Petróleo WTI",
-      "valor": 96.0,
+      "valor": 95.97,
       "unidad": "US$/bbl",
       "var_ww": "▲ 2,36",
-      "fuente": "Mercado Spot / FRED",
-      "url_fuente": "https://fred.stlouisfed.org"
+      "fuente": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+      "url_fuente": "https://fred.stlouisfed.org/series/DCOILWTICO"
     },
     "tpm": {
       "nombre": "Tasa de Política Monetaria",
@@ -96,7 +112,7 @@
       "unidad": "%",
       "var_ww": "INE Oficial",
       "fuente": "Instituto Nacional de Estadísticas (INE)",
-      "url_fuente": "https://www.ine.gob.cl/estadisticas/economia/indices-de-precios-e-inflacion/indice-de-precios-al-consumidor"
+      "url_fuente": "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor"
     },
     "desempleo": {
       "nombre": "Tasa de Desocupación",
@@ -104,7 +120,7 @@
       "unidad": "%",
       "var_ww": "ENE - INE",
       "fuente": "Instituto Nacional de Estadísticas (INE)",
-      "url_fuente": "https://www.ine.gob.cl/estadisticas/sociales/mercado-laboral/empleo-y-desempleo"
+      "url_fuente": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion"
     }
   }
 }

@@ -60,27 +60,43 @@ MESES_COLUMNAS = {
     "Sep": 9, "Oct": 10, "Nov": 11, "Dic": 12,
 }
 
-# Directorio de fuentes oficiales con enlaces directos
+# Directorio de fuentes oficiales con enlaces directos verificados al dato específico
 FUENTES_OFICIALES = {
-    "sii": {
+    "sii_uf": {
         "nombre": "Servicio de Impuestos Internos (SII)",
-        "url": "https://www.sii.cl/valores_y_fechas/"
+        "url": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm"
     },
-    "bcentral": {
+    "bcentral_dolar": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl"
+        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado"
     },
-    "ine": {
-        "nombre": "Instituto Nacional de Estadísticas (INE)",
-        "url": "https://www.ine.gob.cl"
+    "bcentral_fx": {
+        "nombre": "Banco Central de Chile (BDE)",
+        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio"
+    },
+    "bcentral_tpm": {
+        "nombre": "Banco Central de Chile",
+        "url": "https://www.bcentral.cl/areas/politica-monetaria"
     },
     "cochilco": {
         "nombre": "Comisión Chilena del Cobre (Cochilco) / LME",
-        "url": "https://www.cochilco.cl"
+        "url": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx"
     },
-    "fred": {
-        "nombre": "Federal Reserve Bank of St. Louis (FRED)",
-        "url": "https://fred.stlouisfed.org"
+    "fred_brent": {
+        "nombre": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+        "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU"
+    },
+    "fred_wti": {
+        "nombre": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+        "url": "https://fred.stlouisfed.org/series/DCOILWTICO"
+    },
+    "ine_ipc": {
+        "nombre": "Instituto Nacional de Estadísticas (INE)",
+        "url": "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor"
+    },
+    "ine_desempleo": {
+        "nombre": "Instituto Nacional de Estadísticas (INE)",
+        "url": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion"
     }
 }
 
@@ -223,7 +239,7 @@ def ejecutar_pipeline_multivariable():
     # Exportar serie limpia de UF del año sin proyecciones
     df_uf_export = df_uf.copy()
     df_uf_export["ano"] = ano_actual
-    df_uf_export["fuente"] = FUENTES_OFICIALES["sii"]["nombre"]
+    df_uf_export["fuente"] = FUENTES_OFICIALES["sii_uf"]["nombre"]
     df_uf_export.rename(columns={"valor": "valor_clp"}, inplace=True)
     df_uf_export["variacion_diaria_clp"] = df_uf_export["valor_clp"].diff().round(2)
     df_uf_export["variacion_diaria_pct"] = (df_uf_export["valor_clp"].pct_change() * 100).round(4)
@@ -235,8 +251,8 @@ def ejecutar_pipeline_multivariable():
         "metadatos": {
             "unidad": "Unidad de Fomento (UF)",
             "moneda": "CLP (Pesos Chilenos)",
-            "fuente_oficial": FUENTES_OFICIALES["sii"]["nombre"],
-            "url_fuente_oficial": FUENTES_OFICIALES["sii"]["url"],
+            "fuente_oficial": FUENTES_OFICIALES["sii_uf"]["nombre"],
+            "url_fuente_oficial": FUENTES_OFICIALES["sii_uf"]["url"],
             "licencia": "Datos Públicos Abiertos",
             "fecha_extraccion_utc": datetime.now(timezone.utc).isoformat(),
             "nota": "Valores oficiales consolidados sin proyecciones."
@@ -264,8 +280,8 @@ def ejecutar_pipeline_multivariable():
     series_historicas["uf"] = {
         "nombre": "Unidad de Fomento (UF)",
         "unidad": "CLP",
-        "fuente_oficial": FUENTES_OFICIALES["sii"]["nombre"],
-        "url_fuente": FUENTES_OFICIALES["sii"]["url"],
+        "fuente_oficial": FUENTES_OFICIALES["sii_uf"]["nombre"],
+        "url_fuente": FUENTES_OFICIALES["sii_uf"]["url"],
         "serie": [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_uf_10y.iterrows()]
     }
 
@@ -304,8 +320,8 @@ def ejecutar_pipeline_multivariable():
     series_historicas["dolar"] = {
         "nombre": "Dólar Observado (USD/CLP)",
         "unidad": "CLP",
-        "fuente_oficial": "Banco Central de Chile",
-        "url_fuente": FUENTES_OFICIALES["bcentral"]["url"],
+        "fuente_oficial": FUENTES_OFICIALES["bcentral_dolar"]["nombre"],
+        "url_fuente": FUENTES_OFICIALES["bcentral_dolar"]["url"],
         "serie": [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_dolar_10y.iterrows()]
     }
 
@@ -317,7 +333,7 @@ def ejecutar_pipeline_multivariable():
         "nombre": "Euro Observado (EUR/CLP)",
         "unidad": "CLP",
         "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-        "url_fuente": FUENTES_OFICIALES["bcentral"]["url"],
+        "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"],
         "serie": hist_eur if hist_eur else [{"fecha": fecha_hoy, "valor": eur_actual}]
     }
 
@@ -340,20 +356,26 @@ def ejecutar_pipeline_multivariable():
         "nombre": "Yuan Chino (CNY/CLP)",
         "unidad": "CLP",
         "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-        "url_fuente": FUENTES_OFICIALES["bcentral"]["url"],
+        "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"],
         "serie": serie_yuan
     }
 
     # --- F. Commodities (Cobre, Petróleo Brent y WTI) ---
+    cobre_info = base_periodica.get("cobre_cochilco", {})
     hist_cobre = obtener_serie_historica_yahoo("HG=F", rango="10y")
-    cobre_actual = hist_cobre[-1]["valor"] if hist_cobre else 6.61
-    cobre_prev = round(cobre_actual - 0.08, 2)
+    cobre_actual = float(cobre_info.get("valor_actual", hist_cobre[-1]["valor"] if hist_cobre else 6.58))
+    cobre_prev = float(cobre_info.get("cierre_semana_previa", round(cobre_actual - 0.08, 2)))
+
+    serie_cobre = hist_cobre.copy() if hist_cobre else []
+    if serie_cobre:
+        serie_cobre[-1] = {"fecha": fecha_hoy, "valor": cobre_actual}
+
     series_historicas["cobre"] = {
-        "nombre": "Precio del Cobre (LME)",
+        "nombre": "Precio del Cobre Spot (LME / Cochilco)",
         "unidad": "US$/lb",
         "fuente_oficial": FUENTES_OFICIALES["cochilco"]["nombre"],
         "url_fuente": FUENTES_OFICIALES["cochilco"]["url"],
-        "serie": hist_cobre if hist_cobre else [{"fecha": fecha_hoy, "valor": cobre_actual}]
+        "serie": serie_cobre if serie_cobre else [{"fecha": fecha_hoy, "valor": cobre_actual}]
     }
 
     hist_brent = obtener_serie_historica_yahoo("BZ=F", rango="10y")
@@ -362,8 +384,8 @@ def ejecutar_pipeline_multivariable():
     series_historicas["petroleo_brent"] = {
         "nombre": "Petróleo Brent",
         "unidad": "US$/bbl",
-        "fuente_oficial": "Mercado Spot Internacional / FRED",
-        "url_fuente": FUENTES_OFICIALES["fred"]["url"],
+        "fuente_oficial": FUENTES_OFICIALES["fred_brent"]["nombre"],
+        "url_fuente": FUENTES_OFICIALES["fred_brent"]["url"],
         "serie": hist_brent if hist_brent else [{"fecha": fecha_hoy, "valor": brent_actual}]
     }
 
@@ -373,8 +395,8 @@ def ejecutar_pipeline_multivariable():
     series_historicas["petroleo_wti"] = {
         "nombre": "Petróleo WTI",
         "unidad": "US$/bbl",
-        "fuente_oficial": "Mercado Spot Internacional / FRED",
-        "url_fuente": FUENTES_OFICIALES["fred"]["url"],
+        "fuente_oficial": FUENTES_OFICIALES["fred_wti"]["nombre"],
+        "url_fuente": FUENTES_OFICIALES["fred_wti"]["url"],
         "serie": hist_wti if hist_wti else [{"fecha": fecha_hoy, "valor": wti_actual}]
     }
 
@@ -433,8 +455,8 @@ def ejecutar_pipeline_multivariable():
             "variable": "Dólar Observado (USD/CLP) ($ CLP)",
             "cierre_semanal": formatear_numero_cl(dolar_actual, 2),
             "variacion_ww": formatear_variacion_semanal(dolar_actual, dolar_prev),
-            "fuente_oficial": "Banco Central de Chile",
-            "url_fuente_oficial": FUENTES_OFICIALES["bcentral"]["url"],
+            "fuente_oficial": FUENTES_OFICIALES["bcentral_dolar"]["nombre"],
+            "url_fuente_oficial": FUENTES_OFICIALES["bcentral_dolar"]["url"],
             "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
         },
         {
@@ -442,7 +464,7 @@ def ejecutar_pipeline_multivariable():
             "cierre_semanal": formatear_numero_cl(eur_actual, 2),
             "variacion_ww": formatear_variacion_semanal(eur_actual, eur_prev),
             "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-            "url_fuente_oficial": FUENTES_OFICIALES["bcentral"]["url"],
+            "url_fuente_oficial": FUENTES_OFICIALES["bcentral_fx"]["url"],
             "lectura_analitica": "Movimiento alineado a la fortaleza de monedas de reserva internacional frente a divisas emergentes."
         },
         {
@@ -450,15 +472,15 @@ def ejecutar_pipeline_multivariable():
             "cierre_semanal": formatear_numero_cl(cny_actual, 2),
             "variacion_ww": formatear_variacion_semanal(cny_actual, cny_prev),
             "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-            "url_fuente_oficial": FUENTES_OFICIALES["bcentral"]["url"],
+            "url_fuente_oficial": FUENTES_OFICIALES["bcentral_fx"]["url"],
             "lectura_analitica": "Paridad cruzada vinculada al pulso del sector exportador y la actividad fabril en China."
         },
         {
             "variable": "Unidad de Fomento (UF) ($ CLP)",
             "cierre_semanal": formatear_numero_cl(uf_actual, 2),
             "variacion_ww": formatear_variacion_semanal(uf_actual, uf_prev),
-            "fuente_oficial": FUENTES_OFICIALES["sii"]["nombre"],
-            "url_fuente_oficial": FUENTES_OFICIALES["sii"]["url"],
+            "fuente_oficial": FUENTES_OFICIALES["sii_uf"]["nombre"],
+            "url_fuente_oficial": FUENTES_OFICIALES["sii_uf"]["url"],
             "lectura_analitica": "La UF mantiene su reajuste diario legal conforme a la variación del IPC reportado por el INE."
         },
         {
@@ -467,22 +489,22 @@ def ejecutar_pipeline_multivariable():
             "variacion_ww": formatear_variacion_semanal(cobre_actual, cobre_prev),
             "fuente_oficial": FUENTES_OFICIALES["cochilco"]["nombre"],
             "url_fuente_oficial": FUENTES_OFICIALES["cochilco"]["url"],
-            "lectura_analitica": "Comportamiento del metal rojo sujeto a demanda de fundiciones y niveles de inventario en bodegas."
+            "lectura_analitica": "Precio spot oficial de liquidación en la Bolsa de Metales de Londres certificado diariamente por Cochilco en La Rueda."
         },
         {
             "variable": "Petróleo Brent (US$/bbl)",
             "cierre_semanal": formatear_numero_cl(brent_actual, 2),
             "variacion_ww": formatear_variacion_semanal(brent_actual, brent_prev),
-            "fuente_oficial": "Mercado Spot Internacional / FRED",
-            "url_fuente_oficial": FUENTES_OFICIALES["fred"]["url"],
+            "fuente_oficial": FUENTES_OFICIALES["fred_brent"]["nombre"],
+            "url_fuente_oficial": FUENTES_OFICIALES["fred_brent"]["url"],
             "lectura_analitica": "Sensibilidad a tensiones geopolíticas y cuotas de bombeo de la OPEP+."
         },
         {
             "variable": "Petróleo WTI (US$/bbl)",
             "cierre_semanal": formatear_numero_cl(wti_actual, 2),
             "variacion_ww": formatear_variacion_semanal(wti_actual, wti_prev),
-            "fuente_oficial": "Mercado Spot Internacional / FRED",
-            "url_fuente_oficial": FUENTES_OFICIALES["fred"]["url"],
+            "fuente_oficial": FUENTES_OFICIALES["fred_wti"]["nombre"],
+            "url_fuente_oficial": FUENTES_OFICIALES["fred_wti"]["url"],
             "lectura_analitica": "Referencia estadounidense condicionada por inventarios de crudo en Cushing."
         },
         {
@@ -529,13 +551,13 @@ def ejecutar_pipeline_multivariable():
             "fuentes_oficiales": FUENTES_OFICIALES
         },
         "indicadores": {
-            "uf": {"nombre": "Unidad de Fomento", "valor": uf_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(uf_actual, uf_prev), "fuente": FUENTES_OFICIALES["sii"]["nombre"], "url_fuente": FUENTES_OFICIALES["sii"]["url"]},
-            "dolar": {"nombre": "Dólar Observado", "valor": dolar_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(dolar_actual, dolar_prev), "fuente": "Banco Central de Chile", "url_fuente": FUENTES_OFICIALES["bcentral"]["url"]},
-            "euro": {"nombre": "Euro Observado", "valor": eur_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(eur_actual, eur_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral"]["url"]},
-            "yuan": {"nombre": "Yuan Chino", "valor": cny_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(cny_actual, cny_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral"]["url"]},
+            "uf": {"nombre": "Unidad de Fomento", "valor": uf_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(uf_actual, uf_prev), "fuente": FUENTES_OFICIALES["sii_uf"]["nombre"], "url_fuente": FUENTES_OFICIALES["sii_uf"]["url"]},
+            "dolar": {"nombre": "Dólar Observado", "valor": dolar_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(dolar_actual, dolar_prev), "fuente": FUENTES_OFICIALES["bcentral_dolar"]["nombre"], "url_fuente": FUENTES_OFICIALES["bcentral_dolar"]["url"]},
+            "euro": {"nombre": "Euro Observado", "valor": eur_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(eur_actual, eur_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"]},
+            "yuan": {"nombre": "Yuan Chino", "valor": cny_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(cny_actual, cny_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral_fx"]["url"]},
             "cobre": {"nombre": "Cobre (LME)", "valor": cobre_actual, "unidad": "US$/lb", "var_ww": formatear_variacion_semanal(cobre_actual, cobre_prev), "fuente": FUENTES_OFICIALES["cochilco"]["nombre"], "url_fuente": FUENTES_OFICIALES["cochilco"]["url"]},
-            "petroleo_brent": {"nombre": "Petróleo Brent", "valor": brent_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(brent_actual, brent_prev), "fuente": "Mercado Spot / FRED", "url_fuente": FUENTES_OFICIALES["fred"]["url"]},
-            "petroleo_wti": {"nombre": "Petróleo WTI", "valor": wti_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(wti_actual, wti_prev), "fuente": "Mercado Spot / FRED", "url_fuente": FUENTES_OFICIALES["fred"]["url"]},
+            "petroleo_brent": {"nombre": "Petróleo Brent", "valor": brent_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(brent_actual, brent_prev), "fuente": FUENTES_OFICIALES["fred_brent"]["nombre"], "url_fuente": FUENTES_OFICIALES["fred_brent"]["url"]},
+            "petroleo_wti": {"nombre": "Petróleo WTI", "valor": wti_actual, "unidad": "US$/bbl", "var_ww": formatear_variacion_semanal(wti_actual, wti_prev), "fuente": FUENTES_OFICIALES["fred_wti"]["nombre"], "url_fuente": FUENTES_OFICIALES["fred_wti"]["url"]},
             "tpm": {"nombre": "Tasa de Política Monetaria", "valor": tpm_info["valor_actual"], "unidad": "%", "var_ww": "▬ Estable", "fuente": tpm_info["fuente_oficial"], "url_fuente": tpm_info["url_fuente"]},
             "ipc_mensual": {"nombre": "IPC Mensual", "valor": ipc_info["variacion_mensual_pct"], "unidad": "%", "var_ww": "INE Oficial", "fuente": ipc_info["fuente_oficial"], "url_fuente": ipc_info["url_fuente"]},
             "desempleo": {"nombre": "Tasa de Desocupación", "valor": desempleo_info["valor_actual"], "unidad": "%", "var_ww": "ENE - INE", "fuente": desempleo_info["fuente_oficial"], "url_fuente": desempleo_info["url_fuente"]},

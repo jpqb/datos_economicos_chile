@@ -49,11 +49,16 @@
           <p class="text-xs text-slate-500 font-medium">Proveedor de Datos Abiertos • Economía de Chile</p>
         </div>
       </div>
-      <div class="flex items-center space-x-3">
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <button onclick="abrirModalNotasTecnicas()" class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg transition border border-blue-200 shadow-sm">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Notas Técnicas & Metodología</span>
+          <span class="sm:hidden">Metodología</span>
+        </button>
         <a href="https://github.com/jpqb/datos_economicos_chile" target="_blank" rel="noopener noreferrer" 
            class="inline-flex items-center space-x-2 text-xs font-semibold px-3 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition shadow-sm">
           <i data-lucide="github" class="w-4 h-4"></i>
-          <span class="hidden sm:inline">Ver Repositorio</span>
+          <span class="hidden md:inline">Ver Repositorio</span>
         </a>
       </div>
     </div>
@@ -140,11 +145,17 @@
           <i data-lucide="landmark" class="w-4 h-4 text-blue-600"></i>
           <span>Fuente Oficial: <strong id="lbl-fuente-grafico">Servicio de Impuestos Internos (SII)</strong></span>
         </div>
-        <a id="lnk-fuente-grafico" href="https://www.sii.cl/valores_y_fechas/" target="_blank" rel="noopener noreferrer" 
-           class="inline-flex items-center space-x-1 text-blue-700 hover:text-blue-900 font-semibold underline text-[11px]">
-          <span>Ver Fuente Primaria</span>
-          <i data-lucide="external-link" class="w-3 h-3"></i>
-        </a>
+        <div class="flex items-center gap-2">
+          <button onclick="abrirModalNotasTecnicas(variableActual)" class="inline-flex items-center space-x-1 px-2.5 py-1 bg-white hover:bg-blue-100 border border-blue-200 text-blue-800 rounded-lg text-[11px] font-semibold transition shadow-xs">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-blue-600"></i>
+            <span>Ver Ficha Técnica</span>
+          </button>
+          <a id="lnk-fuente-grafico" href="https://www.sii.cl/valores_y_fechas/uf/uf2026.htm" target="_blank" rel="noopener noreferrer" 
+             class="inline-flex items-center space-x-1 text-blue-700 hover:text-blue-900 font-semibold underline text-[11px]">
+            <span>Ver Fuente Primaria</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
       </div>
 
       <!-- Lienzo del Gráfico -->
@@ -538,6 +549,59 @@
 
   </main>
 
+  <!-- Modal de Notas Técnicas y Metodología Oficial -->
+  <div id="modal-notas-tecnicas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-3 sm:p-5">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-base sm:text-lg">Fichas Técnicas & Metodología de Obtención</h3>
+            <p class="text-xs text-slate-500">Trazabilidad oficial, metodología de cálculo y explicación de discrepancias de mercado.</p>
+          </div>
+        </div>
+        <button onclick="cerrarModalNotasTecnicas()" class="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-xl transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Selector Tabs + Content) -->
+      <div class="flex-grow flex flex-col md:flex-row overflow-hidden min-h-[380px]">
+        <!-- Sidebar Tabs -->
+        <div class="w-full md:w-60 bg-slate-50 border-b md:border-b-0 md:border-r border-slate-200 p-2.5 overflow-x-auto md:overflow-y-auto flex md:flex-col gap-1 flex-shrink-0 text-xs">
+          <div id="tabs-modal-indicadores" class="flex md:flex-col gap-1 w-full"></div>
+        </div>
+
+        <!-- Contenido Detallado -->
+        <div id="contenido-modal-tecnico" class="flex-grow p-5 sm:p-6 overflow-y-auto space-y-4 text-xs leading-relaxed text-slate-700">
+          <!-- Renderizado dinámico -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3.5 sm:p-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-1.5 text-slate-500 text-[11px]">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Documento normativo oficial homologado con la Minuta Semanal UCEN</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <a id="lnk-modal-fuente-primaria" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition shadow-xs">
+            <span>Abrir Fuente Primaria Verificada</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+          <button onclick="cerrarModalNotasTecnicas()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold transition">
+            Cerrar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-center">
@@ -775,9 +839,14 @@
                   <p class="text-slate-300 text-[10.5px]">${c.tipDesc}</p>
                 </div>
               </div>
-              <a href="${c.url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="text-slate-400 hover:text-blue-600 truncate max-w-[80px]" title="Fuente: ${c.fuente}">
-                ${c.fuente.split('(')[0].trim()}
-              </a>
+              <div class="flex items-center gap-1.5">
+                <a href="${c.url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="text-slate-400 hover:text-blue-600 truncate max-w-[80px]" title="Fuente directa: ${c.fuente}">
+                  ${c.fuente.split('(')[0].trim()}
+                </a>
+                <button onclick="event.stopPropagation(); abrirModalNotasTecnicas('${c.serieKey}')" class="text-blue-500 hover:text-blue-700 p-0.5 rounded hover:bg-blue-50 transition" title="Ver Ficha Técnica y Metodología de ${c.titulo}">
+                  <i data-lucide="help-circle" class="w-3 h-3"></i>
+                </button>
+              </div>
             </div>
           `;
           grid.appendChild(cardEl);
@@ -1228,6 +1297,269 @@
         alert("✅ Cuadro de la Minuta Semanal copiado al portapapeles en formato Markdown.");
       });
     }
+
+    // --- Fichas Técnicas & Metodología de Obtención de Indicadores ---
+    const NOTAS_TECNICAS = {
+      uf: {
+        nombre: "Unidad de Fomento (UF)",
+        emisor: "Banco Central de Chile & SII",
+        marcoLegal: "Decreto Ley N° 3.588 de 1980 y D.F.L. N° 320 de 1960",
+        unidad: "Pesos Chilenos ($ CLP por UF)",
+        frecuencia: "Diaria (Reajuste legal a las 00:00 hrs)",
+        urlFuente: "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
+        icono: "badge-percent",
+        comoSeObtiene: "La UF no es una moneda física ni un activo financiero cotizado en bolsa; es una unidad de cuenta reajustable legal indexada al IPC. Su valor diario se actualiza entre el día 10 de cada mes y el día 9 del mes calendario siguiente mediante una tasa de interés geométrica diaria calculada a partir de la variación porcentual del IPC del mes inmediatamente anterior informado oficialmente por el INE:\n\nUF(t) = UF(t-1) * (1 + Var_IPC)^(1/k)\n(donde k es el número de días del período mensual de reajuste).\n\nEl calendario mensual completo es publicado oficialmente el día 9 de cada mes tras conocerse la cifra oficial de inflación del INE.",
+        discrepancias: "El SII publica en su portal el calendario tributario proyectado para los siguientes 30 días. No obstante, para garantizar consistencia metodológica y modelado econométrico con activos de mercado spot, este repositorio y la Minuta Semanal excluyen estrictamente las proyecciones futuras, registrando exclusivamente el valor diario efectivo devengado hasta la fecha."
+      },
+      dolar: {
+        nombre: "Dólar Observado (USD/CLP)",
+        emisor: "Banco Central de Chile (BCCh)",
+        marcoLegal: "Artículo 44 Ley N° 18.840 (LOC BCCh) y Cap. I CNCI",
+        unidad: "Pesos Chilenos ($ CLP por US$ 1)",
+        frecuencia: "Días hábiles bancarios (08:30 hrs y adelanto a las 17:00 hrs)",
+        urlFuente: "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado",
+        icono: "dollar-sign",
+        comoSeObtiene: "El Dólar Observado es el promedio aritmético ponderado por volumen de todas las operaciones cambiarias spot (compra y venta de dólares estadounidenses por moneda nacional) transadas por los bancos comerciales e instituciones financieras en el Mercado Cambiario Formal chileno durante el día hábil bancario anterior.\n\nSe publica diariamente en el Diario Oficial y en la web del Banco Central cada mañana a las 08:30 hrs para regir esa jornada. A contar de las 17:00 – 18:00 hrs de cada tarde, el Banco Central calcula y adelanta en su portal el valor oficial vigente para el siguiente día hábil.",
+        discrepancias: "¿Por qué difiere del dólar en vivo o del SII?\n1. Mercado en vivo vs. Observado: Portales financieros (Google / Yahoo Finance) muestran la cotización interbancaria spot continua en tiempo real, sujeta a fluctuación segundo a segundo. El Dólar Observado es una media legal ponderada fija ex-post.\n2. Rezago del SII: El SII es un replicador tributario que transcribe las cifras del Banco Central con rezagos de semanas (actualmente su tabla estática llega al 1 de octubre). La fuente originaria, legal y primaria indiscutible es el Banco Central de Chile."
+      },
+      euro: {
+        nombre: "Euro Observado (EUR/CLP)",
+        emisor: "Banco Central de Chile (Base de Datos Estadísticos)",
+        marcoLegal: "Compendio de Normas de Cambios Internacionales (CNCI)",
+        unidad: "Pesos Chilenos ($ CLP por € 1)",
+        frecuencia: "Días hábiles bancarios (14:00 hrs)",
+        urlFuente: "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
+        icono: "euro",
+        comoSeObtiene: "No surge de un mercado de negociación spot local masivo peso-euro en Santiago. El Banco Central de Chile determina el Euro Observado mediante paridad cambiaria cruzada de arbitraje oficial: se multiplica el Dólar Observado vigente por la cotización de arbitraje internacional EUR/USD reportada en los mercados monetarios globales a las 13:30 hrs de Santiago.",
+        discrepancias: "Puede presentar leves diferencias con cotizaciones forex instantáneas debido a la hora fija de corte estandarizada (13:30 hrs) adoptada institucionalmente por el Banco Central."
+      },
+      yuan: {
+        nombre: "Yuan Chino (CNY/CLP)",
+        emisor: "Banco Central de Chile & Banco Popular de China (PBOC)",
+        marcoLegal: "Estadísticas Monetarias y Financieras Internacionales (BDE)",
+        unidad: "Pesos Chilenos ($ CLP por ¥ 1)",
+        frecuencia: "Días hábiles bancarios",
+        urlFuente: "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
+        icono: "coins",
+        comoSeObtiene: "Paridad cambiaria cruzada oficial calculada a partir de la relación entre el Dólar Observado en Chile (USD/CLP) y la paridad oficial USD/CNY establecida por el Banco Popular de China. Es un indicador clave para evaluar los términos de intercambio y la competitividad de las exportaciones de cobre, fruta y celulosa hacia China.",
+        discrepancias: "China opera bajo un régimen de flotación administrada con una banda diaria de fluctuación en torno a un punto medio fijado por el PBOC, por lo que su paridad con el peso refleja tanto la dinámica cambiaria en Santiago como las fijaciones oficiales de Beijing."
+      },
+      cobre: {
+        nombre: "Precio del Cobre Spot (LME / Cochilco)",
+        emisor: "Comisión Chilena del Cobre (Cochilco) & London Metal Exchange (LME)",
+        marcoLegal: "Decreto Ley N° 1.349 de 1976 (Creación de Cochilco)",
+        unidad: "Dólares de EE.UU. por libra física (US$/lb)",
+        frecuencia: "Lunes a Viernes (09:30 - 11:00 hrs CLT)",
+        urlFuente: "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx",
+        icono: "layers",
+        comoSeObtiene: "Corresponde al Precio Oficial de Liquidación en Efectivo (Cash Settlement) para Cátodos de Cobre de Grado A transados en la Bolsa de Metales de Londres (LME). Cochilco certifica y publica este valor diariamente tras el cierre de la segunda sesión de rueda en Londres ('La Rueda Diaria'), expresándolo en centavos de dólar por libra física y dólares por tonelada métrica (1 TM = 2.204,62 lb).",
+        discrepancias: "Cochilco Spot LME vs. Yahoo Finance COMEX (HG=F):\nYahoo Finance y portales comerciales informan contratos de futuros de cobre en el COMEX de Nueva York, que incluyen primas de financiamiento, cobertura y entrega a meses futuros. Cochilco reporta el precio spot de entrega física inmediata en Londres (BML), que es el valor legal oficial utilizado para calcular el Royalty Minero, los ingresos fiscales de Codelco y las proyecciones presupuestarias de Hacienda."
+      },
+      petroleo_brent: {
+        nombre: "Petróleo Brent (Mar del Norte)",
+        emisor: "U.S. Energy Information Administration (EIA) / FRED",
+        marcoLegal: "Referencia para cálculo MEPCO y ENAP en Chile",
+        unidad: "Dólares de EE.UU. por barril (US$/bbl)",
+        frecuencia: "Diaria (Días hábiles de negociación bursátil)",
+        urlFuente: "https://fred.stlouisfed.org/series/DCOILBRENTEU",
+        icono: "droplet",
+        comoSeObtiene: "Precio spot FOB en boca de terminal de exportación para la canasta de crudos ligeros del Mar del Norte (Brent, Forties, Oseberg, Ekofisk, Troll). Constituye el marcador global de referencia para más del 65% del crudo importado por ENAP en Chile y rige los parámetros de ajuste semanal del Mecanismo de Estabilización de Precios de los Combustibles (MEPCO).",
+        discrepancias: "No debe confundirse con los contratos de futuros del Brent en el ICE. La serie canónica directa DCOILBRENTEU de la Reserva Federal (FRED/EIA) refleja el precio spot diario certificado sin primas financieras temporales."
+      },
+      petroleo_wti: {
+        nombre: "Petróleo WTI (West Texas Intermediate)",
+        emisor: "U.S. Energy Information Administration (EIA) / FRED",
+        marcoLegal: "Marcador de referencia crudo dulce liviano de EE.UU.",
+        unidad: "Dólares de EE.UU. por barril (US$/bbl)",
+        frecuencia: "Diaria (Días hábiles en EE.UU.)",
+        urlFuente: "https://fred.stlouisfed.org/series/DCOILWTICO",
+        icono: "fuel",
+        comoSeObtiene: "Precio spot físico para entrega inmediata en el nodo de oleoductos y almacenamiento de Cushing, Oklahoma. Representa el crudo ligero de alta calidad de EE.UU. Es monitoreado en Chile por su impacto directo en los costos de refinería de derivados (gasolinas y diésel) en el Golfo de México.",
+        discrepancias: "El diferencial de precio entre Brent y WTI (spread Brent-WTI) responde a cuellos de botella de transporte en EE.UU. y costos de flete marítimo internacional hacia refinerías chilenas."
+      },
+      tpm: {
+        nombre: "Tasa de Política Monetaria (TPM)",
+        emisor: "Banco Central de Chile (BCCh)",
+        marcoLegal: "Artículos 34 y 35 Ley N° 18.840 (LOC BCCh)",
+        unidad: "Porcentaje anual (%)",
+        frecuencia: "8 Reuniones de Política Monetaria (RPM) al año",
+        urlFuente: "https://www.bcentral.cl/areas/politica-monetaria",
+        icono: "percent",
+        comoSeObtiene: "La TPM no es un precio de mercado libre; es una decisión discrecional de política macroeconómica votada formalmente por el Consejo del Banco Central de Chile en sus Reuniones de Política Monetaria (RPM). Define la tasa de interés objetivo para las operaciones de préstamos interbancarios a un día (overnight) que el Banco Central conduce para anclar la inflación en la meta del 3% a dos años plazo.",
+        discrepancias: "Permanece fija entre reuniones. En el Cuadro de la Minuta Semanal se clasifica como '▬ Estable' en aquellas semanas donde no sesiona el Consejo del Banco Central."
+      },
+      ipc: {
+        nombre: "Índice de Precios al Consumidor (IPC)",
+        emisor: "Instituto Nacional de Estadísticas (INE)",
+        marcoLegal: "Ley N° 17.374 y Decreto Supremo N° 35 Ministerio de Economía",
+        unidad: "Variación mensual (%), acumulada en el año y a doce meses",
+        frecuencia: "Mensual (Día 8 de cada mes a las 08:00 hrs)",
+        urlFuente: "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor",
+        icono: "trending-up",
+        comoSeObtiene: "El INE recolecta mes a mes más de 120.000 cotizaciones de bienes y servicios en las 16 capitales regionales del país para calcular el costo de una canasta representativa de 303 productos (base anual 2023=100). Cuantifica la variación ponderada del gasto de los hogares de acuerdo a la Encuesta de Presupuestos Familiares (EPF).",
+        discrepancias: "Es una cifra mensual única que se publica una sola vez cada 30 días. Su publicación determina directamente el reajuste legal diario de la UF para el ciclo que comienza el día 10 de ese mismo mes."
+      },
+      desempleo: {
+        nombre: "Tasa de Desocupación Nacional (Desempleo)",
+        emisor: "Instituto Nacional de Estadísticas (INE)",
+        marcoLegal: "Ley N° 17.374 (Encuesta Nacional de Empleo - ENE)",
+        unidad: "Porcentaje de la Fuerza de Trabajo (%)",
+        frecuencia: "Trimestre Móvil (Último día hábil de cada mes a las 09:00 hrs)",
+        urlFuente: "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
+        icono: "users",
+        comoSeObtiene: "Se estima mediante la Encuesta Nacional de Empleo (ENE), realizada a más de 35.000 hogares en todo el territorio chileno. Mide el porcentaje de personas de 15 años o más que pertenecen a la fuerza de trabajo, no estuvieron ocupadas durante la semana de referencia, buscaron activamente empleo en las 4 semanas anteriores y estaban disponibles para comenzar a trabajar de inmediato:\n\nTasa Desocupación = (Personas Desocupadas / Fuerza de Trabajo) * 100",
+        discrepancias: "El dato reportado no corresponde a un mes calendario aislado, sino al promedio de un trimestre móvil de tres meses consecutivos (ej. junio-julio-agosto). Esta metodología internacional estandarizada por la OIT amortigua la alta volatilidad estacional del empleo (como temporadas agrícolas o estivales)."
+      }
+    };
+
+    let notaTecnicaActiva = "uf";
+
+    function normalizarClaveNota(clave) {
+      if (!clave) return "uf";
+      const s = String(clave).toLowerCase();
+      if (s.includes("uf")) return "uf";
+      if (s.includes("dolar") || s.includes("dólar") || s.includes("usd")) return "dolar";
+      if (s.includes("euro") || s.includes("eur")) return "euro";
+      if (s.includes("yuan") || s.includes("cny")) return "yuan";
+      if (s.includes("cobre")) return "cobre";
+      if (s.includes("brent")) return "petroleo_brent";
+      if (s.includes("wti")) return "petroleo_wti";
+      if (s.includes("tpm")) return "tpm";
+      if (s.includes("ipc")) return "ipc";
+      if (s.includes("desempleo") || s.includes("empleo")) return "desempleo";
+      return "uf";
+    }
+
+    function abrirModalNotasTecnicas(claveInicial = "uf") {
+      const modal = document.getElementById("modal-notas-tecnicas");
+      if (!modal) return;
+      modal.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+      
+      const claveNorm = normalizarClaveNota(claveInicial);
+      renderizarTabsNotasTecnicas(claveNorm);
+      seleccionarTabNotaTecnica(claveNorm);
+    }
+
+    function cerrarModalNotasTecnicas() {
+      const modal = document.getElementById("modal-notas-tecnicas");
+      if (!modal) return;
+      modal.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    function renderizarTabsNotasTecnicas(claveSeleccionada) {
+      const contenedorTabs = document.getElementById("tabs-modal-indicadores");
+      if (!contenedorTabs) return;
+      contenedorTabs.innerHTML = "";
+
+      Object.keys(NOTAS_TECNICAS).forEach(k => {
+        const item = NOTAS_TECNICAS[k];
+        const esActivo = k === claveSeleccionada;
+        const btn = document.createElement("button");
+        btn.id = `tab-nota-${k}`;
+        btn.className = `w-full text-left px-3 py-2.5 rounded-xl font-medium transition flex items-center justify-between gap-2 text-xs flex-shrink-0 ${
+          esActivo ? 'bg-blue-600 text-white shadow-xs font-semibold' : 'text-slate-600 hover:bg-slate-200/60 hover:text-slate-900 bg-white md:bg-transparent border border-slate-200 md:border-transparent'
+        }`;
+        btn.onclick = () => seleccionarTabNotaTecnica(k);
+        btn.innerHTML = `
+          <span class="truncate">${item.nombre.split('(')[0].trim()}</span>
+          <i data-lucide="${item.icono}" class="w-3.5 h-3.5 flex-shrink-0 ${esActivo ? 'text-white' : 'text-slate-400'}"></i>
+        `;
+        contenedorTabs.appendChild(btn);
+      });
+      lucide.createIcons();
+    }
+
+    function seleccionarTabNotaTecnica(clave) {
+      const item = NOTAS_TECNICAS[clave];
+      if (!item) return;
+      notaTecnicaActiva = clave;
+
+      // Actualizar estilos visuales de los tabs
+      Object.keys(NOTAS_TECNICAS).forEach(k => {
+        const tabEl = document.getElementById(`tab-nota-${k}`);
+        if (!tabEl) return;
+        const esActivo = k === clave;
+        tabEl.className = `w-full text-left px-3 py-2.5 rounded-xl font-medium transition flex items-center justify-between gap-2 text-xs flex-shrink-0 ${
+          esActivo ? 'bg-blue-600 text-white shadow-xs font-semibold' : 'text-slate-600 hover:bg-slate-200/60 hover:text-slate-900 bg-white md:bg-transparent border border-slate-200 md:border-transparent'
+        }`;
+        const iconEl = tabEl.querySelector("i");
+        if (iconEl) {
+          iconEl.className = `w-3.5 h-3.5 flex-shrink-0 ${esActivo ? 'text-white' : 'text-slate-400'}`;
+        }
+      });
+
+      // Renderizar el cuerpo de la ficha
+      const contenedorContenido = document.getElementById("contenido-modal-tecnico");
+      if (!contenedorContenido) return;
+
+      contenedorContenido.innerHTML = `
+        <!-- Encabezado de la Ficha -->
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h4 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="${item.icono}" class="w-4 h-4 text-blue-600"></i>
+              <span>${item.nombre}</span>
+            </h4>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
+              ${item.emisor}
+            </span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-200/70 text-[11px]">
+            <div>
+              <span class="font-bold text-slate-800">Marco Legal / Normativo:</span>
+              <p class="text-slate-600 mt-0.5">${item.marcoLegal}</p>
+            </div>
+            <div>
+              <span class="font-bold text-slate-800">Unidad & Frecuencia:</span>
+              <p class="text-slate-600 mt-0.5">${item.unidad} • ${item.frecuencia}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ¿Cómo se obtiene y calcula? -->
+        <div class="p-4 bg-white border border-slate-200 rounded-xl shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-slate-900 text-sm">
+            <div class="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center">
+              <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+            </div>
+            <span>¿Cómo se obtiene y calcula oficialmente?</span>
+          </div>
+          <div class="text-slate-600 text-[12px] leading-relaxed whitespace-pre-line pl-8">
+            ${item.comoSeObtiene}
+          </div>
+        </div>
+
+        <!-- Advertencias de Discrepancia y Rigor Metodológico -->
+        ${item.discrepancias ? `
+        <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-xl space-y-2">
+          <div class="flex items-center gap-2 font-bold text-amber-950 text-sm">
+            <div class="w-6 h-6 rounded-md bg-amber-100 text-amber-700 flex items-center justify-center">
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+            </div>
+            <span>Rigor Metodológico y Explicación de Discrepancias</span>
+          </div>
+          <div class="text-amber-900/90 text-[11.5px] leading-relaxed whitespace-pre-line pl-8">
+            ${item.discrepancias}
+          </div>
+        </div>
+        ` : ''}
+      `;
+
+      // Actualizar enlace inferior hacia la fuente primaria
+      const lnkFuente = document.getElementById("lnk-modal-fuente-primaria");
+      if (lnkFuente) {
+        lnkFuente.href = item.urlFuente;
+        lnkFuente.innerHTML = `<span>Abrir Fuente Primaria (${item.emisor.split('&')[0].split('/')[0].trim()})</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i>`;
+      }
+
+      lucide.createIcons();
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") cerrarModalNotasTecnicas();
+    });
 
     window.addEventListener("DOMContentLoaded", inicializarDashboard);
   </script>

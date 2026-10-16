@@ -21,7 +21,7 @@
       "cierre_semanal": "984,09",
       "variacion_ww": "▲ 4,24",
       "fuente_oficial": "Banco Central de Chile",
-      "url_fuente_oficial": "https://www.bcentral.cl",
+      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado",
       "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
     },
     {
@@ -29,15 +29,15 @@
       "cierre_semanal": "1.069,27",
       "variacion_ww": "▲ 17,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-      "url_fuente_oficial": "https://www.bcentral.cl",
+      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
       "lectura_analitica": "Movimiento alineado a la fortaleza de monedas de reserva internacional frente a divisas emergentes."
     },
     {
       "variable": "Yuan Chino (CNY/CLP) ($ CLP)",
-      "cierre_semanal": "147,76",
+      "cierre_semanal": "147,54",
       "variacion_ww": "▲ 2,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-      "url_fuente_oficial": "https://www.bcentral.cl",
+      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
       "lectura_analitica": "Paridad cruzada vinculada al pulso del sector exportador y la actividad fabril en China."
     },
     {
@@ -45,31 +45,31 @@
       "cierre_semanal": "41.162,73",
       "variacion_ww": "▲ 39,99",
       "fuente_oficial": "Servicio de Impuestos Internos (SII)",
-      "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/",
+      "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
       "lectura_analitica": "La UF mantiene su reajuste diario legal conforme a la variación del IPC reportado por el INE."
     },
     {
       "variable": "Cobre (LME / Cochilco) (US$/lb)",
-      "cierre_semanal": "6,55",
-      "variacion_ww": "▲ 0,08",
+      "cierre_semanal": "6,58",
+      "variacion_ww": "▼ 0,08",
       "fuente_oficial": "Comisión Chilena del Cobre (Cochilco) / LME",
-      "url_fuente_oficial": "https://www.cochilco.cl",
-      "lectura_analitica": "Comportamiento del metal rojo sujeto a demanda de fundiciones y niveles de inventario en bodegas."
+      "url_fuente_oficial": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx",
+      "lectura_analitica": "Precio spot oficial de liquidación en la Bolsa de Metales de Londres certificado diariamente por Cochilco en La Rueda."
     },
     {
       "variable": "Petróleo Brent (US$/bbl)",
-      "cierre_semanal": "105,57",
+      "cierre_semanal": "105,44",
       "variacion_ww": "▲ 1,67",
-      "fuente_oficial": "Mercado Spot Internacional / FRED",
-      "url_fuente_oficial": "https://fred.stlouisfed.org",
+      "fuente_oficial": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+      "url_fuente_oficial": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
       "lectura_analitica": "Sensibilidad a tensiones geopolíticas y cuotas de bombeo de la OPEP+."
     },
     {
       "variable": "Petróleo WTI (US$/bbl)",
-      "cierre_semanal": "96,00",
+      "cierre_semanal": "95,97",
       "variacion_ww": "▲ 2,36",
-      "fuente_oficial": "Mercado Spot Internacional / FRED",
-      "url_fuente_oficial": "https://fred.stlouisfed.org",
+      "fuente_oficial": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+      "url_fuente_oficial": "https://fred.stlouisfed.org/series/DCOILWTICO",
       "lectura_analitica": "Referencia estadounidense condicionada por inventarios de crudo en Cushing."
     },
     {
@@ -77,7 +77,7 @@
       "cierre_semanal": "0.4% m/m; 4.1% a/a",
       "variacion_ww": "▬ Estable",
       "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
-      "url_fuente_oficial": "https://www.ine.gob.cl/estadisticas/economia/indices-de-precios-e-inflacion/indice-de-precios-al-consumidor",
+      "url_fuente_oficial": "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor",
       "lectura_analitica": "IPC de Septiembre 2026 con 0.4% mensual y 4.1% a doce meses."
     },
     {
@@ -85,7 +85,7 @@
       "cierre_semanal": "9,6",
       "variacion_ww": "▬ Estable",
       "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
-      "url_fuente_oficial": "https://www.ine.gob.cl/estadisticas/sociales/mercado-laboral/empleo-y-desempleo",
+      "url_fuente_oficial": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
       "lectura_analitica": "Desocupación situada en 9.6% en el trimestre móvil Junio - Agosto 2026."
     }
   ]

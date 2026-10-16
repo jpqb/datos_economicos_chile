@@ -66,7 +66,7 @@
     "mes_referencia": "Septiembre 2026",
     "fecha_publicacion": "2026-10-08",
     "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
-    "url_fuente": "https://www.ine.gob.cl/estadisticas/economia/indices-de-precios-e-inflacion/indice-de-precios-al-consumidor",
+    "url_fuente": "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor",
     "documento_oficial": "Boletín Estadístico Mensual IPC Septiembre 2026",
     "serie_historica_10y": [
       {"fecha": "2016-01-31", "valor": 0.5}, {"fecha": "2016-02-29", "valor": 0.3}, {"fecha": "2016-03-31", "valor": 0.4},
@@ -122,7 +122,7 @@
     "fecha_publicacion": "2026-09-30",
     "variacion_12_meses_pp": 1.0,
     "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
-    "url_fuente": "https://www.ine.gob.cl/estadisticas/sociales/mercado-laboral/empleo-y-desempleo",
+    "url_fuente": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
     "documento_oficial": "Encuesta Nacional de Empleo (ENE)",
     "serie_historica_10y": [
       {"fecha": "2016-01-31", "valor": 6.1}, {"fecha": "2016-02-29", "valor": 6.3}, {"fecha": "2016-03-31", "valor": 6.4},
@@ -191,5 +191,14 @@
     {"fecha": "2026-10-14", "valor": 980.79},
     {"fecha": "2026-10-15", "valor": 987.03},
     {"fecha": "2026-10-16", "valor": 984.09}
-  ]
+  ],
+  "cobre_cochilco": {
+    "nombre": "Precio del Cobre Spot (BML - Cochilco)",
+    "valor_actual": 6.58,
+    "cierre_semana_previa": 6.66,
+    "unidad": "US$/lb",
+    "fuente_oficial": "Comisión Chilena del Cobre (Cochilco) / LME",
+    "url_fuente": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx",
+    "documento_oficial": "Informe Diario La Rueda BML"
+  }
 }
