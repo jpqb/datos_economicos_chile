@@ -49,7 +49,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **⚠️ Advertencia de Discrepancia (Spot Forex vs. Dólar Observado):**
   1. *Mercado Continuo:* La cotización de mercado libre interbancario (Yahoo Finance `CLP=X` o terminales Bloomberg/Reuters) varía segundo a segundo. El Dólar Observado es una media fija calculada con las operaciones del día anterior.
   2. *Rezago del SII:* El SII **no calcula el dólar**; es un replicador tributario que transcribe las cifras del Banco Central con rezagos de semanas. La fuente originaria e indiscutible es el Banco Central.
-- **Enlace Directo Oficial Verificado:** [Indicadores Diarios Oficiales - Banco Central de Chile (BDE)](https://si3.bcentral.cl/indicadoressiete/index.htm)
+- **Enlace Directo Oficial Verificado:** [Indicadores Diarios Oficiales - Banco Central de Chile (BDE)](https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx)
 
 ---
 
@@ -61,7 +61,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   No surge de transacciones directas masivas entre pesos y euros en Santiago, sino que es una **paridad cruzada oficial**. Se obtiene multiplicando el Dólar Observado vigente del Banco Central por la cotización de arbitraje internacional Euro/Dólar (EUR/USD) fijada en los mercados cambiarios globales a las 13:30 hrs de Santiago.
 - **Frecuencia y Horario:** Días hábiles bancarios a las 14:00 hrs.
-- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile (BDE)](https://si3.bcentral.cl/indicadoressiete/index.htm)
+- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile (BDE)](https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx)
 
 ---
 
@@ -73,7 +73,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Paridad cruzada implícita calculada a partir de la razón entre el Dólar Observado oficial (USD/CLP) del Banco Central de Chile y la paridad oficial Dólar/Renminbi (USD/CNY) publicada por el Banco Popular de China. Esencial para evaluar la competitividad con el principal destino de las exportaciones mineras y agroindustriales chilenas.
 - **Frecuencia y Horario:** Diaria (días hábiles bancarios).
-- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile (BDE)](https://si3.bcentral.cl/indicadoressiete/index.htm)
+- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile (BDE)](https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx)
 
 ---
 
@@ -166,9 +166,9 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 | Variable | Tipo de Dato | Institución Emisora / Certificadora | Enlace Canónico Directo |
 | :--- | :--- | :--- | :--- |
 | **UF** | Reajuste legal diario | Servicio de Impuestos Internos (SII) | [sii.cl/valores_y_fechas/uf/uf2026.htm](https://www.sii.cl/valores_y_fechas/uf/uf2026.htm) |
-| **Dólar Obs.** | Media ponderada diaria | Banco Central de Chile (BCCh) | [si3.bcentral.cl/.../indicadoressiete](https://si3.bcentral.cl/indicadoressiete/index.htm) |
-| **Euro Obs.** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [si3.bcentral.cl/.../indicadoressiete](https://si3.bcentral.cl/indicadoressiete/index.htm) |
-| **Yuan Chino** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [si3.bcentral.cl/.../indicadoressiete](https://si3.bcentral.cl/indicadoressiete/index.htm) |
+| **Dólar Obs.** | Media ponderada diaria | Banco Central de Chile (BCCh) | [si3.bcentral.cl/.../Indicadoresdiarios.aspx](https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx) |
+| **Euro Obs.** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [si3.bcentral.cl/.../Indicadoresdiarios.aspx](https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx) |
+| **Yuan Chino** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [si3.bcentral.cl/.../Indicadoresdiarios.aspx](https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx) |
 | **Cobre LME** | Precio spot físico BML | London Metal Exchange / Cochilco | [cochilco.cl/web/la-rueda-diaria/](https://www.cochilco.cl/web/la-rueda-diaria/) |
 | **Petróleo Brent** | Spot FOB Mar del Norte (T-1) | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILBRENTEU](https://fred.stlouisfed.org/series/DCOILBRENTEU) |
 | **Petróleo WTI** | Spot Cushing (T-1) | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILWTICO](https://fred.stlouisfed.org/series/DCOILWTICO) |

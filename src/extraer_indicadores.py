@@ -68,11 +68,11 @@ FUENTES_OFICIALES = {
     },
     "bcentral_dolar": {
         "nombre": "Banco Central de Chile",
-        "url": "https://si3.bcentral.cl/indicadoressiete/index.htm"
+        "url": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx"
     },
     "bcentral_fx": {
         "nombre": "Banco Central de Chile (BDE)",
-        "url": "https://si3.bcentral.cl/indicadoressiete/index.htm"
+        "url": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx"
     },
     "bcentral_tpm": {
         "nombre": "Banco Central de Chile",
