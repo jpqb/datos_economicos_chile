@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-16T00:55:10.089445+00:00",
+    "fecha_actualizacion_utc": "2026-10-16T01:30:00.212506+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii_uf": {
@@ -9,19 +9,23 @@
       },
       "bcentral_dolar": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado"
+        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
       },
       "bcentral_fx": {
         "nombre": "Banco Central de Chile (BDE)",
-        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio"
+        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
       },
       "bcentral_tpm": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/areas/politica-monetaria"
+        "url": "https://www.bcentral.cl/web/banco-central/politica-monetaria"
       },
       "cochilco": {
-        "nombre": "Comisión Chilena del Cobre (Cochilco) / LME",
-        "url": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx"
+        "nombre": "London Metal Exchange (LME) / Cochilco",
+        "url": "https://www.cochilco.cl/web/la-rueda-diaria/"
+      },
+      "lme_cobre": {
+        "nombre": "London Metal Exchange (LME)",
+        "url": "https://www.lme.com/Metals/Non-ferrous/LME-Copper"
       },
       "fred_brent": {
         "nombre": "Federal Reserve Bank of St. Louis (FRED) / EIA",
@@ -56,7 +60,7 @@
       "unidad": "CLP",
       "var_ww": "▲ 4,24",
       "fuente": "Banco Central de Chile",
-      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado"
+      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
     },
     "euro": {
       "nombre": "Euro Observado",
@@ -64,27 +68,27 @@
       "unidad": "CLP",
       "var_ww": "▲ 17,00",
       "fuente": "Banco Central / FRED",
-      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio"
+      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
     },
     "yuan": {
       "nombre": "Yuan Chino",
-      "valor": 147.54,
+      "valor": 147.76,
       "unidad": "CLP",
       "var_ww": "▲ 2,00",
       "fuente": "Banco Central / FRED",
-      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio"
+      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
     },
     "cobre": {
       "nombre": "Cobre (LME)",
       "valor": 6.58,
       "unidad": "US$/lb",
       "var_ww": "▼ 0,08",
-      "fuente": "Comisión Chilena del Cobre (Cochilco) / LME",
-      "url_fuente": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx"
+      "fuente": "London Metal Exchange (LME) / Cochilco",
+      "url_fuente": "https://www.cochilco.cl/web/la-rueda-diaria/"
     },
     "petroleo_brent": {
       "nombre": "Petróleo Brent",
-      "valor": 105.44,
+      "valor": 105.35,
       "unidad": "US$/bbl",
       "var_ww": "▲ 1,67",
       "fuente": "Federal Reserve Bank of St. Louis (FRED) / EIA",
@@ -92,7 +96,7 @@
     },
     "petroleo_wti": {
       "nombre": "Petróleo WTI",
-      "valor": 95.97,
+      "valor": 95.89,
       "unidad": "US$/bbl",
       "var_ww": "▲ 2,36",
       "fuente": "Federal Reserve Bank of St. Louis (FRED) / EIA",
@@ -104,7 +108,7 @@
       "unidad": "%",
       "var_ww": "▬ Estable",
       "fuente": "Banco Central de Chile",
-      "url_fuente": "https://www.bcentral.cl/areas/politica-monetaria"
+      "url_fuente": "https://www.bcentral.cl/web/banco-central/politica-monetaria"
     },
     "ipc_mensual": {
       "nombre": "IPC Mensual",

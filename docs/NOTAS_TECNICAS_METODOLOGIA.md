@@ -49,7 +49,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **⚠️ Advertencia de Discrepancia (Spot Forex vs. Dólar Observado):**
   1. *Mercado Continuo:* La cotización de mercado libre interbancario (Yahoo Finance `CLP=X` o terminales Bloomberg/Reuters) varía segundo a segundo. El Dólar Observado es una media fija calculada con las operaciones del día anterior.
   2. *Rezago del SII:* El SII **no calcula el dólar**; es un replicador tributario que transcribe las cifras del Banco Central con rezagos de semanas. La fuente originaria e indiscutible es el Banco Central.
-- **Enlace Directo Oficial Verificado:** [Estadísticas Oficiales del Dólar Observado - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado)
+- **Enlace Directo Oficial Verificado:** [Indicadores Diarios Oficiales - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios)
 
 ---
 
@@ -61,7 +61,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   No surge de transacciones directas masivas entre pesos y euros en Santiago, sino que es una **paridad cruzada oficial**. Se obtiene multiplicando el Dólar Observado vigente del Banco Central por la cotización de arbitraje internacional Euro/Dólar (EUR/USD) fijada en los mercados cambiarios globales a las 13:30 hrs de Santiago.
 - **Frecuencia y Horario:** Días hábiles bancarios a las 14:00 hrs.
-- **Enlace Directo Oficial Verificado:** [Tipos de Cambio Oficiales - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio)
+- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios)
 
 ---
 
@@ -73,21 +73,25 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Paridad cruzada implícita calculada a partir de la razón entre el Dólar Observado oficial (USD/CLP) del Banco Central de Chile y la paridad oficial Dólar/Renminbi (USD/CNY) publicada por el Banco Popular de China. Esencial para evaluar la competitividad con el principal destino de las exportaciones mineras y agroindustriales chilenas.
 - **Frecuencia y Horario:** Diaria (días hábiles bancarios).
-- **Enlace Directo Oficial Verificado:** [Base de Datos Estadísticos (BDE) - Tipos de Cambio](https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio)
+- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios)
 
 ---
 
 ### 5. Precio del Cobre Spot (LME / Cochilco)
 
 - **Unidad de Medida:** Dólares de EE.UU. por libra física (US$/lb).
-- **Institución Informante Oficial:** Comisión Chilena del Cobre (Cochilco) / London Metal Exchange (LME).
+- **Mercado Primario Originario:** London Metal Exchange (LME / Bolsa de Metales de Londres).
+- **Institución Certificadora Oficial en Chile:** Comisión Chilena del Cobre (Cochilco).
 - **Marco Normativo:** Decreto Ley N° 1.349 de 1976 (Creación de Cochilco).
 - **¿Cómo se obtiene y calcula?:**  
-  Es el **Precio Spot de Liquidación en Efectivo (Cash Settlement)** para **Cátodos de Cobre de Grado A** transados en la Bolsa de Metales de Londres (LME). Cochilco certifica y publica este valor diariamente tras el cierre de la segunda sesión de rueda en Londres ("La Rueda"), expresándolo tanto en dólares por tonelada métrica como en centavos de dólar por libra física ($1 \text{ TM} = 2.204,62 \text{ lb}$).
+  1. *Mercado Primario (LME):* El precio originario mundial se determina en las sesiones de negociación de la **Bolsa de Metales de Londres (LME)** como el **Precio Spot de Liquidación en Efectivo (Cash Settlement)** para Cátodos de Cobre Grado A.
+  2. *Certificación Oficial de Cochilco:* Cochilco no fija un precio propio; recibe la cotización oficial de la LME tras la segunda rueda matutina de Londres y la publica oficialmente en Chile a través de **"La Rueda Diaria"**, certificando el valor en dólares por tonelada métrica y centavos de dólar por libra física ($1 \text{ TM} = 2.204,62 \text{ lb}$). Esta cifra certificada por Cochilco es la referencia legal vinculante para la recaudación del Royalty Minero y el presupuesto de la Nación.
 - **Frecuencia y Horario:** Lunes a viernes entre 09:30 y 11:00 hrs CLT (tras el cierre de rueda matutina en Londres).
 - **⚠️ Advertencia de Discrepancia (Spot LME vs. Futuros COMEX):**  
-  Muchos sitios financieros (como Yahoo Finance ticker `HG=F`) reportan los contratos de futuros de cobre en el COMEX de Nueva York. El contrato de futuros cotiza con primas de entrega, costos de flete financiero y expectativas a meses futuros. Cochilco publica el **precio spot físico en Londres (BML)**, que es el valor legal de referencia para la tributación minera, el royalty y las proyecciones del Ministerio de Hacienda.
-- **Enlace Directo Oficial Verificado:** [La Rueda Diaria BML - Cochilco](https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx)
+  Muchos sitios financieros (como Yahoo Finance ticker `HG=F`) reportan los contratos de futuros de cobre en el COMEX de Nueva York. El contrato de futuros cotiza con primas de entrega, costos de flete financiero y expectativas a meses futuros. Cochilco certifica el **precio spot físico en Londres (BML)**, que es el valor legal de referencia en Chile.
+- **Enlaces Oficiales Verificados:**
+  - *Mercado Primario Global:* [London Metal Exchange (LME Copper)](https://www.lme.com/Metals/Non-ferrous/LME-Copper)
+  - *Certificación Oficial en Chile:* [La Rueda Diaria - Cochilco](https://www.cochilco.cl/web/la-rueda-diaria/)
 
 ---
 
@@ -99,6 +103,8 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Precio spot en boca de terminal para el crudo ligero extraído en los campos del Mar del Norte (Brent Blend, Forties, Oseberg, Ekofisk, Troll). Constituye el marcador de referencia para más del 65% de las compras internacionales de hidrocarburos de ENAP y rige los parámetros de cálculo semanal del Mecanismo de Estabilización de Precios de los Combustibles (MEPCO) en Chile.
 - **Frecuencia:** Diaria (días de negociación bursátil en Europa e ICE).
+- **⚠️ Desfase Oficial de Publicación T-1 (EIA / FRED):**  
+  La EIA y FRED consolidan y certifican el precio spot oficial de cierre una vez concluidas las operaciones bursátiles, publicando formalmente la serie en FRED **al día hábil siguiente (desfase normativo T-1)**. Por ello, el dato más reciente disponible en las bases oficiales certificadas de FRED corresponde siempre al día hábil inmediatamente anterior al momento de la consulta.
 - **Enlace Directo Oficial Verificado:** [FRED Series DCOILBRENTEU (Brent Spot - EIA)](https://fred.stlouisfed.org/series/DCOILBRENTEU)
 
 ---
@@ -111,6 +117,8 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Cotización spot física para entrega en el centro de distribución de oleoductos de Cushing, Oklahoma. Representa el crudo dulce ligero de referencia estadounidense.
 - **Frecuencia:** Diaria (días hábiles en EE.UU.).
+- **⚠️ Desfase Oficial de Publicación T-1 (EIA / FRED):**  
+  Al igual que con el Brent, la serie canónica de la EIA en FRED se actualiza con un desfase de 1 día hábil ($T-1$) tras el cierre oficial de Cushing, reflejando el último día hábil anterior.
 - **Enlace Directo Oficial Verificado:** [FRED Series DCOILWTICO (WTI Spot - EIA)](https://fred.stlouisfed.org/series/DCOILWTICO)
 
 ---
@@ -123,7 +131,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Es la tasa de interés objetivo fijada por el Consejo del Banco Central para las operaciones de crédito interbancario a un día plazo (overnight). **No es una tasa determinada por el mercado**, sino una decisión de política macroeconómica votada formalmente por los cinco consejeros del Banco Central en sus Reuniones de Política Monetaria (RPM), celebradas 8 veces al año conforme a un calendario predefinido.
 - **Frecuencia:** Se reúne 8 veces al año. Permanece idéntica entre reuniones a menos que ocurra una sesión de emergencia. En el cuadro semanal se etiqueta como *"▬ Estable"* cuando la semana no coincide con una decisión de RPM.
-- **Enlace Directo Oficial Verificado:** [Reuniones y Comunicados de Política Monetaria - BCCh](https://www.bcentral.cl/areas/politica-monetaria)
+- **Enlace Directo Oficial Verificado:** [Política Monetaria y Comunicados RPM - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/politica-monetaria)
 
 ---
 
@@ -155,15 +163,15 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 
 ## 🏛️ Matriz de Gobernanza y Resumen de Enlaces Canónicos
 
-| Variable | Tipo de Dato | Institución Emisora Legal | Enlace Canónico Directo |
+| Variable | Tipo de Dato | Institución Emisora / Certificadora | Enlace Canónico Directo |
 | :--- | :--- | :--- | :--- |
 | **UF** | Reajuste legal diario | Servicio de Impuestos Internos (SII) | [sii.cl/valores_y_fechas/uf/uf2026.htm](https://www.sii.cl/valores_y_fechas/uf/uf2026.htm) |
-| **Dólar Obs.** | Media ponderada diaria | Banco Central de Chile (BCCh) | [bcentral.cl/.../dolar-observado](https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado) |
-| **Euro Obs.** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [bcentral.cl/.../tipo-de-cambio](https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio) |
-| **Yuan Chino** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [bcentral.cl/.../tipo-de-cambio](https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio) |
-| **Cobre LME** | Precio spot físico BML | Cochilco / London Metal Exchange | [cochilco.cl/.../Rueda-Diaria.aspx](https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx) |
-| **Petróleo Brent** | Spot FOB Mar del Norte | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILBRENTEU](https://fred.stlouisfed.org/series/DCOILBRENTEU) |
-| **Petróleo WTI** | Spot Cushing | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILWTICO](https://fred.stlouisfed.org/series/DCOILWTICO) |
-| **TPM** | Tasa objetivo Consejo | Banco Central de Chile (BCCh) | [bcentral.cl/areas/politica-monetaria](https://www.bcentral.cl/areas/politica-monetaria) |
+| **Dólar Obs.** | Media ponderada diaria | Banco Central de Chile (BCCh) | [bcentral.cl/.../indicadores-diarios](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios) |
+| **Euro Obs.** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [bcentral.cl/.../indicadores-diarios](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios) |
+| **Yuan Chino** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [bcentral.cl/.../indicadores-diarios](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios) |
+| **Cobre LME** | Precio spot físico BML | London Metal Exchange / Cochilco | [cochilco.cl/web/la-rueda-diaria/](https://www.cochilco.cl/web/la-rueda-diaria/) |
+| **Petróleo Brent** | Spot FOB Mar del Norte (T-1) | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILBRENTEU](https://fred.stlouisfed.org/series/DCOILBRENTEU) |
+| **Petróleo WTI** | Spot Cushing (T-1) | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILWTICO](https://fred.stlouisfed.org/series/DCOILWTICO) |
+| **TPM** | Tasa objetivo Consejo | Banco Central de Chile (BCCh) | [bcentral.cl/.../politica-monetaria](https://www.bcentral.cl/web/banco-central/politica-monetaria) |
 | **Inflación IPC** | Canasta ponderada mensual | Instituto Nacional de Estadísticas (INE) | [ine.gob.cl/.../indice-de-precios-al-consumidor](https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor) |
 | **Desempleo** | Trimestre móvil ENE | Instituto Nacional de Estadísticas (INE) | [ine.gob.cl/.../ocupacion-y-desocupacion](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion) |

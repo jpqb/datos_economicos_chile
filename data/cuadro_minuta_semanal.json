@@ -13,7 +13,7 @@
       "cierre_semanal": "4,5",
       "variacion_ww": "▬ Estable",
       "fuente_oficial": "Banco Central de Chile",
-      "url_fuente_oficial": "https://www.bcentral.cl/areas/politica-monetaria",
+      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/politica-monetaria",
       "lectura_analitica": "El Consejo acordó mantener la tasa en 4,5% por unanimidad, enfocado en anclar expectativas inflacionarias."
     },
     {
@@ -21,7 +21,7 @@
       "cierre_semanal": "984,09",
       "variacion_ww": "▲ 4,24",
       "fuente_oficial": "Banco Central de Chile",
-      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado",
+      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
       "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
     },
     {
@@ -29,15 +29,15 @@
       "cierre_semanal": "1.069,27",
       "variacion_ww": "▲ 17,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
+      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
       "lectura_analitica": "Movimiento alineado a la fortaleza de monedas de reserva internacional frente a divisas emergentes."
     },
     {
       "variable": "Yuan Chino (CNY/CLP) ($ CLP)",
-      "cierre_semanal": "147,54",
+      "cierre_semanal": "147,76",
       "variacion_ww": "▲ 2,00",
       "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
+      "url_fuente_oficial": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
       "lectura_analitica": "Paridad cruzada vinculada al pulso del sector exportador y la actividad fabril en China."
     },
     {
@@ -52,13 +52,13 @@
       "variable": "Cobre (LME / Cochilco) (US$/lb)",
       "cierre_semanal": "6,58",
       "variacion_ww": "▼ 0,08",
-      "fuente_oficial": "Comisión Chilena del Cobre (Cochilco) / LME",
-      "url_fuente_oficial": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx",
+      "fuente_oficial": "London Metal Exchange (LME) / Cochilco",
+      "url_fuente_oficial": "https://www.cochilco.cl/web/la-rueda-diaria/",
       "lectura_analitica": "Precio spot oficial de liquidación en la Bolsa de Metales de Londres certificado diariamente por Cochilco en La Rueda."
     },
     {
       "variable": "Petróleo Brent (US$/bbl)",
-      "cierre_semanal": "105,44",
+      "cierre_semanal": "105,35",
       "variacion_ww": "▲ 1,67",
       "fuente_oficial": "Federal Reserve Bank of St. Louis (FRED) / EIA",
       "url_fuente_oficial": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
@@ -66,7 +66,7 @@
     },
     {
       "variable": "Petróleo WTI (US$/bbl)",
-      "cierre_semanal": "95,97",
+      "cierre_semanal": "95,89",
       "variacion_ww": "▲ 2,36",
       "fuente_oficial": "Federal Reserve Bank of St. Louis (FRED) / EIA",
       "url_fuente_oficial": "https://fred.stlouisfed.org/series/DCOILWTICO",

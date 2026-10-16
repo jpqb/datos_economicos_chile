@@ -15775,7 +15775,7 @@
     "nombre": "Dólar Observado (USD/CLP)",
     "unidad": "CLP",
     "fuente_oficial": "Banco Central de Chile",
-    "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado",
+    "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
     "serie": [
       {
         "fecha": "2016-01-04",
@@ -26527,7 +26527,7 @@
     "nombre": "Euro Observado (EUR/CLP)",
     "unidad": "CLP",
     "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-    "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
+    "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
     "serie": [
       {
         "fecha": "2016-10-16",
@@ -36935,7 +36935,7 @@
     "nombre": "Yuan Chino (CNY/CLP)",
     "unidad": "CLP",
     "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-    "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
+    "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
     "serie": [
       {
         "fecha": "2016-10-17",
@@ -44907,15 +44907,15 @@
       },
       {
         "fecha": "2026-10-15",
-        "valor": 147.54
+        "valor": 147.76
       }
     ]
   },
   "cobre": {
     "nombre": "Precio del Cobre Spot (LME / Cochilco)",
     "unidad": "US$/lb",
-    "fuente_oficial": "Comisión Chilena del Cobre (Cochilco) / LME",
-    "url_fuente": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx",
+    "fuente_oficial": "London Metal Exchange (LME) / Cochilco",
+    "url_fuente": "https://www.cochilco.cl/web/la-rueda-diaria/",
     "serie": [
       {
         "fecha": "2016-10-17",
@@ -65039,7 +65039,7 @@
       },
       {
         "fecha": "2026-10-15",
-        "valor": 105.44
+        "valor": 105.35
       }
     ]
   },
@@ -75103,7 +75103,7 @@
       },
       {
         "fecha": "2026-10-15",
-        "valor": 95.97
+        "valor": 95.89
       }
     ]
   },
@@ -75111,7 +75111,7 @@
     "nombre": "Tasa de Política Monetaria (TPM)",
     "unidad": "%",
     "fuente_oficial": "Banco Central de Chile",
-    "url_fuente": "https://www.bcentral.cl/areas/politica-monetaria",
+    "url_fuente": "https://www.bcentral.cl/web/banco-central/politica-monetaria",
     "serie": [
       {
         "fecha": "2016-01-14",

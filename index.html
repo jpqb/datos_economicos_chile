@@ -128,14 +128,8 @@
             </div>
           </div>
 
-          <!-- Filtro de Rango Temporal -->
-          <div class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-50 text-xs font-semibold">
-            <button onclick="filtrarRango(30)" id="btn-30" class="px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">30D</button>
-            <button onclick="filtrarRango(90)" id="btn-90" class="px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">90D</button>
-            <button onclick="filtrarRango('1y')" id="btn-1y" class="px-2.5 py-1 rounded-md bg-white shadow-sm text-blue-600 font-bold transition">1A</button>
-            <button onclick="filtrarRango('5y')" id="btn-5y" class="px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">5A</button>
-            <button onclick="filtrarRango('todos')" id="btn-todos" class="px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">10A (Todo)</button>
-          </div>
+          <!-- Filtro de Rango Temporal Adaptativo (Día a Día vs. Mensual / Reunión) -->
+          <div id="contenedor-filtros-rango" class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-50 text-xs font-semibold"></div>
         </div>
       </div>
 
@@ -745,18 +739,18 @@
           { 
             key: "cobre", serieKey: "cobre", titulo: "Cobre (LME)", 
             valor: `US$ ${indMap.cobre.valor.toFixed(2)}`, 
-            sub: "Por libra física", var: indMap.cobre.var_ww, icon: "layers", 
-            fuente: indMap.cobre.fuente, url: indMap.cobre.url_fuente,
+            sub: "Por libra física • Cochilco", var: indMap.cobre.var_ww, icon: "layers", 
+            fuente: "LME / Cochilco", url: indMap.cobre.url_fuente,
             tipTitulo: "Variación Semanal (w/w)",
-            tipDesc: "Comportamiento en 7 días de la libra de cobre físico Grado A transado en la Bolsa de Metales de Londres."
+            tipDesc: "Precio spot físico oficial en la Bolsa de Metales de Londres (LME), certificado por Cochilco en La Rueda Diaria."
           },
           { 
             key: "petroleo_brent", serieKey: "petroleo_brent", titulo: "Petróleo Brent", 
             valor: `US$ ${indMap.petroleo_brent.valor.toFixed(2)}`, 
-            sub: "Por barril", var: indMap.petroleo_brent.var_ww, icon: "droplet", 
-            fuente: indMap.petroleo_brent.fuente, url: indMap.petroleo_brent.url_fuente,
-            tipTitulo: "Variación Semanal (w/w)",
-            tipDesc: "Variación a 7 días del crudo de referencia europea (Mar del Norte / FRED)."
+            sub: "Por barril • Cierre T-1 (FRED)", var: indMap.petroleo_brent.var_ww, icon: "droplet", 
+            fuente: "FRED / EIA", url: indMap.petroleo_brent.url_fuente,
+            tipTitulo: "Cierre Spot Oficial T-1 (EIA / FRED)",
+            tipDesc: "La EIA y FRED publican el cierre oficial spot con 1 día hábil de desfase (T-1) tras la consolidación de transacciones en el Mar del Norte."
           },
           { 
             key: "tpm", serieKey: "tpm", titulo: "TPM", 
@@ -793,10 +787,10 @@
           { 
             key: "petroleo_wti", serieKey: "petroleo_wti", titulo: "Petróleo WTI", 
             valor: `US$ ${indMap.petroleo_wti.valor.toFixed(2)}`, 
-            sub: "Por barril", var: indMap.petroleo_wti.var_ww, icon: "fuel", 
-            fuente: indMap.petroleo_wti.fuente, url: indMap.petroleo_wti.url_fuente,
-            tipTitulo: "Variación Semanal (w/w)",
-            tipDesc: "Variación a 7 días del crudo West Texas Intermediate estadounidense de referencia spot."
+            sub: "Por barril • Cierre T-1 (FRED)", var: indMap.petroleo_wti.var_ww, icon: "fuel", 
+            fuente: "FRED / EIA", url: indMap.petroleo_wti.url_fuente,
+            tipTitulo: "Cierre Spot Oficial T-1 (EIA / FRED)",
+            tipDesc: "Precio spot físico en Cushing, Oklahoma. La EIA y FRED certifican el cierre al día hábil anterior (desfase normativo T-1)."
           },
         ];
 
@@ -911,6 +905,7 @@
       variableActual = key;
       const select = document.getElementById("select-variable");
       if (select) select.value = key;
+      actualizarBotonesRango();
       actualizarGrafico();
 
       const seccion = document.getElementById("seccion-grafico");
@@ -933,6 +928,7 @@
           res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/series_historicas.json");
         }
         seriesHistoricasCheadas = await res.json();
+        actualizarBotonesRango();
         actualizarGrafico();
 
       } catch (err) {
@@ -942,18 +938,67 @@
 
     function cambiarVariableGrafico(nuevaVar) {
       variableActual = nuevaVar;
+      actualizarBotonesRango();
       actualizarGrafico();
+    }
+
+    function esVariablePeriodica(key) {
+      return ["ipc", "desempleo", "tpm"].includes(key);
+    }
+
+    function actualizarBotonesRango() {
+      const contenedor = document.getElementById("contenedor-filtros-rango");
+      if (!contenedor) return;
+
+      const esPeriodica = esVariablePeriodica(variableActual);
+      let opciones = [];
+
+      if (esPeriodica) {
+        // Rangos adaptados para indicadores mensuales o por reunión de política monetaria
+        opciones = [
+          { id: "6m", label: "6M", title: "Últimos 6 Meses" },
+          { id: "1y", label: "1A", title: "Último Año (12 Meses)" },
+          { id: "3y", label: "3A", title: "Últimos 3 Años" },
+          { id: "5y", label: "5A", title: "Últimos 5 Años" },
+          { id: "todos", label: "10A (Todo)", title: "Serie Histórica Completa" }
+        ];
+        // Si el rango previo era diario (30 o 90 días), normalizar a 1 año
+        if (rangoActual === 30 || rangoActual === 90 || rangoActual === "30" || rangoActual === "90") {
+          rangoActual = "1y";
+        }
+      } else {
+        // Rangos para indicadores de cotización diaria continua
+        opciones = [
+          { id: "30", label: "30D", title: "Últimos 30 Días" },
+          { id: "90", label: "90D", title: "Últimos 90 Días" },
+          { id: "1y", label: "1A", title: "Último Año" },
+          { id: "5y", label: "5A", title: "Últimos 5 Años" },
+          { id: "todos", label: "10A (Todo)", title: "Serie Histórica Completa" }
+        ];
+        // Si el rango previo era mensual específico (6m o 3y), normalizar a 1 año
+        if (rangoActual === "6m" || rangoActual === "3y") {
+          rangoActual = "1y";
+        }
+      }
+
+      contenedor.innerHTML = "";
+      opciones.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.id = `btn-${opt.id}`;
+        btn.title = opt.title;
+        btn.onclick = () => filtrarRango(opt.id);
+        const esActivo = String(rangoActual) === String(opt.id);
+        btn.className = esActivo 
+          ? "px-2.5 py-1 rounded-md bg-white shadow-sm text-blue-600 font-bold transition"
+          : "px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition";
+        btn.textContent = opt.label;
+        contenedor.appendChild(btn);
+      });
     }
 
     function filtrarRango(rango) {
       rangoActual = rango;
-      document.querySelectorAll("[id^='btn-']").forEach(btn => {
-        btn.className = "px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition";
-      });
-      const btnActivo = document.getElementById(`btn-${rango}`);
-      if (btnActivo) {
-        btnActivo.className = "px-2.5 py-1 rounded-md bg-white shadow-sm text-blue-600 font-bold transition";
-      }
+      actualizarBotonesRango();
       actualizarGrafico();
     }
 
@@ -968,21 +1013,38 @@
       const lnk = document.getElementById("lnk-fuente-grafico");
       lnk.href = objVar.url_fuente || "#";
 
-      // Aplicar filtro de rango temporal adaptativo a 10 años
-      if (rangoActual !== "todos") {
-        if (rangoActual === "1y") {
-          datos = datos.length <= 150 ? datos.slice(-12) : datos.slice(-365);
+      // Aplicar filtro de rango temporal adaptativo basado en fechas efectivas
+      if (rangoActual !== "todos" && datos.length > 0) {
+        const ultimoPunto = datos[datos.length - 1];
+        const partesFecha = ultimoPunto.fecha.split("-");
+        const ultFecha = new Date(parseInt(partesFecha[0], 10), parseInt(partesFecha[1], 10) - 1, parseInt(partesFecha[2], 10));
+
+        let fechaCorte = null;
+        if (rangoActual === 30 || rangoActual === "30") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setDate(fechaCorte.getDate() - 30);
+        } else if (rangoActual === 90 || rangoActual === "90") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setDate(fechaCorte.getDate() - 90);
+        } else if (rangoActual === "6m") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setMonth(fechaCorte.getMonth() - 6);
+        } else if (rangoActual === "1y") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setFullYear(fechaCorte.getFullYear() - 1);
+        } else if (rangoActual === "3y") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setFullYear(fechaCorte.getFullYear() - 3);
         } else if (rangoActual === "5y") {
-          datos = datos.length <= 150 ? datos.slice(-60) : datos.slice(-365 * 5);
-        } else {
-          const dias = parseInt(rangoActual, 10);
-          if (datos.length <= 150) {
-            if (dias === 30) datos = datos.slice(-2);
-            else if (dias === 90) datos = datos.slice(-4);
-            else datos = datos.slice(-dias);
-          } else {
-            datos = datos.slice(-dias);
-          }
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setFullYear(fechaCorte.getFullYear() - 5);
+        }
+
+        if (fechaCorte) {
+          const isoCorte = fechaCorte.toISOString().split("T")[0];
+          const filtrados = datos.filter(d => d.fecha >= isoCorte);
+          // Asegura al menos 2 observaciones para proyectar la curva con rigor
+          datos = filtrados.length >= 2 ? filtrados : datos.slice(-2);
         }
       }
 
@@ -1317,10 +1379,10 @@
         marcoLegal: "Artículo 44 Ley N° 18.840 (LOC BCCh) y Cap. I CNCI",
         unidad: "Pesos Chilenos ($ CLP por US$ 1)",
         frecuencia: "Días hábiles bancarios (08:30 hrs y adelanto a las 17:00 hrs)",
-        urlFuente: "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado",
+        urlFuente: "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
         icono: "dollar-sign",
         comoSeObtiene: "El Dólar Observado es el promedio aritmético ponderado por volumen de todas las operaciones cambiarias spot (compra y venta de dólares estadounidenses por moneda nacional) transadas por los bancos comerciales e instituciones financieras en el Mercado Cambiario Formal chileno durante el día hábil bancario anterior.\n\nSe publica diariamente en el Diario Oficial y en la web del Banco Central cada mañana a las 08:30 hrs para regir esa jornada. A contar de las 17:00 – 18:00 hrs de cada tarde, el Banco Central calcula y adelanta en su portal el valor oficial vigente para el siguiente día hábil.",
-        discrepancias: "¿Por qué difiere del dólar en vivo o del SII?\n1. Mercado en vivo vs. Observado: Portales financieros (Google / Yahoo Finance) muestran la cotización interbancaria spot continua en tiempo real, sujeta a fluctuación segundo a segundo. El Dólar Observado es una media legal ponderada fija ex-post.\n2. Rezago del SII: El SII es un replicador tributario que transcribe las cifras del Banco Central con rezagos de semanas (actualmente su tabla estática llega al 1 de octubre). La fuente originaria, legal y primaria indiscutible es el Banco Central de Chile."
+        discrepancias: "¿Por qué difiere del dólar en vivo o del SII?\n1. Mercado en vivo vs. Observado: Portales financieros (Google / Yahoo Finance) muestran la cotización interbancaria spot continua en tiempo real, sujeta a fluctuación segundo a segundo. El Dólar Observado es una media legal ponderada fija ex-post calculada por el Banco Central.\n2. Rezago del SII: El SII es un replicador tributario que transcribe las cifras del Banco Central con rezagos de semanas (actualmente su tabla estática llega al 1 de octubre). La fuente originaria, legal y primaria indiscutible es el Banco Central de Chile."
       },
       euro: {
         nombre: "Euro Observado (EUR/CLP)",
@@ -1328,7 +1390,7 @@
         marcoLegal: "Compendio de Normas de Cambios Internacionales (CNCI)",
         unidad: "Pesos Chilenos ($ CLP por € 1)",
         frecuencia: "Días hábiles bancarios (14:00 hrs)",
-        urlFuente: "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
+        urlFuente: "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
         icono: "euro",
         comoSeObtiene: "No surge de un mercado de negociación spot local masivo peso-euro en Santiago. El Banco Central de Chile determina el Euro Observado mediante paridad cambiaria cruzada de arbitraje oficial: se multiplica el Dólar Observado vigente por la cotización de arbitraje internacional EUR/USD reportada en los mercados monetarios globales a las 13:30 hrs de Santiago.",
         discrepancias: "Puede presentar leves diferencias con cotizaciones forex instantáneas debido a la hora fija de corte estandarizada (13:30 hrs) adoptada institucionalmente por el Banco Central."
@@ -1339,21 +1401,21 @@
         marcoLegal: "Estadísticas Monetarias y Financieras Internacionales (BDE)",
         unidad: "Pesos Chilenos ($ CLP por ¥ 1)",
         frecuencia: "Días hábiles bancarios",
-        urlFuente: "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio",
+        urlFuente: "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
         icono: "coins",
         comoSeObtiene: "Paridad cambiaria cruzada oficial calculada a partir de la relación entre el Dólar Observado en Chile (USD/CLP) y la paridad oficial USD/CNY establecida por el Banco Popular de China. Es un indicador clave para evaluar los términos de intercambio y la competitividad de las exportaciones de cobre, fruta y celulosa hacia China.",
         discrepancias: "China opera bajo un régimen de flotación administrada con una banda diaria de fluctuación en torno a un punto medio fijado por el PBOC, por lo que su paridad con el peso refleja tanto la dinámica cambiaria en Santiago como las fijaciones oficiales de Beijing."
       },
       cobre: {
         nombre: "Precio del Cobre Spot (LME / Cochilco)",
-        emisor: "Comisión Chilena del Cobre (Cochilco) & London Metal Exchange (LME)",
+        emisor: "London Metal Exchange (LME) & Cochilco",
         marcoLegal: "Decreto Ley N° 1.349 de 1976 (Creación de Cochilco)",
         unidad: "Dólares de EE.UU. por libra física (US$/lb)",
         frecuencia: "Lunes a Viernes (09:30 - 11:00 hrs CLT)",
-        urlFuente: "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx",
+        urlFuente: "https://www.cochilco.cl/web/la-rueda-diaria/",
         icono: "layers",
-        comoSeObtiene: "Corresponde al Precio Oficial de Liquidación en Efectivo (Cash Settlement) para Cátodos de Cobre de Grado A transados en la Bolsa de Metales de Londres (LME). Cochilco certifica y publica este valor diariamente tras el cierre de la segunda sesión de rueda en Londres ('La Rueda Diaria'), expresándolo en centavos de dólar por libra física y dólares por tonelada métrica (1 TM = 2.204,62 lb).",
-        discrepancias: "Cochilco Spot LME vs. Yahoo Finance COMEX (HG=F):\nYahoo Finance y portales comerciales informan contratos de futuros de cobre en el COMEX de Nueva York, que incluyen primas de financiamiento, cobertura y entrega a meses futuros. Cochilco reporta el precio spot de entrega física inmediata en Londres (BML), que es el valor legal oficial utilizado para calcular el Royalty Minero, los ingresos fiscales de Codelco y las proyecciones presupuestarias de Hacienda."
+        comoSeObtiene: "• Mercado Primario Originario: El precio mundial del cobre se fija en la Bolsa de Metales de Londres (London Metal Exchange - LME), donde se determina el Precio Spot de Liquidación en Efectivo (Cash Settlement) para Cátodos de Grado A.\n• Rol y Certificación de Cochilco: Cochilco (Comisión Chilena del Cobre) no es una bolsa mercantil, sino el organismo del Estado de Chile encargado de certificar oficialmente la cotización de la LME y publicarla en 'La Rueda Diaria', convirtiéndola en dólares por tonelada métrica y centavos de dólar por libra física (1 TM = 2.204,62 lb). Esta certificación de Cochilco es la referencia legal oficial para el Royalty Minero y el presupuesto fiscal chileno.",
+        discrepancias: "1. LME (Spot) vs. Cochilco: Cochilco no 'inventa' un precio propio; adopta directamente el cierre de la segunda rueda de Londres de cátodos Grado A.\n2. LME vs. COMEX (Yahoo Finance HG=F): Portales financieros reportan futuros de cobre transados en Nueva York (COMEX), los cuales incluyen costos de financiamiento, cobertura y primas a meses futuros, mostrando discrepancias con el precio spot de entrega física inmediata en Londres utilizado por Chile."
       },
       petroleo_brent: {
         nombre: "Petróleo Brent (Mar del Norte)",
@@ -1364,7 +1426,7 @@
         urlFuente: "https://fred.stlouisfed.org/series/DCOILBRENTEU",
         icono: "droplet",
         comoSeObtiene: "Precio spot FOB en boca de terminal de exportación para la canasta de crudos ligeros del Mar del Norte (Brent, Forties, Oseberg, Ekofisk, Troll). Constituye el marcador global de referencia para más del 65% del crudo importado por ENAP en Chile y rige los parámetros de ajuste semanal del Mecanismo de Estabilización de Precios de los Combustibles (MEPCO).",
-        discrepancias: "No debe confundirse con los contratos de futuros del Brent en el ICE. La serie canónica directa DCOILBRENTEU de la Reserva Federal (FRED/EIA) refleja el precio spot diario certificado sin primas financieras temporales."
+        discrepancias: "• Desfase Oficial de Publicación T-1 (EIA / FRED):\n¿Por qué el dato más reciente en FRED tiene fecha del día anterior? La EIA (Energy Information Administration) y la Reserva Federal de San Luis (FRED) publican el precio spot oficial de cierre una vez concluidas y consolidadas las transacciones del día, liberando el dato formal al día hábil siguiente (desfase normativo T-1). Por ello, en cualquier momento del día, el registro oficial más reciente en FRED corresponde al cierre del día hábil previo.\n• Spot vs. Futuros: No debe confundirse con los contratos de futuros del Brent en el ICE."
       },
       petroleo_wti: {
         nombre: "Petróleo WTI (West Texas Intermediate)",
@@ -1375,7 +1437,7 @@
         urlFuente: "https://fred.stlouisfed.org/series/DCOILWTICO",
         icono: "fuel",
         comoSeObtiene: "Precio spot físico para entrega inmediata en el nodo de oleoductos y almacenamiento de Cushing, Oklahoma. Representa el crudo ligero de alta calidad de EE.UU. Es monitoreado en Chile por su impacto directo en los costos de refinería de derivados (gasolinas y diésel) en el Golfo de México.",
-        discrepancias: "El diferencial de precio entre Brent y WTI (spread Brent-WTI) responde a cuellos de botella de transporte en EE.UU. y costos de flete marítimo internacional hacia refinerías chilenas."
+        discrepancias: "• Desfase Oficial de Publicación T-1 (EIA / FRED):\nAl igual que el Brent, la EIA recopila los precios spot al cierre bursátil de Cushing y los publica a través de FRED en la jornada hábil posterior (T-1). Por ende, el dato oficial en FRED siempre muestra la fecha del día hábil anterior.\n• Spread Brent-WTI: El diferencial entre Brent y WTI responde a cuellos de botella de transporte continental en EE.UU. y fletes marítimos internacionales hacia Chile."
       },
       tpm: {
         nombre: "Tasa de Política Monetaria (TPM)",
@@ -1383,7 +1445,7 @@
         marcoLegal: "Artículos 34 y 35 Ley N° 18.840 (LOC BCCh)",
         unidad: "Porcentaje anual (%)",
         frecuencia: "8 Reuniones de Política Monetaria (RPM) al año",
-        urlFuente: "https://www.bcentral.cl/areas/politica-monetaria",
+        urlFuente: "https://www.bcentral.cl/web/banco-central/politica-monetaria",
         icono: "percent",
         comoSeObtiene: "La TPM no es un precio de mercado libre; es una decisión discrecional de política macroeconómica votada formalmente por el Consejo del Banco Central de Chile en sus Reuniones de Política Monetaria (RPM). Define la tasa de interés objetivo para las operaciones de préstamos interbancarios a un día (overnight) que el Banco Central conduce para anclar la inflación en la meta del 3% a dos años plazo.",
         discrepancias: "Permanece fija entre reuniones. En el Cuadro de la Minuta Semanal se clasifica como '▬ Estable' en aquellas semanas donde no sesiona el Consejo del Banco Central."

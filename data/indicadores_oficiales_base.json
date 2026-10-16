@@ -6,7 +6,7 @@
     "fecha_resolucion": "2026-09-08",
     "cierre_semana_previa": 4.50,
     "fuente_oficial": "Banco Central de Chile",
-    "url_fuente": "https://www.bcentral.cl/areas/politica-monetaria",
+    "url_fuente": "https://www.bcentral.cl/web/banco-central/politica-monetaria",
     "documento_oficial": "Comunicado Reunión de Política Monetaria (RPM) Septiembre 2026",
     "proxima_reunion": "2026-10-26 y 2026-10-27",
     "serie_historica_10y": [
@@ -197,8 +197,8 @@
     "valor_actual": 6.58,
     "cierre_semana_previa": 6.66,
     "unidad": "US$/lb",
-    "fuente_oficial": "Comisión Chilena del Cobre (Cochilco) / LME",
-    "url_fuente": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx",
+    "fuente_oficial": "London Metal Exchange (LME) / Cochilco",
+    "url_fuente": "https://www.cochilco.cl/web/la-rueda-diaria/",
     "documento_oficial": "Informe Diario La Rueda BML"
   }
 }

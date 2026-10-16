@@ -68,19 +68,23 @@ FUENTES_OFICIALES = {
     },
     "bcentral_dolar": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/dolar-observado"
+        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
     },
     "bcentral_fx": {
         "nombre": "Banco Central de Chile (BDE)",
-        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/tipo-de-cambio"
+        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
     },
     "bcentral_tpm": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/areas/politica-monetaria"
+        "url": "https://www.bcentral.cl/web/banco-central/politica-monetaria"
     },
     "cochilco": {
-        "nombre": "Comisión Chilena del Cobre (Cochilco) / LME",
-        "url": "https://www.cochilco.cl/Paginas/Estadisticas/La-Rueda/Rueda-Diaria.aspx"
+        "nombre": "London Metal Exchange (LME) / Cochilco",
+        "url": "https://www.cochilco.cl/web/la-rueda-diaria/"
+    },
+    "lme_cobre": {
+        "nombre": "London Metal Exchange (LME)",
+        "url": "https://www.lme.com/Metals/Non-ferrous/LME-Copper"
     },
     "fred_brent": {
         "nombre": "Federal Reserve Bank of St. Louis (FRED) / EIA",
