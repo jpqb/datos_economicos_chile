@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-16T01:30:00.212506+00:00",
+    "fecha_actualizacion_utc": "2026-10-16T01:49:12.156854+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii_uf": {
@@ -9,15 +9,15 @@
       },
       "bcentral_dolar": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
+        "url": "https://si3.bcentral.cl/indicadoressiete/index.htm"
       },
       "bcentral_fx": {
         "nombre": "Banco Central de Chile (BDE)",
-        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
+        "url": "https://si3.bcentral.cl/indicadoressiete/index.htm"
       },
       "bcentral_tpm": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/web/banco-central/politica-monetaria"
+        "url": "https://www.bcentral.cl/politica-monetaria"
       },
       "cochilco": {
         "nombre": "London Metal Exchange (LME) / Cochilco",
@@ -60,7 +60,7 @@
       "unidad": "CLP",
       "var_ww": "▲ 4,24",
       "fuente": "Banco Central de Chile",
-      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
+      "url_fuente": "https://si3.bcentral.cl/indicadoressiete/index.htm"
     },
     "euro": {
       "nombre": "Euro Observado",
@@ -68,15 +68,15 @@
       "unidad": "CLP",
       "var_ww": "▲ 17,00",
       "fuente": "Banco Central / FRED",
-      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
+      "url_fuente": "https://si3.bcentral.cl/indicadoressiete/index.htm"
     },
     "yuan": {
       "nombre": "Yuan Chino",
-      "valor": 147.76,
+      "valor": 147.54,
       "unidad": "CLP",
       "var_ww": "▲ 2,00",
       "fuente": "Banco Central / FRED",
-      "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
+      "url_fuente": "https://si3.bcentral.cl/indicadoressiete/index.htm"
     },
     "cobre": {
       "nombre": "Cobre (LME)",
@@ -88,7 +88,7 @@
     },
     "petroleo_brent": {
       "nombre": "Petróleo Brent",
-      "valor": 105.35,
+      "valor": 126.55,
       "unidad": "US$/bbl",
       "var_ww": "▲ 1,67",
       "fuente": "Federal Reserve Bank of St. Louis (FRED) / EIA",
@@ -96,7 +96,7 @@
     },
     "petroleo_wti": {
       "nombre": "Petróleo WTI",
-      "valor": 95.89,
+      "valor": 101.91,
       "unidad": "US$/bbl",
       "var_ww": "▲ 2,36",
       "fuente": "Federal Reserve Bank of St. Louis (FRED) / EIA",
@@ -108,7 +108,7 @@
       "unidad": "%",
       "var_ww": "▬ Estable",
       "fuente": "Banco Central de Chile",
-      "url_fuente": "https://www.bcentral.cl/web/banco-central/politica-monetaria"
+      "url_fuente": "https://www.bcentral.cl/politica-monetaria"
     },
     "ipc_mensual": {
       "nombre": "IPC Mensual",
@@ -120,7 +120,7 @@
     },
     "desempleo": {
       "nombre": "Tasa de Desocupación",
-      "valor": 9.6,
+      "valor": 8.5,
       "unidad": "%",
       "var_ww": "ENE - INE",
       "fuente": "Instituto Nacional de Estadísticas (INE)",

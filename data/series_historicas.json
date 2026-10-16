@@ -15775,7 +15775,7 @@
     "nombre": "Dólar Observado (USD/CLP)",
     "unidad": "CLP",
     "fuente_oficial": "Banco Central de Chile",
-    "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
+    "url_fuente": "https://si3.bcentral.cl/indicadoressiete/index.htm",
     "serie": [
       {
         "fecha": "2016-01-04",
@@ -26527,7 +26527,7 @@
     "nombre": "Euro Observado (EUR/CLP)",
     "unidad": "CLP",
     "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-    "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
+    "url_fuente": "https://si3.bcentral.cl/indicadoressiete/index.htm",
     "serie": [
       {
         "fecha": "2016-10-16",
@@ -36935,7 +36935,7 @@
     "nombre": "Yuan Chino (CNY/CLP)",
     "unidad": "CLP",
     "fuente_oficial": "Banco Central de Chile (BDE) / FRED",
-    "url_fuente": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios",
+    "url_fuente": "https://si3.bcentral.cl/indicadoressiete/index.htm",
     "serie": [
       {
         "fecha": "2016-10-17",
@@ -44907,7 +44907,7 @@
       },
       {
         "fecha": "2026-10-15",
-        "valor": 147.76
+        "valor": 147.54
       }
     ]
   },
@@ -65038,8 +65038,8 @@
         "valor": 106.06
       },
       {
-        "fecha": "2026-10-15",
-        "valor": 105.35
+        "fecha": "2026-10-14",
+        "valor": 126.55
       }
     ]
   },
@@ -75102,8 +75102,8 @@
         "valor": 95.09
       },
       {
-        "fecha": "2026-10-15",
-        "valor": 95.89
+        "fecha": "2026-10-14",
+        "valor": 101.91
       }
     ]
   },
@@ -75111,7 +75111,7 @@
     "nombre": "Tasa de Política Monetaria (TPM)",
     "unidad": "%",
     "fuente_oficial": "Banco Central de Chile",
-    "url_fuente": "https://www.bcentral.cl/web/banco-central/politica-monetaria",
+    "url_fuente": "https://www.bcentral.cl/politica-monetaria",
     "serie": [
       {
         "fecha": "2016-01-14",
@@ -76339,7 +76339,11 @@
       },
       {
         "fecha": "2026-08-31",
-        "valor": 9.6
+        "valor": 8.9
+      },
+      {
+        "fecha": "2026-09-30",
+        "valor": 8.5
       }
     ]
   }

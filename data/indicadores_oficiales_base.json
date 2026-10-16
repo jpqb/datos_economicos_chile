@@ -6,7 +6,7 @@
     "fecha_resolucion": "2026-09-08",
     "cierre_semana_previa": 4.50,
     "fuente_oficial": "Banco Central de Chile",
-    "url_fuente": "https://www.bcentral.cl/web/banco-central/politica-monetaria",
+    "url_fuente": "https://www.bcentral.cl/politica-monetaria",
     "documento_oficial": "Comunicado Reunión de Política Monetaria (RPM) Septiembre 2026",
     "proxima_reunion": "2026-10-26 y 2026-10-27",
     "serie_historica_10y": [
@@ -116,11 +116,11 @@
   },
   "desempleo": {
     "nombre": "Tasa de Desocupación Nacional",
-    "valor_actual": 9.6,
+    "valor_actual": 8.5,
     "unidad": "%",
-    "trimestre_movil": "Junio - Agosto 2026",
+    "trimestre_movil": "Julio - Septiembre 2026",
     "fecha_publicacion": "2026-09-30",
-    "variacion_12_meses_pp": 1.0,
+    "variacion_12_meses_pp": -0.2,
     "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
     "url_fuente": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
     "documento_oficial": "Encuesta Nacional de Empleo (ENE)",
@@ -167,7 +167,7 @@
       {"fecha": "2025-10-31", "valor": 8.9}, {"fecha": "2025-11-30", "valor": 8.7}, {"fecha": "2025-12-31", "valor": 8.5},
       {"fecha": "2026-01-31", "valor": 8.4}, {"fecha": "2026-02-28", "valor": 8.5}, {"fecha": "2026-03-31", "valor": 8.7},
       {"fecha": "2026-04-30", "valor": 8.5}, {"fecha": "2026-05-31", "valor": 8.9}, {"fecha": "2026-06-30", "valor": 9.1},
-      {"fecha": "2026-07-31", "valor": 9.3}, {"fecha": "2026-08-31", "valor": 9.6}
+      {"fecha": "2026-07-31", "valor": 9.3}, {"fecha": "2026-08-31", "valor": 8.9}, {"fecha": "2026-09-30", "valor": 8.5}
     ]
   },
   "imacec": {
@@ -200,5 +200,22 @@
     "fuente_oficial": "London Metal Exchange (LME) / Cochilco",
     "url_fuente": "https://www.cochilco.cl/web/la-rueda-diaria/",
     "documento_oficial": "Informe Diario La Rueda BML"
+  },
+  "petroleo_fred_oficial": {
+    "fecha": "2026-10-14",
+    "wti": {
+      "valor": 101.91,
+      "cierre_previo": 99.55,
+      "unidad": "US$/bbl",
+      "fuente": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+      "url": "https://fred.stlouisfed.org/series/DCOILWTICO"
+    },
+    "brent": {
+      "valor": 126.55,
+      "cierre_previo": 124.88,
+      "unidad": "US$/bbl",
+      "fuente": "Federal Reserve Bank of St. Louis (FRED) / EIA",
+      "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU"
+    }
   }
 }

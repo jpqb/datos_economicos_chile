@@ -68,15 +68,15 @@ FUENTES_OFICIALES = {
     },
     "bcentral_dolar": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
+        "url": "https://si3.bcentral.cl/indicadoressiete/index.htm"
     },
     "bcentral_fx": {
         "nombre": "Banco Central de Chile (BDE)",
-        "url": "https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios"
+        "url": "https://si3.bcentral.cl/indicadoressiete/index.htm"
     },
     "bcentral_tpm": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/web/banco-central/politica-monetaria"
+        "url": "https://www.bcentral.cl/politica-monetaria"
     },
     "cochilco": {
         "nombre": "London Metal Exchange (LME) / Cochilco",
@@ -382,26 +382,45 @@ def ejecutar_pipeline_multivariable():
         "serie": serie_cobre if serie_cobre else [{"fecha": fecha_hoy, "valor": cobre_actual}]
     }
 
+    petroleo_fred = base_periodica.get("petroleo_fred_oficial", {})
+    fecha_fred = petroleo_fred.get("fecha", "2026-10-14")
+
+    # Petróleo Brent
     hist_brent = obtener_serie_historica_yahoo("BZ=F", rango="10y")
-    brent_actual = hist_brent[-1]["valor"] if hist_brent else 105.67
-    brent_prev = round(brent_actual - 1.67, 2)
+    brent_info = petroleo_fred.get("brent", {})
+    brent_actual = float(brent_info.get("valor", hist_brent[-1]["valor"] if hist_brent else 126.55))
+    brent_prev = float(brent_info.get("cierre_previo", round(brent_actual - 1.67, 2)))
+    serie_brent = hist_brent.copy() if hist_brent else []
+    if serie_brent:
+        serie_brent[-1] = {"fecha": fecha_fred, "valor": brent_actual}
+    else:
+        serie_brent = [{"fecha": fecha_fred, "valor": brent_actual}]
+
     series_historicas["petroleo_brent"] = {
         "nombre": "Petróleo Brent",
         "unidad": "US$/bbl",
         "fuente_oficial": FUENTES_OFICIALES["fred_brent"]["nombre"],
         "url_fuente": FUENTES_OFICIALES["fred_brent"]["url"],
-        "serie": hist_brent if hist_brent else [{"fecha": fecha_hoy, "valor": brent_actual}]
+        "serie": serie_brent
     }
 
+    # Petróleo WTI
     hist_wti = obtener_serie_historica_yahoo("CL=F", rango="10y")
-    wti_actual = hist_wti[-1]["valor"] if hist_wti else 94.79
-    wti_prev = round(wti_actual - 2.36, 2)
+    wti_info = petroleo_fred.get("wti", {})
+    wti_actual = float(wti_info.get("valor", hist_wti[-1]["valor"] if hist_wti else 101.91))
+    wti_prev = float(wti_info.get("cierre_previo", round(wti_actual - 2.36, 2)))
+    serie_wti = hist_wti.copy() if hist_wti else []
+    if serie_wti:
+        serie_wti[-1] = {"fecha": fecha_fred, "valor": wti_actual}
+    else:
+        serie_wti = [{"fecha": fecha_fred, "valor": wti_actual}]
+
     series_historicas["petroleo_wti"] = {
         "nombre": "Petróleo WTI",
         "unidad": "US$/bbl",
         "fuente_oficial": FUENTES_OFICIALES["fred_wti"]["nombre"],
         "url_fuente": FUENTES_OFICIALES["fred_wti"]["url"],
-        "serie": hist_wti if hist_wti else [{"fecha": fecha_hoy, "valor": wti_actual}]
+        "serie": serie_wti
     }
 
     # --- G. Variables Periódicas (TPM, IPC, Desempleo) ---

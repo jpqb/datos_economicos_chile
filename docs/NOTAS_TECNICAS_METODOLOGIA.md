@@ -49,7 +49,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **⚠️ Advertencia de Discrepancia (Spot Forex vs. Dólar Observado):**
   1. *Mercado Continuo:* La cotización de mercado libre interbancario (Yahoo Finance `CLP=X` o terminales Bloomberg/Reuters) varía segundo a segundo. El Dólar Observado es una media fija calculada con las operaciones del día anterior.
   2. *Rezago del SII:* El SII **no calcula el dólar**; es un replicador tributario que transcribe las cifras del Banco Central con rezagos de semanas. La fuente originaria e indiscutible es el Banco Central.
-- **Enlace Directo Oficial Verificado:** [Indicadores Diarios Oficiales - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios)
+- **Enlace Directo Oficial Verificado:** [Indicadores Diarios Oficiales - Banco Central de Chile (BDE)](https://si3.bcentral.cl/indicadoressiete/index.htm)
 
 ---
 
@@ -61,7 +61,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   No surge de transacciones directas masivas entre pesos y euros en Santiago, sino que es una **paridad cruzada oficial**. Se obtiene multiplicando el Dólar Observado vigente del Banco Central por la cotización de arbitraje internacional Euro/Dólar (EUR/USD) fijada en los mercados cambiarios globales a las 13:30 hrs de Santiago.
 - **Frecuencia y Horario:** Días hábiles bancarios a las 14:00 hrs.
-- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios)
+- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile (BDE)](https://si3.bcentral.cl/indicadoressiete/index.htm)
 
 ---
 
@@ -73,7 +73,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Paridad cruzada implícita calculada a partir de la razón entre el Dólar Observado oficial (USD/CLP) del Banco Central de Chile y la paridad oficial Dólar/Renminbi (USD/CNY) publicada por el Banco Popular de China. Esencial para evaluar la competitividad con el principal destino de las exportaciones mineras y agroindustriales chilenas.
 - **Frecuencia y Horario:** Diaria (días hábiles bancarios).
-- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios)
+- **Enlace Directo Oficial Verificado:** [Indicadores Diarios y Paridades Oficiales - Banco Central de Chile (BDE)](https://si3.bcentral.cl/indicadoressiete/index.htm)
 
 ---
 
@@ -131,7 +131,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Es la tasa de interés objetivo fijada por el Consejo del Banco Central para las operaciones de crédito interbancario a un día plazo (overnight). **No es una tasa determinada por el mercado**, sino una decisión de política macroeconómica votada formalmente por los cinco consejeros del Banco Central en sus Reuniones de Política Monetaria (RPM), celebradas 8 veces al año conforme a un calendario predefinido.
 - **Frecuencia:** Se reúne 8 veces al año. Permanece idéntica entre reuniones a menos que ocurra una sesión de emergencia. En el cuadro semanal se etiqueta como *"▬ Estable"* cuando la semana no coincide con una decisión de RPM.
-- **Enlace Directo Oficial Verificado:** [Política Monetaria y Comunicados RPM - Banco Central de Chile](https://www.bcentral.cl/web/banco-central/politica-monetaria)
+- **Enlace Directo Oficial Verificado:** [Política Monetaria y Comunicados RPM - Banco Central de Chile](https://www.bcentral.cl/politica-monetaria)
 
 ---
 
@@ -155,7 +155,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Generada mediante la **Encuesta Nacional de Empleo (ENE)** aplicada a más de 35.000 hogares en todo Chile. Cuantifica a las personas en edad de trabajar que no tienen empleo, buscaron activamente trabajo durante las 4 semanas previas y están disponibles para trabajar de inmediato:
   $$\text{Tasa de Desocupación} = \frac{\text{Personas Desocupadas}}{\text{Fuerza de Trabajo}} \times 100$$
-- **Periodicidad:** **Trimestre móvil** (ej. junio-agosto, julio-septiembre). Se publica el **último día hábil de cada mes** a las **09:00 hrs**.
+- **Periodicidad:** **Trimestre móvil** (ej. Julio – Septiembre 2026, tasa 8,5%). Se publica el **último día hábil de cada mes** a las **09:00 hrs**.
 - **⚠️ Advertencia de Discrepancia:** No refleja un mes aislado, sino un promedio móvil trimestral para neutralizar la alta volatilidad estacional del mercado laboral (empleo agrícola, construcción y turismo).
 - **Enlace Directo Oficial Verificado:** [Estadísticas de Ocupación y Desocupación (ENE) - INE](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion)
 
@@ -166,12 +166,12 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 | Variable | Tipo de Dato | Institución Emisora / Certificadora | Enlace Canónico Directo |
 | :--- | :--- | :--- | :--- |
 | **UF** | Reajuste legal diario | Servicio de Impuestos Internos (SII) | [sii.cl/valores_y_fechas/uf/uf2026.htm](https://www.sii.cl/valores_y_fechas/uf/uf2026.htm) |
-| **Dólar Obs.** | Media ponderada diaria | Banco Central de Chile (BCCh) | [bcentral.cl/.../indicadores-diarios](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios) |
-| **Euro Obs.** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [bcentral.cl/.../indicadores-diarios](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios) |
-| **Yuan Chino** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [bcentral.cl/.../indicadores-diarios](https://www.bcentral.cl/web/banco-central/areas/estadisticas/indicadores-diarios) |
+| **Dólar Obs.** | Media ponderada diaria | Banco Central de Chile (BCCh) | [si3.bcentral.cl/.../indicadoressiete](https://si3.bcentral.cl/indicadoressiete/index.htm) |
+| **Euro Obs.** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [si3.bcentral.cl/.../indicadoressiete](https://si3.bcentral.cl/indicadoressiete/index.htm) |
+| **Yuan Chino** | Paridad cruzada oficial | Banco Central de Chile (BDE) | [si3.bcentral.cl/.../indicadoressiete](https://si3.bcentral.cl/indicadoressiete/index.htm) |
 | **Cobre LME** | Precio spot físico BML | London Metal Exchange / Cochilco | [cochilco.cl/web/la-rueda-diaria/](https://www.cochilco.cl/web/la-rueda-diaria/) |
 | **Petróleo Brent** | Spot FOB Mar del Norte (T-1) | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILBRENTEU](https://fred.stlouisfed.org/series/DCOILBRENTEU) |
 | **Petróleo WTI** | Spot Cushing (T-1) | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILWTICO](https://fred.stlouisfed.org/series/DCOILWTICO) |
-| **TPM** | Tasa objetivo Consejo | Banco Central de Chile (BCCh) | [bcentral.cl/.../politica-monetaria](https://www.bcentral.cl/web/banco-central/politica-monetaria) |
+| **TPM** | Tasa objetivo Consejo | Banco Central de Chile (BCCh) | [bcentral.cl/politica-monetaria](https://www.bcentral.cl/politica-monetaria) |
 | **Inflación IPC** | Canasta ponderada mensual | Instituto Nacional de Estadísticas (INE) | [ine.gob.cl/.../indice-de-precios-al-consumidor](https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor) |
 | **Desempleo** | Trimestre móvil ENE | Instituto Nacional de Estadísticas (INE) | [ine.gob.cl/.../ocupacion-y-desocupacion](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion) |
