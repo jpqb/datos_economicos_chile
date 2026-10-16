@@ -298,8 +298,8 @@ def ejecutar_pipeline_multivariable():
     series_historicas["dolar"] = {
         "nombre": "Dólar Observado (USD/CLP)",
         "unidad": "CLP",
-        "fuente_oficial": "Servicio de Impuestos Internos / Banco Central",
-        "url_fuente": FUENTES_OFICIALES["sii"]["url"],
+        "fuente_oficial": "Banco Central de Chile",
+        "url_fuente": FUENTES_OFICIALES["bcentral"]["url"],
         "serie": [{"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)} for _, r in df_dolar_10y.iterrows()]
     }
 
@@ -427,8 +427,8 @@ def ejecutar_pipeline_multivariable():
             "variable": "Dólar Observado (USD/CLP) ($ CLP)",
             "cierre_semanal": formatear_numero_cl(dolar_actual, 2),
             "variacion_ww": formatear_variacion_semanal(dolar_actual, dolar_prev),
-            "fuente_oficial": "Servicio de Impuestos Internos / Banco Central",
-            "url_fuente_oficial": FUENTES_OFICIALES["sii"]["url"],
+            "fuente_oficial": "Banco Central de Chile",
+            "url_fuente_oficial": FUENTES_OFICIALES["bcentral"]["url"],
             "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
         },
         {
@@ -524,7 +524,7 @@ def ejecutar_pipeline_multivariable():
         },
         "indicadores": {
             "uf": {"nombre": "Unidad de Fomento", "valor": uf_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(uf_actual, uf_prev), "fuente": FUENTES_OFICIALES["sii"]["nombre"], "url_fuente": FUENTES_OFICIALES["sii"]["url"]},
-            "dolar": {"nombre": "Dólar Observado", "valor": dolar_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(dolar_actual, dolar_prev), "fuente": "SII / Banco Central", "url_fuente": FUENTES_OFICIALES["sii"]["url"]},
+            "dolar": {"nombre": "Dólar Observado", "valor": dolar_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(dolar_actual, dolar_prev), "fuente": "Banco Central de Chile", "url_fuente": FUENTES_OFICIALES["bcentral"]["url"]},
             "euro": {"nombre": "Euro Observado", "valor": eur_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(eur_actual, eur_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral"]["url"]},
             "yuan": {"nombre": "Yuan Chino", "valor": cny_actual, "unidad": "CLP", "var_ww": formatear_variacion_semanal(cny_actual, cny_prev), "fuente": "Banco Central / FRED", "url_fuente": FUENTES_OFICIALES["bcentral"]["url"]},
             "cobre": {"nombre": "Cobre (LME)", "valor": cobre_actual, "unidad": "US$/lb", "var_ww": formatear_variacion_semanal(cobre_actual, cobre_prev), "fuente": FUENTES_OFICIALES["cochilco"]["nombre"], "url_fuente": FUENTES_OFICIALES["cochilco"]["url"]},

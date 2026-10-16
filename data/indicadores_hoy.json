@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-15T16:59:12.454320+00:00",
+    "fecha_actualizacion_utc": "2026-10-16T00:09:01.671693+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii": {
@@ -36,15 +36,15 @@
     },
     "dolar": {
       "nombre": "Dólar Observado",
-      "valor": 982.7,
+      "valor": 984.86,
       "unidad": "CLP",
-      "var_ww": "▲ 10,10",
-      "fuente": "SII / Banco Central",
-      "url_fuente": "https://www.sii.cl/valores_y_fechas/"
+      "var_ww": "▲ 12,26",
+      "fuente": "Banco Central de Chile",
+      "url_fuente": "https://www.bcentral.cl"
     },
     "euro": {
       "nombre": "Euro Observado",
-      "valor": 1102.39,
+      "valor": 1069.27,
       "unidad": "CLP",
       "var_ww": "▲ 17,00",
       "fuente": "Banco Central / FRED",
@@ -52,7 +52,7 @@
     },
     "yuan": {
       "nombre": "Yuan Chino",
-      "valor": 147.11,
+      "valor": 147.21,
       "unidad": "CLP",
       "var_ww": "▲ 2,00",
       "fuente": "Banco Central / FRED",
@@ -60,7 +60,7 @@
     },
     "cobre": {
       "nombre": "Cobre (LME)",
-      "valor": 6.56,
+      "valor": 6.55,
       "unidad": "US$/lb",
       "var_ww": "▲ 0,08",
       "fuente": "Comisión Chilena del Cobre (Cochilco) / LME",
@@ -68,7 +68,7 @@
     },
     "petroleo_brent": {
       "nombre": "Petróleo Brent",
-      "valor": 106.14,
+      "valor": 105.74,
       "unidad": "US$/bbl",
       "var_ww": "▲ 1,67",
       "fuente": "Mercado Spot / FRED",
@@ -76,7 +76,7 @@
     },
     "petroleo_wti": {
       "nombre": "Petróleo WTI",
-      "valor": 96.44,
+      "valor": 96.17,
       "unidad": "US$/bbl",
       "var_ww": "▲ 2,36",
       "fuente": "Mercado Spot / FRED",

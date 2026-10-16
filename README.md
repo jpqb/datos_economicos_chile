@@ -13,10 +13,11 @@ Muchos reportes y modelos dependen de intermediarios como `mindicador.cl`, que f
 
 Este proyecto garantiza **resiliencia total** mediante una arquitectura de capas:
 1. **Fuentes Primarias Oficiales:**
-   - **UF y Dólar Observado:** Servicio de Impuestos Internos (SII) y Banco Central de Chile.
+   - **Dólar Observado y TPM:** Banco Central de Chile (BCCh) — Emisor primario legal.
+   - **Unidad de Fomento (UF):** Servicio de Impuestos Internos (SII) — Fijación normativa oficial.
    - **Euro, Yuan, Petróleo (Brent y WTI):** Banco Central de Chile y Reserva Federal de St. Louis (FRED).
    - **Cobre (US$/lb):** Cochilco / London Metal Exchange (LME) y mercado spot.
-   - **TPM, IPC y Desempleo:** Banco Central de Chile e Instituto Nacional de Estadísticas (INE).
+   - **IPC y Desempleo:** Instituto Nacional de Estadísticas (INE).
 2. **Formato Minuta Semanal:** Genera el cuadro semanal exacto con variaciones semana contra semana (*w/w*) y convención simbólica (`▲` Alza, `▼` Baja, `▬` Estable).
 3. **Persistencia Inmutable:** Si alguna red externa tiene problemas temporales, el sistema mantiene el último valor oficial confirmado sin interrumpir los reportes.
 
@@ -80,7 +81,8 @@ El script actualizará inmediatamente todos los archivos en la carpeta `data/`.
 ---
 
 ## 📜 Citas y Gobernanza
-- **Servicio de Impuestos Internos (SII) & Banco Central de Chile:** Fijación oficial de UF y Dólar Observado.
+- **Banco Central de Chile (BCCh):** Fijación oficial del Dólar Observado (Art. 44 LOC), TPM y divisas internacionales.
+- **Servicio de Impuestos Internos (SII):** Reajuste diario y certificación tributaria de la Unidad de Fomento (UF).
 - **Instituto Nacional de Estadísticas (INE):** IPC y Encuesta Nacional de Empleo (ENE).
 - **Comisión Chilena del Cobre (Cochilco) & LME:** Cotización oficial del cobre.
 - **Federal Reserve Bank of St. Louis (FRED):** Divisas internacionales y marcadores de petróleo.
