@@ -1365,6 +1365,7 @@
       uf: {
         nombre: "Unidad de Fomento (UF)",
         emisor: "Banco Central de Chile & SII",
+        fuentePrimaria: "Servicio de Impuestos Internos (SII) - Serie Oficial",
         marcoLegal: "Decreto Ley N° 3.588 de 1980 y D.F.L. N° 320 de 1960",
         unidad: "Pesos Chilenos ($ CLP por UF)",
         frecuencia: "Diaria (Reajuste legal a las 00:00 hrs)",
@@ -1376,6 +1377,7 @@
       dolar: {
         nombre: "Dólar Observado (USD/CLP)",
         emisor: "Banco Central de Chile (BCCh)",
+        fuentePrimaria: "Banco Central de Chile (Indicadores Diarios BDE)",
         marcoLegal: "Artículo 44 Ley N° 18.840 (LOC BCCh) y Cap. I CNCI",
         unidad: "Pesos Chilenos ($ CLP por US$ 1)",
         frecuencia: "Días hábiles bancarios (08:30 hrs y adelanto a las 17:00 hrs)",
@@ -1387,6 +1389,7 @@
       euro: {
         nombre: "Euro Observado (EUR/CLP)",
         emisor: "Banco Central de Chile (Base de Datos Estadísticos)",
+        fuentePrimaria: "Banco Central de Chile (Indicadores Diarios BDE)",
         marcoLegal: "Compendio de Normas de Cambios Internacionales (CNCI)",
         unidad: "Pesos Chilenos ($ CLP por € 1)",
         frecuencia: "Días hábiles bancarios (14:00 hrs)",
@@ -1398,6 +1401,7 @@
       yuan: {
         nombre: "Yuan Chino (CNY/CLP)",
         emisor: "Banco Central de Chile & Banco Popular de China (PBOC)",
+        fuentePrimaria: "Banco Central de Chile (Indicadores Diarios BDE)",
         marcoLegal: "Estadísticas Monetarias y Financieras Internacionales (BDE)",
         unidad: "Pesos Chilenos ($ CLP por ¥ 1)",
         frecuencia: "Días hábiles bancarios",
@@ -1409,6 +1413,7 @@
       cobre: {
         nombre: "Precio del Cobre Spot (LME / Cochilco)",
         emisor: "London Metal Exchange (LME) & Cochilco",
+        fuentePrimaria: "Comisión Chilena del Cobre (Cochilco - La Rueda Diaria BML)",
         marcoLegal: "Decreto Ley N° 1.349 de 1976 (Creación de Cochilco)",
         unidad: "Dólares de EE.UU. por libra física (US$/lb)",
         frecuencia: "Lunes a Viernes (09:30 - 11:00 hrs CLT)",
@@ -1420,6 +1425,7 @@
       petroleo_brent: {
         nombre: "Petróleo Brent (Mar del Norte)",
         emisor: "U.S. Energy Information Administration (EIA) / FRED",
+        fuentePrimaria: "FRED (Federal Reserve Bank of St. Louis) / U.S. EIA",
         marcoLegal: "Referencia para cálculo MEPCO y ENAP en Chile",
         unidad: "Dólares de EE.UU. por barril (US$/bbl)",
         frecuencia: "Diaria (Días hábiles de negociación bursátil)",
@@ -1431,6 +1437,7 @@
       petroleo_wti: {
         nombre: "Petróleo WTI (West Texas Intermediate)",
         emisor: "U.S. Energy Information Administration (EIA) / FRED",
+        fuentePrimaria: "FRED (Federal Reserve Bank of St. Louis) / U.S. EIA",
         marcoLegal: "Marcador de referencia crudo dulce liviano de EE.UU.",
         unidad: "Dólares de EE.UU. por barril (US$/bbl)",
         frecuencia: "Diaria (Días hábiles en EE.UU.)",
@@ -1442,10 +1449,11 @@
       tpm: {
         nombre: "Tasa de Política Monetaria (TPM)",
         emisor: "Banco Central de Chile (BCCh)",
+        fuentePrimaria: "Banco Central de Chile (Política Monetaria y RPM)",
         marcoLegal: "Artículos 34 y 35 Ley N° 18.840 (LOC BCCh)",
         unidad: "Porcentaje anual (%)",
         frecuencia: "8 Reuniones de Política Monetaria (RPM) al año",
-        urlFuente: "https://www.bcentral.cl/politica-monetaria",
+        urlFuente: "https://www.bcentral.cl/areas/politica-monetaria",
         icono: "percent",
         comoSeObtiene: "La TPM no es un precio de mercado libre; es una decisión discrecional de política macroeconómica votada formalmente por el Consejo del Banco Central de Chile en sus Reuniones de Política Monetaria (RPM). Define la tasa de interés objetivo para las operaciones de préstamos interbancarios a un día (overnight) que el Banco Central conduce para anclar la inflación en la meta del 3% a dos años plazo.",
         discrepancias: "Permanece fija entre reuniones. En el Cuadro de la Minuta Semanal se clasifica como '▬ Estable' en aquellas semanas donde no sesiona el Consejo del Banco Central."
@@ -1453,6 +1461,7 @@
       ipc: {
         nombre: "Índice de Precios al Consumidor (IPC)",
         emisor: "Instituto Nacional de Estadísticas (INE)",
+        fuentePrimaria: "Instituto Nacional de Estadísticas (INE - Precios al Consumidor)",
         marcoLegal: "Ley N° 17.374 y Decreto Supremo N° 35 Ministerio de Economía",
         unidad: "Variación mensual (%), acumulada en el año y a doce meses",
         frecuencia: "Mensual (Día 8 de cada mes a las 08:00 hrs)",
@@ -1464,9 +1473,10 @@
       desempleo: {
         nombre: "Tasa de Desocupación Nacional (Desempleo)",
         emisor: "Instituto Nacional de Estadísticas (INE)",
+        fuentePrimaria: "Instituto Nacional de Estadísticas (INE - Encuesta Nacional de Empleo)",
         marcoLegal: "Ley N° 17.374 (Encuesta Nacional de Empleo - ENE)",
         unidad: "Porcentaje de la Fuerza de Trabajo (%)",
-        frecuencia: "Trimestre Móvil (Julio - Septiembre 2026: 8,5%)",
+        frecuencia: "Trimestre Móvil (Junio - Agosto 2026: 9,6%)",
         urlFuente: "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
         icono: "users",
         comoSeObtiene: "Se estima mediante la Encuesta Nacional de Empleo (ENE), realizada a más de 35.000 hogares en todo el territorio chileno. Mide el porcentaje de personas de 15 años o más que pertenecen a la fuerza de trabajo, no estuvieron ocupadas durante la semana de referencia, buscaron activamente empleo en las 4 semanas anteriores y estaban disponibles para comenzar a trabajar de inmediato:\n\nTasa Desocupación = (Personas Desocupadas / Fuerza de Trabajo) * 100",
@@ -1558,7 +1568,7 @@
 
       contenedorContenido.innerHTML = `
         <!-- Encabezado de la Ficha -->
-        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5">
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <h4 class="text-base font-bold text-slate-900 flex items-center gap-2">
               <i data-lucide="${item.icono}" class="w-4 h-4 text-blue-600"></i>
@@ -1568,12 +1578,21 @@
               ${item.emisor}
             </span>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-200/70 text-[11px]">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-slate-200/70 text-[11px]">
+            <div>
+              <span class="font-bold text-slate-800">Fuente Primaria Oficial:</span>
+              <p class="mt-0.5">
+                <a href="${item.urlFuente}" target="_blank" rel="noopener noreferrer" class="text-blue-700 hover:text-blue-900 font-semibold underline inline-flex items-center gap-1">
+                  <span>${item.fuentePrimaria || item.emisor}</span>
+                  <i data-lucide="external-link" class="w-3 h-3"></i>
+                </a>
+              </p>
+            </div>
             <div>
               <span class="font-bold text-slate-800">Marco Legal / Normativo:</span>
               <p class="text-slate-600 mt-0.5">${item.marcoLegal}</p>
             </div>
-            <div>
+            <div class="sm:col-span-2">
               <span class="font-bold text-slate-800">Unidad & Frecuencia:</span>
               <p class="text-slate-600 mt-0.5">${item.unidad} • ${item.frecuencia}</p>
             </div>
@@ -1613,7 +1632,7 @@
       const lnkFuente = document.getElementById("lnk-modal-fuente-primaria");
       if (lnkFuente) {
         lnkFuente.href = item.urlFuente;
-        lnkFuente.innerHTML = `<span>Abrir Fuente Primaria (${item.emisor.split('&')[0].split('/')[0].trim()})</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i>`;
+        lnkFuente.innerHTML = `<span>Abrir Fuente Primaria Oficial (${item.fuentePrimaria || item.emisor})</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i>`;
       }
 
       lucide.createIcons();

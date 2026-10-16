@@ -131,7 +131,7 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 - **¿Cómo se obtiene y calcula?:**  
   Es la tasa de interés objetivo fijada por el Consejo del Banco Central para las operaciones de crédito interbancario a un día plazo (overnight). **No es una tasa determinada por el mercado**, sino una decisión de política macroeconómica votada formalmente por los cinco consejeros del Banco Central en sus Reuniones de Política Monetaria (RPM), celebradas 8 veces al año conforme a un calendario predefinido.
 - **Frecuencia:** Se reúne 8 veces al año. Permanece idéntica entre reuniones a menos que ocurra una sesión de emergencia. En el cuadro semanal se etiqueta como *"▬ Estable"* cuando la semana no coincide con una decisión de RPM.
-- **Enlace Directo Oficial Verificado:** [Política Monetaria y Comunicados RPM - Banco Central de Chile](https://www.bcentral.cl/politica-monetaria)
+- **Enlace Directo Oficial Verificado:** [Política Monetaria y Comunicados RPM - Banco Central de Chile](https://www.bcentral.cl/areas/politica-monetaria)
 
 ---
 
@@ -172,6 +172,6 @@ Este documento establece las especificaciones técnicas, institucionales y norma
 | **Cobre LME** | Precio spot físico BML | London Metal Exchange / Cochilco | [cochilco.cl/web/la-rueda-diaria/](https://www.cochilco.cl/web/la-rueda-diaria/) |
 | **Petróleo Brent** | Spot FOB Mar del Norte (T-1) | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILBRENTEU](https://fred.stlouisfed.org/series/DCOILBRENTEU) |
 | **Petróleo WTI** | Spot Cushing (T-1) | FRED (St. Louis Fed) / EIA | [fred.stlouisfed.org/series/DCOILWTICO](https://fred.stlouisfed.org/series/DCOILWTICO) |
-| **TPM** | Tasa objetivo Consejo | Banco Central de Chile (BCCh) | [bcentral.cl/politica-monetaria](https://www.bcentral.cl/politica-monetaria) |
+| **TPM** | Tasa objetivo Consejo | Banco Central de Chile (BCCh) | [bcentral.cl/.../politica-monetaria](https://www.bcentral.cl/areas/politica-monetaria) |
 | **Inflación IPC** | Canasta ponderada mensual | Instituto Nacional de Estadísticas (INE) | [ine.gob.cl/.../indice-de-precios-al-consumidor](https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor) |
 | **Desempleo** | Trimestre móvil ENE | Instituto Nacional de Estadísticas (INE) | [ine.gob.cl/.../ocupacion-y-desocupacion](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion) |

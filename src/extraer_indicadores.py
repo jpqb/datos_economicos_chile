@@ -76,7 +76,7 @@ FUENTES_OFICIALES = {
     },
     "bcentral_tpm": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/politica-monetaria"
+        "url": "https://www.bcentral.cl/areas/politica-monetaria"
     },
     "cochilco": {
         "nombre": "London Metal Exchange (LME) / Cochilco",

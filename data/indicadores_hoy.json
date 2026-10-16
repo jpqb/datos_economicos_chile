@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-16T02:34:12.139103+00:00",
+    "fecha_actualizacion_utc": "2026-10-16T02:52:04.639460+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii_uf": {
@@ -17,7 +17,7 @@
       },
       "bcentral_tpm": {
         "nombre": "Banco Central de Chile",
-        "url": "https://www.bcentral.cl/politica-monetaria"
+        "url": "https://www.bcentral.cl/areas/politica-monetaria"
       },
       "cochilco": {
         "nombre": "London Metal Exchange (LME) / Cochilco",
@@ -108,7 +108,7 @@
       "unidad": "%",
       "var_ww": "▬ Estable",
       "fuente": "Banco Central de Chile",
-      "url_fuente": "https://www.bcentral.cl/politica-monetaria"
+      "url_fuente": "https://www.bcentral.cl/areas/politica-monetaria"
     },
     "ipc_mensual": {
       "nombre": "IPC Mensual",

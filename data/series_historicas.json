@@ -75123,7 +75123,7 @@
     "nombre": "Tasa de Política Monetaria (TPM)",
     "unidad": "%",
     "fuente_oficial": "Banco Central de Chile",
-    "url_fuente": "https://www.bcentral.cl/politica-monetaria",
+    "url_fuente": "https://www.bcentral.cl/areas/politica-monetaria",
     "serie": [
       {
         "fecha": "2016-01-14",
