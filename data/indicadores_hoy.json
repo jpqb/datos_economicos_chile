@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-16T16:37:21.618005+00:00",
+    "fecha_actualizacion_utc": "2026-10-17T07:49:56.137124+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii_uf": {
@@ -48,7 +48,7 @@
   "indicadores": {
     "uf": {
       "nombre": "Unidad de Fomento",
-      "valor": 41168.03,
+      "valor": 41173.33,
       "unidad": "CLP",
       "var_ww": "▲ 37,09",
       "fuente": "Servicio de Impuestos Internos (SII)",
