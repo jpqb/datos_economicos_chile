@@ -1,8 +1,8 @@
 {
   "metadatos": {
     "titulo": "Cuadro de Variables Macroeconómicas y Financieras",
-    "fecha_emision": "2026-10-18",
-    "semana_analizada": "2026-10-11 al 2026-10-18",
+    "fecha_emision": "2026-10-19",
+    "semana_analizada": "2026-10-12 al 2026-10-19",
     "proveedor": "Repositorio Oficial de Datos Económicos de Chile (UCEN)",
     "url_proveedor": "https://jpqb.github.io/datos_economicos_chile/",
     "licencia": "Datos Públicos Abiertos"
@@ -18,16 +18,16 @@
     },
     {
       "variable": "Dólar Observado (USD/CLP) ($ CLP)",
-      "cierre_semanal": "984,09",
-      "variacion_ww": "▲ 2,48",
+      "cierre_semanal": "981,65",
+      "variacion_ww": "▲ 0,04",
       "fuente_oficial": "Banco Central de Chile",
       "url_fuente_oficial": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
       "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
     },
     {
       "variable": "Euro Observado (EUR/CLP) ($ CLP)",
-      "cierre_semanal": "1.103,49",
-      "variacion_ww": "▲ 39,05",
+      "cierre_semanal": "1.101,99",
+      "variacion_ww": "▲ 39,85",
       "fuente_oficial": "Banco Central de Chile (BDE)",
       "url_fuente_oficial": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
       "lectura_analitica": "Paridad cambiaria oficial fijada por el Banco Central a partir del arbitraje EUR/USD en mercados globales."
@@ -42,7 +42,7 @@
     },
     {
       "variable": "Unidad de Fomento (UF) ($ CLP)",
-      "cierre_semanal": "41.178,64",
+      "cierre_semanal": "41.183,94",
       "variacion_ww": "▲ 37,11",
       "fuente_oficial": "Servicio de Impuestos Internos (SII)",
       "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
