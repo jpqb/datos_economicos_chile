@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-10-27T02:58:04.166070+00:00",
+    "fecha_actualizacion_utc": "2026-10-27T09:02:10.359058+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii_uf": {
@@ -52,25 +52,25 @@
   "indicadores": {
     "uf": {
       "nombre": "Unidad de Fomento",
-      "valor": 41221.08,
+      "valor": 41226.39,
       "unidad": "CLP",
-      "var_ww": "▲ 37,14",
+      "var_ww": "▲ 37,15",
       "fuente": "Servicio de Impuestos Internos (SII)",
       "url_fuente": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm"
     },
     "dolar": {
       "nombre": "Dólar Observado",
-      "valor": 990.35,
+      "valor": 994.29,
       "unidad": "CLP",
-      "var_ww": "▲ 8,70",
+      "var_ww": "▲ 12,43",
       "fuente": "Banco Central de Chile",
       "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx"
     },
     "euro": {
       "nombre": "Euro Observado",
-      "valor": 1108.39,
+      "valor": 1112.8,
       "unidad": "CLP",
-      "var_ww": "▲ 6,40",
+      "var_ww": "▲ 11,94",
       "fuente": "Banco Central de Chile (BDE)",
       "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx"
     },
@@ -78,7 +78,7 @@
       "nombre": "Yuan Chino",
       "valor": 147.09,
       "unidad": "CLP",
-      "var_ww": "▲ 0,36",
+      "var_ww": "▲ 0,10",
       "fuente": "Banco Central de Chile (BDE)",
       "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx"
     },
