@@ -223,7 +223,10 @@ def obtener_serie_historica_yahoo(ticker: str, rango: str = "1y") -> List[Dict[s
                 if q is not None and not pd.isna(q):
                     f = date.fromtimestamp(t).isoformat()
                     resultado.append({"fecha": f, "valor": round(float(q), 2)})
-            return resultado
+            if resultado:
+                df_res = pd.DataFrame(resultado).drop_duplicates(subset=["fecha"], keep="last")
+                return [{"fecha": str(r["fecha"]), "valor": float(r["valor"])} for _, r in df_res.iterrows()]
+            return []
     except Exception as e:
         logger.debug(f"Error al descargar serie histórica para {ticker}: {e}")
     return []
@@ -460,14 +463,20 @@ def ejecutar_pipeline_multivariable():
 
     serie_cobre = hist_cobre.copy() if hist_cobre else []
     if serie_cobre:
-        serie_cobre[-1] = {"fecha": fecha_hoy, "valor": cobre_actual}
+        if serie_cobre[-1]["fecha"] == fecha_hoy:
+            serie_cobre[-1]["valor"] = cobre_actual
+        elif fecha_hoy > serie_cobre[-1]["fecha"]:
+            serie_cobre.append({"fecha": fecha_hoy, "valor": cobre_actual})
+    else:
+        serie_cobre = [{"fecha": fecha_hoy, "valor": cobre_actual}]
+    serie_cobre = pd.DataFrame(serie_cobre).drop_duplicates(subset=["fecha"], keep="last").to_dict(orient="records")
 
     series_historicas["cobre"] = {
         "nombre": "Precio del Cobre Spot (LME / Cochilco)",
         "unidad": "US$/lb",
         "fuente_oficial": FUENTES_OFICIALES["cochilco"]["nombre"],
         "url_fuente": FUENTES_OFICIALES["cochilco"]["url"],
-        "serie": serie_cobre if serie_cobre else [{"fecha": fecha_hoy, "valor": cobre_actual}]
+        "serie": serie_cobre
     }
 
     petroleo_fred = base_periodica.get("petroleo_fred_oficial", {})
@@ -480,9 +489,13 @@ def ejecutar_pipeline_multivariable():
     brent_prev = float(brent_info.get("cierre_previo", round(brent_actual - 1.67, 2)))
     serie_brent = hist_brent.copy() if hist_brent else []
     if serie_brent:
-        serie_brent[-1] = {"fecha": fecha_fred, "valor": brent_actual}
+        if serie_brent[-1]["fecha"] == fecha_fred:
+            serie_brent[-1]["valor"] = brent_actual
+        elif fecha_fred > serie_brent[-1]["fecha"]:
+            serie_brent.append({"fecha": fecha_fred, "valor": brent_actual})
     else:
         serie_brent = [{"fecha": fecha_fred, "valor": brent_actual}]
+    serie_brent = pd.DataFrame(serie_brent).drop_duplicates(subset=["fecha"], keep="last").to_dict(orient="records")
 
     series_historicas["petroleo_brent"] = {
         "nombre": "Petróleo Brent",
@@ -499,9 +512,13 @@ def ejecutar_pipeline_multivariable():
     wti_prev = float(wti_info.get("cierre_previo", round(wti_actual - 2.36, 2)))
     serie_wti = hist_wti.copy() if hist_wti else []
     if serie_wti:
-        serie_wti[-1] = {"fecha": fecha_fred, "valor": wti_actual}
+        if serie_wti[-1]["fecha"] == fecha_fred:
+            serie_wti[-1]["valor"] = wti_actual
+        elif fecha_fred > serie_wti[-1]["fecha"]:
+            serie_wti.append({"fecha": fecha_fred, "valor": wti_actual})
     else:
         serie_wti = [{"fecha": fecha_fred, "valor": wti_actual}]
+    serie_wti = pd.DataFrame(serie_wti).drop_duplicates(subset=["fecha"], keep="last").to_dict(orient="records")
 
     series_historicas["petroleo_wti"] = {
         "nombre": "Petróleo WTI",
@@ -549,6 +566,39 @@ def ejecutar_pipeline_multivariable():
     with open(archivo_series, "w", encoding="utf-8") as f:
         json.dump(series_historicas, f, ensure_ascii=False, indent=2)
     logger.info(f"✔ Archivo de series históricas generado: {archivo_series.name}")
+
+    # Auto-persistencia oficial de tipos de cambio en indicadores_oficiales_base.json
+    modificado_base = False
+    base_dolar = base_periodica.setdefault("dolar_bcch_oficial", [])
+    fechas_base_dolar = {p["fecha"] for p in base_dolar}
+    for r in serie_dolar_2026:
+        if r["fecha"] not in fechas_base_dolar and r["fecha"] > "2026-10-01":
+            base_dolar.append({"fecha": r["fecha"], "valor": round(float(r["valor"]), 2)})
+            fechas_base_dolar.add(r["fecha"])
+            modificado_base = True
+
+    base_euro = base_periodica.setdefault("euro_bcch_oficial", [])
+    fechas_base_euro = {p["fecha"] for p in base_euro}
+    if eur_actual is not None and fecha_hoy not in fechas_base_euro:
+        base_euro.append({"fecha": fecha_hoy, "valor": round(float(eur_actual), 2)})
+        fechas_base_euro.add(fecha_hoy)
+        modificado_base = True
+
+    base_yuan = base_periodica.setdefault("yuan_bcch_oficial", [])
+    fechas_base_yuan = {p["fecha"] for p in base_yuan}
+    if cny_actual is not None and fecha_hoy not in fechas_base_yuan:
+        base_yuan.append({"fecha": fecha_hoy, "valor": round(float(cny_actual), 2)})
+        fechas_base_yuan.add(fecha_hoy)
+        modificado_base = True
+
+    if modificado_base:
+        base_periodica["dolar_bcch_oficial"] = sorted(base_dolar, key=lambda x: x["fecha"])
+        base_periodica["euro_bcch_oficial"] = sorted(base_euro, key=lambda x: x["fecha"])
+        base_periodica["yuan_bcch_oficial"] = sorted(base_yuan, key=lambda x: x["fecha"])
+        with open(archivo_base, "w", encoding="utf-8") as f:
+            json.dump(base_periodica, f, ensure_ascii=False, indent=2)
+        logger.info("💾 Auto-persistencia: 'indicadores_oficiales_base.json' actualizado con nuevos registros oficiales.")
+
 
     # ==============================================================================
     # 6. GENERAR CUADRO OFICIAL PARA MINUTA SEMANAL (CON ENLACES Y FUENTES)
