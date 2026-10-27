@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datos Macroeconómicos de Chile | Portal Oficial y Abierto</title>
+  <meta name="description" content="Proveedor público de indicadores económicos oficiales de Chile de alta disponibilidad. Sincronización oficial para la Minuta Semanal UCEN.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Navbar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="text-xs font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-lg border border-amber-300">Versión 1.0 (Legado)</span>
+        <a href="../index.html" class="text-xs font-bold px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition flex items-center gap-1">
+          <span>Ir a Versión 2.0</span>
+          <span>&rarr;</span>
+        </a>
+        <span class="text-2xl">🇨🇱</span>
+        <div>
+          <h1 class="font-bold text-slate-900 leading-tight flex items-center gap-2">
+            <span>Datos Económicos de Chile</span>
+            <div class="relative group cursor-pointer inline-flex">
+              <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>SLA 99.9%</span>
+                <i data-lucide="info" class="w-3 h-3 text-emerald-700"></i>
+              </span>
+              <!-- Nota explicativa flotante del SLA -->
+              <div class="absolute left-0 top-full mt-1.5 w-72 p-3 bg-slate-900 text-white text-[11px] rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 leading-relaxed border border-slate-700">
+                <p class="font-bold text-emerald-400 mb-1 flex items-center gap-1">
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                  <span>¿Qué es el SLA 99.9%?</span>
+                </p>
+                Es el <strong>Acuerdo de Nivel de Servicio</strong> que garantiza 99,9% de tiempo en línea sin caídas por saturación. Los datos se publican como archivos estáticos en la red global CDN de GitHub (Flat Data), eliminando dependencias de servidores web que sufren caídas.
+              </div>
+            </div>
+          </h1>
+          <p class="text-xs text-slate-500 font-medium">Proveedor de Datos Abiertos • Economía de Chile</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <button onclick="abrirModalNotasTecnicas()" class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg transition border border-blue-200 shadow-sm">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Notas Técnicas & Metodología</span>
+          <span class="sm:hidden">Metodología</span>
+        </button>
+        <a href="https://github.com/jpqb/datos_economicos_chile" target="_blank" rel="noopener noreferrer" 
+           class="inline-flex items-center space-x-2 text-xs font-semibold px-3 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition shadow-sm">
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span class="hidden md:inline">Ver Repositorio</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
+
+    <!-- 1. Grid de Indicadores Clave en Vivo con Fuentes Visibles -->
+    <div>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="activity" class="w-5 h-5 text-blue-600"></i>
+            <span>Tablero Macroeconómico</span>
+          </h2>
+          <p class="text-xs text-slate-500">Valores consolidados y fuentes emisoras oficiales primarias.</p>
+        </div>
+        <span id="timestamp-general" class="text-xs text-slate-500 font-medium bg-white px-3 py-1 rounded-lg border border-slate-200 self-start sm:self-auto">
+          Sincronizando...
+        </span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5" id="grid-cards-principales">
+        <!-- Render dinámico por JavaScript -->
+        <div class="p-4 bg-white rounded-xl border border-slate-200 animate-pulse text-xs text-slate-400">Cargando indicadores...</div>
+      </div>
+    </div>
+
+    <!-- 2. Gráfico Interactivo de Evolución Multivariable -->
+    <div id="seccion-grafico" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5 transition-all duration-300">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-bold text-slate-900 text-lg flex items-center space-x-2">
+              <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i>
+              <span>Evolución Histórica por Variable (2016 – 2026)</span>
+            </h3>
+            <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-md">
+              10 Años
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Trayectoria histórica oficial consolidada. Pasa el cursor sobre la curva para inspeccionar el valor individual de cada fecha o utiliza los rangos predefinidos.
+          </p>
+        </div>
+
+        <!-- Controles: Selector de Variable y Rango Temporal -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Selector de Variable -->
+          <div class="relative">
+            <select id="select-variable" onchange="cambiarVariableGrafico(this.value)" 
+                    class="appearance-none bg-slate-50 border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg pl-3 pr-8 py-2 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer">
+              <option value="uf">🇨🇱 Unidad de Fomento (UF)</option>
+              <option value="dolar">💵 Dólar Observado (USD/CLP)</option>
+              <option value="euro">💶 Euro Observado (EUR/CLP)</option>
+              <option value="yuan">💴 Yuan Chino (CNY/CLP)</option>
+              <option value="cobre">🪙 Cobre (LME US$/lb)</option>
+              <option value="petroleo_brent">🛢️ Petróleo Brent (US$/bbl)</option>
+              <option value="petroleo_wti">⛽ Petróleo WTI (US$/bbl)</option>
+              <option value="tpm">🏛️ TPM (Banco Central %)</option>
+              <option value="ipc">📈 Inflación Mensual IPC (%)</option>
+              <option value="desempleo">👥 Tasa Desempleo (%)</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+
+          <!-- Filtro de Rango Temporal Adaptativo (Día a Día vs. Mensual / Reunión) -->
+          <div id="contenedor-filtros-rango" class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-50 text-xs font-semibold"></div>
+        </div>
+      </div>
+
+      <!-- Badge Destacado de Fuente Oficial para la Variable Seleccionada -->
+      <div id="badge-fuente-grafico" class="flex flex-wrap items-center justify-between text-xs p-3 bg-blue-50/70 border border-blue-100 rounded-xl text-blue-900 gap-2">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="landmark" class="w-4 h-4 text-blue-600"></i>
+          <span>Fuente Oficial: <strong id="lbl-fuente-grafico">Servicio de Impuestos Internos (SII)</strong></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="abrirModalNotasTecnicas(variableActual)" class="inline-flex items-center space-x-1 px-2.5 py-1 bg-white hover:bg-blue-100 border border-blue-200 text-blue-800 rounded-lg text-[11px] font-semibold transition shadow-xs">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-blue-600"></i>
+            <span>Ver Ficha Técnica</span>
+          </button>
+          <a id="lnk-fuente-grafico" href="https://www.sii.cl/valores_y_fechas/uf/uf2026.htm" target="_blank" rel="noopener noreferrer" 
+             class="inline-flex items-center space-x-1 text-blue-700 hover:text-blue-900 font-semibold underline text-[11px]">
+            <span>Ver Fuente Primaria</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Lienzo del Gráfico -->
+      <div class="relative h-72 sm:h-80 w-full pt-1">
+        <canvas id="graficoGeneral"></canvas>
+      </div>
+    </div>
+
+    <!-- 3. Cuadro Oficial para la Minuta Semanal UCEN -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-bold text-slate-900 text-lg flex items-center space-x-2">
+              <i data-lucide="file-spreadsheet" class="w-5 h-5 text-indigo-600"></i>
+              <span>Cuadro de Variables Macroeconómicas y Financieras</span>
+            </h3>
+            <span class="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-md">
+              Cierre Semanal Oficial
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">
+            Haz clic en cualquier fila para filtrar automáticamente el gráfico histórico. Convención direccional (▲ Alza, ▼ Baja, ▬ Estable) y enlaces oficiales.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <button onclick="copiarTablaMarkdown()" class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span>Copiar Tabla</span>
+          </button>
+          <a href="../data/cuadro_minuta_semanal.json" target="_blank" class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition border border-indigo-200">
+            <i data-lucide="code" class="w-3.5 h-3.5"></i>
+            <span>API JSON</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tabla Responsive -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-50 border-b border-slate-200 text-slate-700 font-semibold uppercase tracking-wider text-[11px]">
+            <tr>
+              <th class="py-3 px-4">Variable / Indicador</th>
+              <th class="py-3 px-4">Cierre Semanal</th>
+              <th class="py-3 px-4">Var. Temporal</th>
+              <th class="py-3 px-4">Fuente Oficial Específica</th>
+              <th class="py-3 px-4">Lectura Analítica / Tendencia</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla-minuta" class="divide-y divide-slate-100 text-slate-800 font-medium">
+            <tr>
+              <td colspan="5" class="py-6 text-center text-slate-400">Cargando cuadro de la minuta...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-[11px] text-slate-400 italic">
+        *Pasa el cursor sobre la etiqueta de variación para conocer la periodicidad exacta (semanal w/w, mensual m/m o RPM). Haz clic en una fila para proyectar su curva en el gráfico.
+      </p>
+    </div>
+
+    <!-- 4. Centro de Descarga de Datos Históricos (Mes, Trimestre y Año) -->
+    <!-- 4. Centro de Descarga de Datos Históricos (Multiselección de Categorías, Años y Periodos) -->
+    <div id="seccion-descargas" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-bold text-slate-900 text-lg flex items-center space-x-2">
+              <i data-lucide="download-cloud" class="w-5 h-5 text-emerald-600"></i>
+              <span>Centro de Descarga de Datos Históricos (2016 – 2026)</span>
+            </h3>
+            <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md">
+              10 Años
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">
+            Selecciona una o más categorías/variables y combina libremente con años y periodos. Exportación instantánea en <strong>CSV (Excel / Stata / R / Python)</strong> o <strong>JSON</strong>.
+          </p>
+        </div>
+        <!-- Botones de Acción de Descarga -->
+        <div class="flex items-center gap-2">
+          <button onclick="ejecutarDescarga('csv')" class="inline-flex items-center space-x-1.5 text-xs font-bold py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm transition">
+            <i data-lucide="sheet" class="w-4 h-4"></i>
+            <span>Descargar CSV</span>
+          </button>
+          <button onclick="ejecutarDescarga('json')" class="inline-flex items-center space-x-1.5 text-xs font-bold py-2.5 px-4 bg-slate-800 hover:bg-slate-900 text-white rounded-lg shadow-sm transition">
+            <i data-lucide="code" class="w-4 h-4"></i>
+            <span>Descargar JSON</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 1. Selección Múltiple de Variables / Categorías -->
+      <div class="space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <label class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+            <i data-lucide="check-square" class="w-4 h-4 text-emerald-600"></i>
+            <span>1. Variables y Categorías (Selecciona una o más):</span>
+          </label>
+          <!-- Presets rápidos por categoría -->
+          <div class="inline-flex flex-wrap items-center gap-1.5 text-[11px]">
+            <button onclick="seleccionarPresetVariables('todas')" class="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">Todas (10)</button>
+            <button onclick="seleccionarPresetVariables('divisas')" class="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold transition">Solo Divisas (4)</button>
+            <button onclick="seleccionarPresetVariables('commodities')" class="px-2 py-0.5 rounded-md bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold transition">Solo Commodities (3)</button>
+            <button onclick="seleccionarPresetVariables('macro')" class="px-2 py-0.5 rounded-md bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold transition">Solo Indicadores (3)</button>
+            <button onclick="seleccionarPresetVariables('ninguna')" class="px-2 py-0.5 rounded-md bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold transition">Limpiar</button>
+          </div>
+        </div>
+
+        <!-- Chips interactivos con checkboxes para variables -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs">
+          <!-- Divisas -->
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="uf" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>🇨🇱 UF</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="dolar" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>💵 Dólar Obs.</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="euro" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>💶 Euro Obs.</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="yuan" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>💴 Yuan Chino</span>
+          </label>
+          <!-- Commodities -->
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="cobre" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>🪙 Cobre LME</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="petroleo_brent" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>🛢️ Petróleo Brent</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="petroleo_wti" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>⛽ Petróleo WTI</span>
+          </label>
+          <!-- Indicadores Oficiales -->
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="tpm" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>🏛️ TPM BCCh</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="ipc" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>📈 Inflación IPC</span>
+          </label>
+          <label class="cursor-pointer flex items-center space-x-2 p-2.5 rounded-xl border border-slate-200 hover:border-emerald-500 bg-slate-50/70 transition has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 has-[:checked]:text-emerald-950 font-medium select-none">
+            <input type="checkbox" name="chk-var" value="desempleo" checked onchange="actualizarResumenDescarga()" class="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+            <span>👥 Desempleo</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 2. Filtros de Tiempo: Años y Periodos -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-1">
+        <!-- Selector de Años (Multiselección) -->
+        <div class="space-y-2 p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="flex items-center justify-between">
+            <label class="font-bold text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-blue-600"></i>
+              <span>2. Años (Selecciona uno, varios o todos):</span>
+            </label>
+            <div class="flex items-center gap-1 text-[10px]">
+              <button onclick="seleccionarPresetAnos('todos')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700">Todos</button>
+              <button onclick="seleccionarPresetAnos('2026')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700">2026</button>
+              <button onclick="seleccionarPresetAnos('3y')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700">Últimos 3</button>
+              <button onclick="seleccionarPresetAnos('5y')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:bg-slate-100 font-semibold text-slate-700">Últimos 5</button>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-1">
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2016" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2016</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2017" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2017</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2018" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2018</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2019" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2019</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2020" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2020</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2021" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2021</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2022" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2022</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2023" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2023</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2024" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2024</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2025" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2025</span>
+            </label>
+            <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-blue-400 text-[11px] font-semibold select-none has-[:checked]:bg-blue-600 has-[:checked]:text-white has-[:checked]:border-blue-600 transition">
+              <input type="checkbox" name="chk-ano" value="2026" checked onchange="actualizarResumenDescarga()" class="hidden">
+              <span>2026</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Selector de Periodo (Trimestre o Mes) -->
+        <div class="space-y-2 p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between">
+          <label class="font-bold text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <span>3. Periodo Temporal (Trimestre o Mes):</span>
+          </label>
+          <select id="dl-periodo" onchange="actualizarResumenDescarga()" class="w-full bg-white border border-slate-300 text-slate-800 rounded-lg p-2 font-medium hover:border-emerald-500 focus:ring-2 focus:ring-emerald-500 transition cursor-pointer">
+            <optgroup label="Año / Trimestres">
+              <option value="todos">Año Completo / Rango Completo</option>
+              <option value="T1">Trimestre 1 (Ene - Mar)</option>
+              <option value="T2">Trimestre 2 (Abr - Jun)</option>
+              <option value="T3">Trimestre 3 (Jul - Sep)</option>
+              <option value="T4">Trimestre 4 (Oct - Dic)</option>
+            </optgroup>
+            <optgroup label="Mes Específico">
+              <option value="01">Enero</option>
+              <option value="02">Febrero</option>
+              <option value="03">Marzo</option>
+              <option value="04">Abril</option>
+              <option value="05">Mayo</option>
+              <option value="06">Junio</option>
+              <option value="07">Julio</option>
+              <option value="08">Agosto</option>
+              <option value="09">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </optgroup>
+          </select>
+          <span class="text-[10.5px] text-slate-400">Filtra las fechas correspondientes para todos los años marcados.</span>
+        </div>
+      </div>
+
+      <!-- Resumen dinámico del filtro seleccionado -->
+      <div id="dl-preview" class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
+          <span id="dl-preview-texto" class="font-medium">10 variables seleccionadas • 11 años (2016-2026) • Año completo</span>
+        </div>
+        <span class="text-[11px] text-slate-400">CSV delimitado por punto y coma (;) con UTF-8 BOM para Excel</span>
+      </div>
+    </div>
+
+    <!-- 5. Directorio de Fuentes Oficiales y Gobernanza -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <h3 class="font-bold text-slate-900 text-base flex items-center space-x-2">
+        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-600"></i>
+        <span>Directorio de Fuentes Oficiales y Gobernanza de Datos</span>
+      </h3>
+      <p class="text-xs text-slate-600">
+        Cada dato publicado en este repositorio cuenta con trazabilidad institucional directa a su organismo emisor legal primario:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1 text-xs">
+        
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="building-2" class="w-4 h-4 text-blue-600"></i>
+              <span>Servicio de Impuestos Internos (SII)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Organismo fiscalizador tributario del Estado de Chile. Por mandato legal y normativo, publica y certifica diariamente los valores oficiales de la <strong>Unidad de Fomento (UF)</strong> conforme al IPC, y transcribe con fines tributarios el tipo de cambio oficial del Dólar fijado por el Banco Central.
+            </p>
+          </div>
+          <a href="https://www.sii.cl/valores_y_fechas/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Portal Oficial SII (Valores y Fechas)</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="landmark" class="w-4 h-4 text-indigo-600"></i>
+              <span>Banco Central de Chile (BCCh)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Institución autónoma de rango constitucional con potestad legal exclusiva sobre la política monetaria y cambiaria. Determina la <strong>Tasa de Política Monetaria (TPM)</strong> y fija diariamente a las 08:30 hrs el <strong>Dólar Observado</strong> (Art. 44 LOC), además de las paridades cambiarias (EUR, CNY) y el IMACEC.
+            </p>
+          </div>
+          <a href="https://www.bcentral.cl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Base de Datos Estadísticos (BDE) BCCh</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="bar-chart-3" class="w-4 h-4 text-amber-600"></i>
+              <span>Instituto Nacional de Estadísticas (INE)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Órgano técnico rector de las estadísticas públicas nacionales de Chile. Diseña, recopila y publica mensualmente el <strong>Índice de Precios al Consumidor (IPC)</strong> que rige la inflación oficial, así como la <strong>Encuesta Nacional de Empleo (ENE)</strong> que cuantifica la tasa de desempleo por trimestre móvil.
+            </p>
+          </div>
+          <a href="https://www.ine.gob.cl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Portal Estadístico Oficial INE</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="layers" class="w-4 h-4 text-amber-700"></i>
+              <span>Comisión Chilena del Cobre (Cochilco)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Agencia técnica especializada del Estado de Chile asesora en materias mineras. Monitorea y certifica diariamente la cotización spot internacional de la <strong>libra de cobre físico Grado A</strong> transada en la Bolsa de Metales de Londres (LME), termómetro vital para el fisco y la balanza comercial.
+            </p>
+          </div>
+          <a href="https://www.cochilco.cl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Estadísticas Mineras de Cochilco</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="globe" class="w-4 h-4 text-emerald-600"></i>
+              <span>Federal Reserve Bank of St. Louis (FRED)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              División de investigación y datos de la Reserva Federal de EE.UU. Es uno de los repositorios macroeconómicos más confiables del mundo; consolida las cotizaciones spot y de contratos de crudo de referencia mundial (<strong>Petróleo Brent y Petróleo WTI</strong>) e índices de paridad multilateral.
+            </p>
+          </div>
+          <a href="https://fred.stlouisfed.org" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Plataforma Federal Reserve Economic Data</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between space-y-2.5 hover:bg-slate-50/90 transition">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="github" class="w-4 h-4 text-slate-900"></i>
+              <span>Infraestructura Abierta GitHub (Flat Data)</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+              Plataforma global donde opera el código fuente, la auditoría y los flujos desatendidos de <strong>GitHub Actions</strong> (dos ejecuciones diarias). Los datos se publican como archivos JSON estáticos inmutables en la red perimetral CDN mundial, garantizando reproducibilidad total.
+            </p>
+          </div>
+          <a href="https://github.com/jpqb/datos_economicos_chile" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span>Repositorio y Flujos de Automatización</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <div class="p-4 bg-emerald-50/70 rounded-xl border border-emerald-200 flex flex-col justify-between space-y-2.5 sm:col-span-2 lg:col-span-3">
+          <div>
+            <div class="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-700"></i>
+              <span>Garantía de Nivel de Servicio (SLA 99.9% de Alta Disponibilidad)</span>
+            </div>
+            <p class="text-[11px] text-slate-700 mt-1.5 leading-relaxed">
+              El <strong>Service Level Agreement (SLA 99.9%)</strong> asegura que el servicio permanece accesible de manera ininterrumpida. A diferencia de APIs dinámicas que sufren caídas por saturación de servidores o límites de cuotas de consulta (rate limits), esta arquitectura estática alojada en la nube CDN global de GitHub permite que aplicaciones externas, modelos analíticos y la Minuta Semanal consuman datos con latencia mínima y confiabilidad absoluta.
+            </p>
+          </div>
+          <span class="text-emerald-700 font-semibold text-[11px] flex items-center gap-1 pt-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Certificación de alta disponibilidad y disponibilidad continua</span>
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal de Notas Técnicas y Metodología Oficial -->
+  <div id="modal-notas-tecnicas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-3 sm:p-5">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-base sm:text-lg">Fichas Técnicas & Metodología de Obtención</h3>
+            <p class="text-xs text-slate-500">Trazabilidad oficial, metodología de cálculo y explicación de discrepancias de mercado.</p>
+          </div>
+        </div>
+        <button onclick="cerrarModalNotasTecnicas()" class="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-xl transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Selector Tabs + Content) -->
+      <div class="flex-grow flex flex-col md:flex-row overflow-hidden min-h-[380px]">
+        <!-- Sidebar Tabs -->
+        <div class="w-full md:w-60 bg-slate-50 border-b md:border-b-0 md:border-r border-slate-200 p-2.5 overflow-x-auto md:overflow-y-auto flex md:flex-col gap-1 flex-shrink-0 text-xs">
+          <div id="tabs-modal-indicadores" class="flex md:flex-col gap-1 w-full"></div>
+        </div>
+
+        <!-- Contenido Detallado -->
+        <div id="contenido-modal-tecnico" class="flex-grow p-5 sm:p-6 overflow-y-auto space-y-4 text-xs leading-relaxed text-slate-700">
+          <!-- Renderizado dinámico -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3.5 sm:p-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-1.5 text-slate-500 text-[11px]">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Documento normativo oficial homologado con la Minuta Semanal UCEN</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <a id="lnk-modal-fuente-primaria" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition shadow-xs">
+            <span>Abrir Fuente Primaria Verificada</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+          <button onclick="cerrarModalNotasTecnicas()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold transition">
+            Cerrar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-center">
+      <p>© 2026 Datos Económicos de Chile • Jean Paul Quinteros Brisso (<a href="mailto:jpquinterosbrisso@gmail.com" class="text-blue-600 hover:underline">jpquinterosbrisso@gmail.com</a>)</p>
+    </div>
+  </footer>
+
+  <!-- Lógica y Scripts de Visualización -->
+  <script>
+    let chartInstance = null;
+    let seriesHistoricasCheadas = null;
+    let variableActual = "uf";
+    let rangoActual = "1y";
+    let datosMinutaCacheados = null;
+
+    const formatoCLP = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", minimumFractionDigits: 2 });
+    const formatoUSD = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
+
+    async function inicializarDashboard() {
+      lucide.createIcons();
+      await cargarCuadroMinuta();
+      await cargarIndicadoresHoy();
+      await cargarSeriesHistoricas();
+      actualizarResumenDescarga();
+    }
+
+    async function cargarCuadroMinuta() {
+      try {
+        let res;
+        try {
+          res = await fetch("../data/cuadro_minuta_semanal.json?v=" + Date.now(), { cache: "no-store" });
+          if (!res.ok) throw new Error();
+        } catch {
+          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/cuadro_minuta_semanal.json?v=" + Date.now(), { cache: "no-store" });
+        }
+        const data = await res.json();
+        datosMinutaCacheados = data;
+
+        const tbody = document.getElementById("cuerpo-tabla-minuta");
+        tbody.innerHTML = "";
+
+        data.indicadores.forEach(ind => {
+          const clave = detectarClaveVariable(ind.variable);
+          const tipInfo = obtenerTooltipTabla(ind.variable);
+
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-blue-50/60 transition cursor-pointer group";
+          tr.title = `Haz clic para proyectar ${ind.variable} en el gráfico histórico`;
+          if (clave) {
+            tr.onclick = (e) => {
+              if (e.target.closest("a")) return;
+              seleccionarVariableYScroll(clave);
+            };
+          }
+
+          let colorBadge = "bg-slate-100 text-slate-700";
+          if (ind.variacion_ww.includes("▲")) colorBadge = "bg-emerald-50 text-emerald-700 border border-emerald-200";
+          if (ind.variacion_ww.includes("▼")) colorBadge = "bg-rose-50 text-rose-700 border border-rose-200";
+
+          const enlaceFuente = ind.url_fuente_oficial 
+            ? `<a href="${ind.url_fuente_oficial}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="text-blue-600 hover:underline flex items-center gap-1">${ind.fuente_oficial} <i data-lucide="external-link" class="w-3 h-3 inline"></i></a>`
+            : ind.fuente_oficial;
+
+          tr.innerHTML = `
+            <td class="py-3 px-4 font-semibold text-slate-900">
+              <div class="flex items-center justify-between gap-2">
+                <span class="group-hover:text-blue-600 transition">${ind.variable}</span>
+                <i data-lucide="trending-up" class="w-3.5 h-3.5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></i>
+              </div>
+            </td>
+            <td class="py-3 px-4 font-bold text-slate-950">${ind.cierre_semanal}</td>
+            <td class="py-3 px-4">
+              <div class="relative group/tip inline-flex">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold ${colorBadge} cursor-help gap-1">
+                  <span>${ind.variacion_ww}</span>
+                  <i data-lucide="help-circle" class="w-2.5 h-2.5 opacity-60"></i>
+                </span>
+                <div class="absolute bottom-full left-0 mb-1.5 w-60 p-2.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-2xl opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-50 leading-relaxed border border-slate-700">
+                  <div class="font-bold text-blue-400 mb-0.5 flex items-center gap-1">
+                    <i data-lucide="clock" class="w-3 h-3"></i>
+                    <span>${tipInfo.titulo}</span>
+                  </div>
+                  <p class="text-slate-300 text-[10.5px]">${tipInfo.desc}</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 px-4 text-slate-600">${enlaceFuente}</td>
+            <td class="py-3 px-4 text-slate-600 text-[11px] leading-relaxed max-w-xs">${ind.lectura_analitica}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+        lucide.createIcons();
+
+      } catch (err) {
+        console.error("Error al cargar cuadro minuta:", err);
+      }
+    }
+
+    async function cargarIndicadoresHoy() {
+      try {
+        let res;
+        try {
+          res = await fetch("../data/indicadores_hoy.json?v=" + Date.now(), { cache: "no-store" });
+          if (!res.ok) throw new Error();
+        } catch {
+          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/indicadores_hoy.json?v=" + Date.now(), { cache: "no-store" });
+        }
+        const data = await res.json();
+
+        document.getElementById("timestamp-general").textContent = `Actualizado: ${new Date(data.metadatos.fecha_actualizacion_utc).toLocaleDateString("es-CL")} • 09:15 CLT`;
+
+        const grid = document.getElementById("grid-cards-principales");
+        grid.innerHTML = "";
+
+        const indMap = data.indicadores;
+        const cardsConfig = [
+          { 
+            key: "uf", serieKey: "uf", titulo: "UF", 
+            valor: `$${indMap.uf.valor.toLocaleString("es-CL", {minimumFractionDigits: 2})}`, 
+            sub: "Pesos Chilenos", var: indMap.uf.var_ww, icon: "badge-percent", 
+            fuente: indMap.uf.fuente, url: indMap.uf.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Reajuste diario oficial acumulado en los últimos 7 días corridos, calculado según la variación legal del IPC."
+          },
+          { 
+            key: "dolar", serieKey: "dolar", titulo: "Dólar Obs.", 
+            valor: `$${indMap.dolar.valor.toFixed(2)}`, 
+            sub: "USD / CLP", var: indMap.dolar.var_ww, icon: "dollar-sign", 
+            fuente: indMap.dolar.fuente, url: indMap.dolar.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Variación absoluta y porcentual en 7 días del tipo de cambio oficial publicado diariamente por el Banco Central de Chile."
+          },
+          { 
+            key: "euro", serieKey: "euro", titulo: "Euro Obs.", 
+            valor: `$${indMap.euro.valor.toFixed(2)}`, 
+            sub: "EUR / CLP", var: indMap.euro.var_ww, icon: "euro", 
+            fuente: indMap.euro.fuente, url: indMap.euro.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Variación a 7 días de la paridad cambiaria EUR/CLP fijada por el Banco Central de Chile y FRED."
+          },
+          { 
+            key: "cobre", serieKey: "cobre", titulo: "Cobre (LME)", 
+            valor: `US$ ${indMap.cobre.valor.toFixed(2)}`, 
+            sub: "Por libra física • Cochilco", var: indMap.cobre.var_ww, icon: "layers", 
+            fuente: "LME / Cochilco", url: indMap.cobre.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Precio spot físico oficial en la Bolsa de Metales de Londres (LME), certificado por Cochilco en La Rueda Diaria."
+          },
+          { 
+            key: "petroleo_brent", serieKey: "petroleo_brent", titulo: "Petróleo Brent", 
+            valor: `US$ ${indMap.petroleo_brent.valor.toFixed(2)}`, 
+            sub: "Por barril • Cierre T-1 (FRED)", var: indMap.petroleo_brent.var_ww, icon: "droplet", 
+            fuente: "FRED / EIA", url: indMap.petroleo_brent.url_fuente,
+            tipTitulo: "Cierre Spot Oficial T-1 (EIA / FRED)",
+            tipDesc: "La EIA y FRED publican el cierre oficial spot con 1 día hábil de desfase (T-1) tras la consolidación de transacciones en el Mar del Norte."
+          },
+          { 
+            key: "tpm", serieKey: "tpm", titulo: "TPM", 
+            valor: `${indMap.tpm.valor}%`, 
+            sub: "Tasa Banco Central", var: "▬ Estable", icon: "percent", 
+            fuente: indMap.tpm.fuente, url: indMap.tpm.url_fuente,
+            tipTitulo: "Variación por Reunión (RPM)",
+            tipDesc: "Tasa de Política Monetaria acordada por el Consejo del Banco Central en su última reunión oficial."
+          },
+          { 
+            key: "ipc_mensual", serieKey: "ipc", titulo: "IPC Mensual", 
+            valor: `+${indMap.ipc_mensual.valor}%`, 
+            sub: "Septiembre 2026", var: "INE Oficial", icon: "trending-up", 
+            fuente: indMap.ipc_mensual.fuente, url: indMap.ipc_mensual.url_fuente,
+            tipTitulo: "Variación Mensual (m/m)",
+            tipDesc: "Variación porcentual mensual oficial del Índice de Precios al Consumidor reportada por el INE."
+          },
+          { 
+            key: "desempleo", serieKey: "desempleo", titulo: "Desempleo", 
+            valor: `${indMap.desempleo.valor}%`, 
+            sub: "Trimestre Jun-Ago (INE)", var: "ENE - INE", icon: "users", 
+            fuente: indMap.desempleo.fuente, url: indMap.desempleo.url_fuente,
+            tipTitulo: "Variación por Trimestre Móvil",
+            tipDesc: "Tasa de desocupación estimada para el último trimestre móvil por la Encuesta Nacional de Empleo (ENE)."
+          },
+          { 
+            key: "yuan", serieKey: "yuan", titulo: "Yuan Chino", 
+            valor: `$${indMap.yuan.valor.toFixed(2)}`, 
+            sub: "CNY / CLP", var: indMap.yuan.var_ww, icon: "coins", 
+            fuente: indMap.yuan.fuente, url: indMap.yuan.url_fuente,
+            tipTitulo: "Variación Semanal (w/w)",
+            tipDesc: "Variación a 7 días del Yuan chino respecto al peso chileno (Banco Central / FRED)."
+          },
+          { 
+            key: "petroleo_wti", serieKey: "petroleo_wti", titulo: "Petróleo WTI", 
+            valor: `US$ ${indMap.petroleo_wti.valor.toFixed(2)}`, 
+            sub: "Por barril • Cierre T-1 (FRED)", var: indMap.petroleo_wti.var_ww, icon: "fuel", 
+            fuente: "FRED / EIA", url: indMap.petroleo_wti.url_fuente,
+            tipTitulo: "Cierre Spot Oficial T-1 (EIA / FRED)",
+            tipDesc: "Precio spot físico en Cushing, Oklahoma. La EIA y FRED certifican el cierre al día hábil anterior (desfase normativo T-1)."
+          },
+        ];
+
+        cardsConfig.forEach(c => {
+          const cardEl = document.createElement("div");
+          cardEl.className = "p-4 bg-white border border-slate-200/90 rounded-2xl shadow-sm hover:border-blue-500 hover:shadow-md transition cursor-pointer group flex flex-col justify-between";
+          cardEl.title = `Haz clic para proyectar ${c.titulo} en el gráfico histórico`;
+          cardEl.onclick = (e) => {
+            if (e.target.closest("a")) return;
+            seleccionarVariableYScroll(c.serieKey);
+          };
+
+          let colorVar = "text-slate-600 bg-slate-100";
+          if (c.var.includes("▲")) colorVar = "text-emerald-700 bg-emerald-50 border border-emerald-200";
+          if (c.var.includes("▼")) colorVar = "text-rose-700 bg-rose-50 border border-rose-200";
+
+          cardEl.innerHTML = `
+            <div>
+              <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+                <span class="group-hover:text-blue-600 transition flex items-center gap-1">
+                  ${c.titulo}
+                  <i data-lucide="trending-up" class="w-3 h-3 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                </span>
+                <i data-lucide="${c.icon}" class="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition"></i>
+              </div>
+              <div class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1 tracking-tight">${c.valor}</div>
+              <div class="text-[11px] text-slate-400 font-medium">${c.sub}</div>
+            </div>
+            <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
+              <div class="relative group/tip inline-flex">
+                <span class="font-semibold px-2 py-0.5 rounded ${colorVar} cursor-help flex items-center gap-1">
+                  <span>${c.var}</span>
+                  <i data-lucide="help-circle" class="w-2.5 h-2.5 opacity-60"></i>
+                </span>
+                <div class="absolute bottom-full left-0 mb-2 w-56 p-2.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-2xl opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none z-50 leading-relaxed border border-slate-700">
+                  <div class="font-bold text-blue-400 mb-0.5 flex items-center gap-1">
+                    <i data-lucide="clock" class="w-3 h-3"></i>
+                    <span>${c.tipTitulo}</span>
+                  </div>
+                  <p class="text-slate-300 text-[10.5px]">${c.tipDesc}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <a href="${c.url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="text-slate-400 hover:text-blue-600 truncate max-w-[80px]" title="Fuente directa: ${c.fuente}">
+                  ${c.fuente.split('(')[0].trim()}
+                </a>
+                <button onclick="event.stopPropagation(); abrirModalNotasTecnicas('${c.serieKey}')" class="text-blue-500 hover:text-blue-700 p-0.5 rounded hover:bg-blue-50 transition" title="Ver Ficha Técnica y Metodología de ${c.titulo}">
+                  <i data-lucide="help-circle" class="w-3 h-3"></i>
+                </button>
+              </div>
+            </div>
+          `;
+          grid.appendChild(cardEl);
+        });
+        lucide.createIcons();
+
+      } catch (err) {
+        console.error("Error al cargar indicadores hoy:", err);
+      }
+    }
+
+    function detectarClaveVariable(nombre) {
+      if (!nombre) return null;
+      const s = nombre.toLowerCase();
+      if (s.includes("uf") || s.includes("fomento")) return "uf";
+      if (s.includes("dólar") || s.includes("dolar") || s.includes("usd")) return "dolar";
+      if (s.includes("euro") || s.includes("eur")) return "euro";
+      if (s.includes("yuan") || s.includes("cny")) return "yuan";
+      if (s.includes("cobre")) return "cobre";
+      if (s.includes("brent")) return "petroleo_brent";
+      if (s.includes("wti")) return "petroleo_wti";
+      if (s.includes("tpm") || s.includes("política") || s.includes("politica")) return "tpm";
+      if (s.includes("ipc") || s.includes("inflación") || s.includes("inflacion")) return "ipc";
+      if (s.includes("desempleo") || s.includes("empleo")) return "desempleo";
+      return null;
+    }
+
+    function obtenerTooltipTabla(variable) {
+      const s = (variable || "").toLowerCase();
+      if (s.includes("tpm")) {
+        return {
+          titulo: "Variación por Reunión (RPM)",
+          desc: "Decisión del Consejo del Banco Central de Chile acordada en la Reunión de Política Monetaria."
+        };
+      }
+      if (s.includes("ipc")) {
+        return {
+          titulo: "Variación Mensual (m/m)",
+          desc: "Variación porcentual mensual oficial del Índice de Precios al Consumidor calculada por el INE."
+        };
+      }
+      if (s.includes("desempleo")) {
+        return {
+          titulo: "Variación Trimestre Móvil",
+          desc: "Tasa de desocupación estimada para el último trimestre móvil por la Encuesta Nacional de Empleo (ENE)."
+        };
+      }
+      if (s.includes("uf")) {
+        return {
+          titulo: "Variación Semanal (w/w)",
+          desc: "Reajuste diario acumulado en 7 días corridos conforme a la fórmula legal indexada al IPC."
+        };
+      }
+      return {
+        titulo: "Variación Semanal (w/w)",
+        desc: "Variación porcentual calculada respecto al cierre del ciclo semanal anterior disponible."
+      };
+    }
+
+    function seleccionarVariableYScroll(key) {
+      if (!key) return;
+      variableActual = key;
+      const select = document.getElementById("select-variable");
+      if (select) select.value = key;
+      actualizarBotonesRango();
+      actualizarGrafico();
+
+      const seccion = document.getElementById("seccion-grafico");
+      if (seccion) {
+        seccion.scrollIntoView({ behavior: "smooth", block: "center" });
+        seccion.classList.add("ring-2", "ring-blue-500", "shadow-lg");
+        setTimeout(() => {
+          seccion.classList.remove("ring-2", "ring-blue-500", "shadow-lg");
+        }, 1200);
+      }
+    }
+
+    async function cargarSeriesHistoricas() {
+      try {
+        let res;
+        try {
+          res = await fetch("../data/series_historicas.json?v=" + Date.now(), { cache: "no-store" });
+          if (!res.ok) throw new Error();
+        } catch {
+          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/series_historicas.json?v=" + Date.now(), { cache: "no-store" });
+        }
+        seriesHistoricasCheadas = await res.json();
+        actualizarBotonesRango();
+        actualizarGrafico();
+
+      } catch (err) {
+        console.error("Error al cargar series históricas:", err);
+      }
+    }
+
+    function cambiarVariableGrafico(nuevaVar) {
+      variableActual = nuevaVar;
+      actualizarBotonesRango();
+      actualizarGrafico();
+    }
+
+    function esVariablePeriodica(key) {
+      return ["ipc", "desempleo", "tpm"].includes(key);
+    }
+
+    function actualizarBotonesRango() {
+      const contenedor = document.getElementById("contenedor-filtros-rango");
+      if (!contenedor) return;
+
+      const esPeriodica = esVariablePeriodica(variableActual);
+      let opciones = [];
+
+      if (esPeriodica) {
+        // Rangos adaptados para indicadores mensuales o por reunión de política monetaria
+        opciones = [
+          { id: "6m", label: "6M", title: "Últimos 6 Meses" },
+          { id: "1y", label: "1A", title: "Último Año (12 Meses)" },
+          { id: "3y", label: "3A", title: "Últimos 3 Años" },
+          { id: "5y", label: "5A", title: "Últimos 5 Años" },
+          { id: "todos", label: "10A (Todo)", title: "Serie Histórica Completa" }
+        ];
+        // Si el rango previo era diario (30 o 90 días), normalizar a 1 año
+        if (rangoActual === 30 || rangoActual === 90 || rangoActual === "30" || rangoActual === "90") {
+          rangoActual = "1y";
+        }
+      } else {
+        // Rangos para indicadores de cotización diaria continua
+        opciones = [
+          { id: "30", label: "30D", title: "Últimos 30 Días" },
+          { id: "90", label: "90D", title: "Últimos 90 Días" },
+          { id: "1y", label: "1A", title: "Último Año" },
+          { id: "5y", label: "5A", title: "Últimos 5 Años" },
+          { id: "todos", label: "10A (Todo)", title: "Serie Histórica Completa" }
+        ];
+        // Si el rango previo era mensual específico (6m o 3y), normalizar a 1 año
+        if (rangoActual === "6m" || rangoActual === "3y") {
+          rangoActual = "1y";
+        }
+      }
+
+      contenedor.innerHTML = "";
+      opciones.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.id = `btn-${opt.id}`;
+        btn.title = opt.title;
+        btn.onclick = () => filtrarRango(opt.id);
+        const esActivo = String(rangoActual) === String(opt.id);
+        btn.className = esActivo 
+          ? "px-2.5 py-1 rounded-md bg-white shadow-sm text-blue-600 font-bold transition"
+          : "px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition";
+        btn.textContent = opt.label;
+        contenedor.appendChild(btn);
+      });
+    }
+
+    function filtrarRango(rango) {
+      rangoActual = rango;
+      actualizarBotonesRango();
+      actualizarGrafico();
+    }
+
+    function actualizarGrafico() {
+      if (!seriesHistoricasCheadas || !seriesHistoricasCheadas[variableActual]) return;
+
+      const objVar = seriesHistoricasCheadas[variableActual];
+      let datos = objVar.serie || [];
+
+      // Actualizar badge de fuente bajo el gráfico
+      document.getElementById("lbl-fuente-grafico").textContent = objVar.fuente_oficial;
+      const lnk = document.getElementById("lnk-fuente-grafico");
+      lnk.href = objVar.url_fuente || "#";
+
+      // Aplicar filtro de rango temporal adaptativo basado en fechas efectivas
+      if (rangoActual !== "todos" && datos.length > 0) {
+        const ultimoPunto = datos[datos.length - 1];
+        const partesFecha = ultimoPunto.fecha.split("-");
+        const ultFecha = new Date(parseInt(partesFecha[0], 10), parseInt(partesFecha[1], 10) - 1, parseInt(partesFecha[2], 10));
+
+        let fechaCorte = null;
+        if (rangoActual === 30 || rangoActual === "30") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setDate(fechaCorte.getDate() - 30);
+        } else if (rangoActual === 90 || rangoActual === "90") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setDate(fechaCorte.getDate() - 90);
+        } else if (rangoActual === "6m") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setMonth(fechaCorte.getMonth() - 6);
+        } else if (rangoActual === "1y") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setFullYear(fechaCorte.getFullYear() - 1);
+        } else if (rangoActual === "3y") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setFullYear(fechaCorte.getFullYear() - 3);
+        } else if (rangoActual === "5y") {
+          fechaCorte = new Date(ultFecha);
+          fechaCorte.setFullYear(fechaCorte.getFullYear() - 5);
+        }
+
+        if (fechaCorte) {
+          const isoCorte = fechaCorte.toISOString().split("T")[0];
+          const filtrados = datos.filter(d => d.fecha >= isoCorte);
+          // Asegura al menos 2 observaciones para proyectar la curva con rigor
+          datos = filtrados.length >= 2 ? filtrados : datos.slice(-2);
+        }
+      }
+
+      renderizarGrafico(objVar, datos);
+    }
+
+    function obtenerVariablesSeleccionadas() {
+      const chks = document.querySelectorAll("input[name='chk-var']:checked");
+      return Array.from(chks).map(c => c.value);
+    }
+
+    function obtenerAnosSeleccionados() {
+      const chks = document.querySelectorAll("input[name='chk-ano']:checked");
+      return Array.from(chks).map(c => c.value);
+    }
+
+    function seleccionarPresetVariables(preset) {
+      const divisas = ["uf", "dolar", "euro", "yuan"];
+      const commodities = ["cobre", "petroleo_brent", "petroleo_wti"];
+      const macro = ["tpm", "ipc", "desempleo"];
+
+      document.querySelectorAll("input[name='chk-var']").forEach(chk => {
+        if (preset === "todas") chk.checked = true;
+        else if (preset === "ninguna") chk.checked = false;
+        else if (preset === "divisas") chk.checked = divisas.includes(chk.value);
+        else if (preset === "commodities") chk.checked = commodities.includes(chk.value);
+        else if (preset === "macro") chk.checked = macro.includes(chk.value);
+      });
+      actualizarResumenDescarga();
+    }
+
+    function seleccionarPresetAnos(preset) {
+      document.querySelectorAll("input[name='chk-ano']").forEach(chk => {
+        const y = parseInt(chk.value, 10);
+        if (preset === "todos") chk.checked = true;
+        else if (preset === "2026") chk.checked = (y === 2026);
+        else if (preset === "3y") chk.checked = (y >= 2024);
+        else if (preset === "5y") chk.checked = (y >= 2022);
+      });
+      actualizarResumenDescarga();
+    }
+
+    function actualizarResumenDescarga() {
+      const vars = obtenerVariablesSeleccionadas();
+      const anos = obtenerAnosSeleccionados();
+      const per = document.getElementById("dl-periodo") ? document.getElementById("dl-periodo").value : "todos";
+
+      const lblPreview = document.getElementById("dl-preview-texto");
+      if (!lblPreview) return;
+
+      if (vars.length === 0) {
+        lblPreview.textContent = "⚠️ Ninguna variable seleccionada. Por favor marca al menos una variable.";
+        lblPreview.className = "font-medium text-rose-600";
+        return;
+      }
+      if (anos.length === 0) {
+        lblPreview.textContent = "⚠️ Ningún año seleccionado. Por favor marca al menos un año.";
+        lblPreview.className = "font-medium text-rose-600";
+        return;
+      }
+
+      lblPreview.className = "font-medium text-slate-800";
+      let textoPer = "Año completo";
+      if (per.startsWith("T")) textoPer = `Trimestre ${per.replace("T", "")}`;
+      else if (per !== "todos") textoPer = `Mes ${per}`;
+
+      const textoAnos = anos.length === 11 ? "10 años (2016-2026)" : `${anos.length} año(s) [${anos.join(', ')}]`;
+      lblPreview.textContent = `${vars.length} variable(s) seleccionada(s) • ${textoAnos} • ${textoPer}`;
+    }
+
+    function ejecutarDescarga(formato) {
+      if (!seriesHistoricasCheadas) {
+        alert("Las series históricas se están sincronizando. Intenta en un segundo.");
+        return;
+      }
+
+      const variablesSel = obtenerVariablesSeleccionadas();
+      const anosSel = obtenerAnosSeleccionados();
+      const perSel = document.getElementById("dl-periodo") ? document.getElementById("dl-periodo").value : "todos";
+
+      if (variablesSel.length === 0) {
+        alert("Por favor selecciona al menos una variable o categoría para descargar.");
+        return;
+      }
+      if (anosSel.length === 0) {
+        alert("Por favor selecciona al menos un año.");
+        return;
+      }
+
+      function pasaFiltroFecha(fechaStr) {
+        const partes = fechaStr.split("-");
+        const y = partes[0];
+        const m = partes[1];
+
+        if (!anosSel.includes(y)) return false;
+        if (perSel === "todos") return true;
+        if (perSel === "T1") return ["01", "02", "03"].includes(m);
+        if (perSel === "T2") return ["04", "05", "06"].includes(m);
+        if (perSel === "T3") return ["07", "08", "09"].includes(m);
+        if (perSel === "T4") return ["10", "11", "12"].includes(m);
+        return m === perSel;
+      }
+
+      const nombreBase = `datos_economicos_chile_${variablesSel.length === 1 ? variablesSel[0] : 'seleccion_' + variablesSel.length + 'vars'}_${anosSel.length === 1 ? anosSel[0] : anosSel[0] + '_' + anosSel[anosSel.length - 1]}_${perSel}`;
+
+      if (variablesSel.length === 1) {
+        // 1 sola variable seleccionada
+        const k = variablesSel[0];
+        const obj = seriesHistoricasCheadas[k];
+        if (!obj || !obj.serie) {
+          alert("Variable seleccionada no disponible.");
+          return;
+        }
+        const serieFiltrada = obj.serie.filter(pt => pasaFiltroFecha(pt.fecha));
+
+        if (serieFiltrada.length === 0) {
+          alert("No se encontraron observaciones para los filtros seleccionados.");
+          return;
+        }
+
+        if (formato === "json") {
+          const exportJson = {
+            metadatos: {
+              variable: obj.nombre,
+              unidad: obj.unidad,
+              fuente_oficial: obj.fuente_oficial,
+              url_fuente: obj.url_fuente,
+              anos_seleccionados: anosSel,
+              periodo: perSel,
+              total_registros: serieFiltrada.length
+            },
+            serie: serieFiltrada
+          };
+          descargarBlob(JSON.stringify(exportJson, null, 2), `${nombreBase}.json`, "application/json");
+        } else {
+          let csv = "\uFEFFFecha;Valor;Variable;Unidad;Fuente_Oficial\n";
+          serieFiltrada.forEach(pt => {
+            csv += `${pt.fecha};${pt.valor};"${obj.nombre}";"${obj.unidad}";"${obj.fuente_oficial}"\n`;
+          });
+          descargarBlob(csv, `${nombreBase}.csv`, "text/csv;charset=utf-8;");
+        }
+
+      } else {
+        // Múltiples variables seleccionadas
+        const mapaFechas = {};
+        variablesSel.forEach(k => {
+          const obj = seriesHistoricasCheadas[k];
+          if (obj && obj.serie) {
+            obj.serie.forEach(pt => {
+              if (pasaFiltroFecha(pt.fecha)) {
+                if (!mapaFechas[pt.fecha]) mapaFechas[pt.fecha] = { fecha: pt.fecha };
+                mapaFechas[pt.fecha][k] = pt.valor;
+              }
+            });
+          }
+        });
+
+        const filasConsolidadas = Object.values(mapaFechas).sort((a, b) => a.fecha.localeCompare(b.fecha));
+
+        if (filasConsolidadas.length === 0) {
+          alert("No se encontraron observaciones para los filtros seleccionados.");
+          return;
+        }
+
+        if (formato === "json") {
+          const exportJson = {
+            metadatos: {
+              proveedor: "Datos Económicos de Chile (UCEN)",
+              licencia: "Datos Abiertos / Dominio Público",
+              fecha_exportacion: new Date().toISOString(),
+              variables: variablesSel.map(k => ({ key: k, nombre: seriesHistoricasCheadas[k]?.nombre, unidad: seriesHistoricasCheadas[k]?.unidad })),
+              anos_seleccionados: anosSel,
+              periodo: perSel,
+              total_registros: filasConsolidadas.length
+            },
+            datos: filasConsolidadas
+          };
+          descargarBlob(JSON.stringify(exportJson, null, 2), `${nombreBase}.json`, "application/json");
+        } else {
+          // Columnas dinámicas según las variables elegidas
+          const columnas = ["Fecha", ...variablesSel.map(k => {
+            const obj = seriesHistoricasCheadas[k];
+            return obj ? obj.nombre.replace(/[\(\)\/\$]/g, "").trim().replace(/\s+/g, "_") : k;
+          })];
+
+          let csv = "\uFEFF" + columnas.join(";") + "\n";
+          filasConsolidadas.forEach(f => {
+            const rowVals = [f.fecha, ...variablesSel.map(k => (f[k] !== undefined ? f[k] : ""))];
+            csv += rowVals.join(";") + "\n";
+          });
+          descargarBlob(csv, `${nombreBase}.csv`, "text/csv;charset=utf-8;");
+        }
+      }
+    }
+
+    function descargarBlob(contenido, nombreArchivo, mimeType) {
+      const blob = new Blob([contenido], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = nombreArchivo;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 500);
+    }
+
+    function renderizarGrafico(objVar, datos) {
+      const ctx = document.getElementById("graficoGeneral").getContext("2d");
+      if (chartInstance) chartInstance.destroy();
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+      gradient.addColorStop(0, 'rgba(37, 99, 235, 0.25)');
+      gradient.addColorStop(1, 'rgba(37, 99, 235, 0.0)');
+
+      const unidad = objVar.unidad;
+
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: datos.map(d => {
+            const p = d.fecha.split("-");
+            return `${p[2]}/${p[1]}/${p[0]}`; // Detalla día, mes y año (ej: 14/10/2026)
+          }),
+          datasets: [{
+            label: `${objVar.nombre} (${unidad})`,
+            data: datos.map(d => d.valor),
+            borderColor: '#2563eb',
+            borderWidth: 2.2,
+            fill: true,
+            backgroundColor: gradient,
+            pointRadius: datos.length > 50 ? 0 : 3,
+            pointHoverRadius: 7,
+            pointHoverBackgroundColor: '#2563eb',
+            pointHoverBorderColor: '#ffffff',
+            pointHoverBorderWidth: 2,
+            pointHitRadius: 30, // Gran área de captura táctil y de mouse
+            tension: 0.2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false, // Permite ver el dato con solo mover el cursor horizontalmente
+          },
+          hover: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              enabled: true,
+              backgroundColor: '#0f172a',
+              padding: 12,
+              cornerRadius: 10,
+              titleFont: { size: 12, weight: 'bold' },
+              bodyFont: { size: 13, weight: '600' },
+              callbacks: {
+                title: function(items) {
+                  if (!items.length) return '';
+                  const d = datos[items[0].dataIndex];
+                  const p = d.fecha.split('-');
+                  const fObj = new Date(p[0], p[1] - 1, p[2]);
+                  const fTexto = fObj.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                  return fTexto.charAt(0).toUpperCase() + fTexto.slice(1);
+                },
+                label: function(ctx) {
+                  const val = ctx.parsed.y;
+                  if (unidad === "CLP") return `${objVar.nombre}: $${val.toLocaleString("es-CL", {minimumFractionDigits: 2})} CLP`;
+                  if (unidad === "US$/lb" || unidad === "US$/bbl") return `${objVar.nombre}: US$ ${val.toFixed(2)}`;
+                  if (unidad === "%") return `${objVar.nombre}: ${val.toFixed(2)}%`;
+                  return `${objVar.nombre}: ${val}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { 
+              grid: { display: false }, 
+              ticks: { maxTicksLimit: 10, font: { size: 10 } } 
+            },
+            y: { 
+              grid: { color: '#f1f5f9' }, 
+              ticks: { 
+                font: { size: 10 },
+                callback: function(v) {
+                  if (unidad === "CLP") return "$" + v.toLocaleString("es-CL");
+                  if (unidad === "US$/lb" || unidad === "US$/bbl") return "US$ " + v;
+                  if (unidad === "%") return v + "%";
+                  return v;
+                }
+              } 
+            }
+          }
+        }
+      });
+    }
+
+    function copiarTablaMarkdown() {
+      if (!datosMinutaCacheados) return;
+      let md = "| Variable / Indicador | Cierre Semanal | Var. vs. Sem. Previa (w/w) | Fuente Oficial Específica | Lectura Analítica / Tendencia |\n";
+      md += "| :------------------- | :------------- | :------------------------- | :------------------------ | :--------------------------- |\n";
+      datosMinutaCacheados.indicadores.forEach(i => {
+        md += `| ${i.variable} | ${i.cierre_semanal} | ${i.variacion_ww} | ${i.fuente_oficial} | ${i.lectura_analitica} |\n`;
+      });
+      navigator.clipboard.writeText(md).then(() => {
+        alert("✅ Cuadro de la Minuta Semanal copiado al portapapeles en formato Markdown.");
+      });
+    }
+
+    // --- Fichas Técnicas & Metodología de Obtención de Indicadores ---
+    const NOTAS_TECNICAS = {
+      uf: {
+        nombre: "Unidad de Fomento (UF)",
+        emisor: "Banco Central de Chile & SII",
+        fuentePrimaria: "Servicio de Impuestos Internos (SII) - Serie Oficial",
+        marcoLegal: "Decreto Ley N° 3.588 de 1980 y D.F.L. N° 320 de 1960",
+        unidad: "Pesos Chilenos ($ CLP por UF)",
+        frecuencia: "Diaria (Reajuste legal a las 00:00 hrs)",
+        urlFuente: "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
+        icono: "badge-percent",
+        comoSeObtiene: "La UF no es una moneda física ni un activo financiero cotizado en bolsa; es una unidad de cuenta reajustable legal indexada al IPC. Su valor diario se actualiza entre el día 10 de cada mes y el día 9 del mes calendario siguiente mediante una tasa de interés geométrica diaria calculada a partir de la variación porcentual del IPC del mes inmediatamente anterior informado oficialmente por el INE:\n\nUF(t) = UF(t-1) * (1 + Var_IPC)^(1/k)\n(donde k es el número de días del período mensual de reajuste).\n\nEl calendario mensual completo es publicado oficialmente el día 9 de cada mes tras conocerse la cifra oficial de inflación del INE.",
+        discrepancias: "El SII publica en su portal el calendario tributario proyectado para los siguientes 30 días. No obstante, para garantizar consistencia metodológica y modelado econométrico con activos de mercado spot, este repositorio y la Minuta Semanal excluyen estrictamente las proyecciones futuras, registrando exclusivamente el valor diario efectivo devengado hasta la fecha."
+      },
+      dolar: {
+        nombre: "Dólar Observado (USD/CLP)",
+        emisor: "Banco Central de Chile (BCCh)",
+        fuentePrimaria: "Banco Central de Chile (Indicadores Diarios BDE)",
+        marcoLegal: "Artículo 44 Ley N° 18.840 (LOC BCCh) y Cap. I CNCI",
+        unidad: "Pesos Chilenos ($ CLP por US$ 1)",
+        frecuencia: "Días hábiles bancarios (08:30 hrs y adelanto a las 17:00 hrs)",
+        urlFuente: "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
+        icono: "dollar-sign",
+        comoSeObtiene: "El Dólar Observado es el promedio aritmético ponderado por volumen de todas las operaciones cambiarias spot (compra y venta de dólares estadounidenses por moneda nacional) transadas por los bancos comerciales e instituciones financieras en el Mercado Cambiario Formal chileno durante el día hábil bancario anterior.\n\nSe publica diariamente en el Diario Oficial y en la web del Banco Central cada mañana a las 08:30 hrs para regir esa jornada. A contar de las 17:00 – 18:00 hrs de cada tarde, el Banco Central calcula y adelanta en su portal el valor oficial vigente para el siguiente día hábil.",
+        discrepancias: "¿Por qué difiere del dólar en vivo o del SII?\n1. Mercado en vivo vs. Observado: Portales financieros (Google / Yahoo Finance) muestran la cotización interbancaria spot continua en tiempo real, sujeta a fluctuación segundo a segundo. El Dólar Observado es una media legal ponderada fija ex-post calculada por el Banco Central.\n2. Rezago del SII: El SII es un replicador tributario que transcribe las cifras del Banco Central con rezagos de semanas (actualmente su tabla estática llega al 1 de octubre). La fuente originaria, legal y primaria indiscutible es el Banco Central de Chile."
+      },
+      euro: {
+        nombre: "Euro Observado (EUR/CLP)",
+        emisor: "Banco Central de Chile (Base de Datos Estadísticos)",
+        fuentePrimaria: "Banco Central de Chile (Indicadores Diarios BDE)",
+        marcoLegal: "Compendio de Normas de Cambios Internacionales (CNCI)",
+        unidad: "Pesos Chilenos ($ CLP por € 1)",
+        frecuencia: "Días hábiles bancarios (14:00 hrs)",
+        urlFuente: "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
+        icono: "euro",
+        comoSeObtiene: "No surge de un mercado de negociación spot local masivo peso-euro en Santiago. El Banco Central de Chile determina el Euro Observado mediante paridad cambiaria cruzada de arbitraje oficial: se multiplica el Dólar Observado vigente por la cotización de arbitraje internacional EUR/USD reportada en los mercados monetarios globales a las 13:30 hrs de Santiago.",
+        discrepancias: "Puede presentar leves diferencias con cotizaciones forex instantáneas debido a la hora fija de corte estandarizada (13:30 hrs) adoptada institucionalmente por el Banco Central."
+      },
+      yuan: {
+        nombre: "Yuan Chino (CNY/CLP)",
+        emisor: "Banco Central de Chile & Banco Popular de China (PBOC)",
+        fuentePrimaria: "Banco Central de Chile (Indicadores Diarios BDE)",
+        marcoLegal: "Estadísticas Monetarias y Financieras Internacionales (BDE)",
+        unidad: "Pesos Chilenos ($ CLP por ¥ 1)",
+        frecuencia: "Días hábiles bancarios",
+        urlFuente: "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
+        icono: "coins",
+        comoSeObtiene: "Paridad cambiaria cruzada oficial calculada a partir de la relación entre el Dólar Observado en Chile (USD/CLP) y la paridad oficial USD/CNY establecida por el Banco Popular de China. Es un indicador clave para evaluar los términos de intercambio y la competitividad de las exportaciones de cobre, fruta y celulosa hacia China.",
+        discrepancias: "China opera bajo un régimen de flotación administrada con una banda diaria de fluctuación en torno a un punto medio fijado por el PBOC, por lo que su paridad con el peso refleja tanto la dinámica cambiaria en Santiago como las fijaciones oficiales de Beijing."
+      },
+      cobre: {
+        nombre: "Precio del Cobre Spot (LME / Cochilco)",
+        emisor: "London Metal Exchange (LME) & Cochilco",
+        fuentePrimaria: "Comisión Chilena del Cobre (Cochilco - La Rueda Diaria BML)",
+        marcoLegal: "Decreto Ley N° 1.349 de 1976 (Creación de Cochilco)",
+        unidad: "Dólares de EE.UU. por libra física (US$/lb)",
+        frecuencia: "Lunes a Viernes (09:30 - 11:00 hrs CLT)",
+        urlFuente: "https://www.cochilco.cl/web/la-rueda-diaria/",
+        icono: "layers",
+        comoSeObtiene: "• Mercado Primario Originario: El precio mundial del cobre se fija en la Bolsa de Metales de Londres (London Metal Exchange - LME), donde se determina el Precio Spot de Liquidación en Efectivo (Cash Settlement) para Cátodos de Grado A.\n• Rol y Certificación de Cochilco: Cochilco (Comisión Chilena del Cobre) no es una bolsa mercantil, sino el organismo del Estado de Chile encargado de certificar oficialmente la cotización de la LME y publicarla en 'La Rueda Diaria', convirtiéndola en dólares por tonelada métrica y centavos de dólar por libra física (1 TM = 2.204,62 lb). Esta certificación de Cochilco es la referencia legal oficial para el Royalty Minero y el presupuesto fiscal chileno.",
+        discrepancias: "1. LME (Spot) vs. Cochilco: Cochilco no 'inventa' un precio propio; adopta directamente el cierre de la segunda rueda de Londres de cátodos Grado A.\n2. LME vs. COMEX (Yahoo Finance HG=F): Portales financieros reportan futuros de cobre transados en Nueva York (COMEX), los cuales incluyen costos de financiamiento, cobertura y primas a meses futuros, mostrando discrepancias con el precio spot de entrega física inmediata en Londres utilizado por Chile."
+      },
+      petroleo_brent: {
+        nombre: "Petróleo Brent (Mar del Norte)",
+        emisor: "U.S. Energy Information Administration (EIA) / FRED",
+        fuentePrimaria: "FRED (Federal Reserve Bank of St. Louis) / U.S. EIA",
+        marcoLegal: "Referencia para cálculo MEPCO y ENAP en Chile",
+        unidad: "Dólares de EE.UU. por barril (US$/bbl)",
+        frecuencia: "Diaria (Días hábiles de negociación bursátil)",
+        urlFuente: "https://fred.stlouisfed.org/series/DCOILBRENTEU",
+        icono: "droplet",
+        comoSeObtiene: "Precio spot FOB en boca de terminal de exportación para la canasta de crudos ligeros del Mar del Norte (Brent, Forties, Oseberg, Ekofisk, Troll). Constituye el marcador global de referencia para más del 65% del crudo importado por ENAP en Chile y rige los parámetros de ajuste semanal del Mecanismo de Estabilización de Precios de los Combustibles (MEPCO).",
+        discrepancias: "• Desfase Oficial de Publicación T-1 (EIA / FRED):\n¿Por qué el dato más reciente en FRED tiene fecha del día anterior? La EIA (Energy Information Administration) y la Reserva Federal de San Luis (FRED) publican el precio spot oficial de cierre una vez concluidas y consolidadas las transacciones del día, liberando el dato formal al día hábil siguiente (desfase normativo T-1). Por ello, en cualquier momento del día, el registro oficial más reciente en FRED corresponde al cierre del día hábil previo.\n• Spot vs. Futuros: No debe confundirse con los contratos de futuros del Brent en el ICE."
+      },
+      petroleo_wti: {
+        nombre: "Petróleo WTI (West Texas Intermediate)",
+        emisor: "U.S. Energy Information Administration (EIA) / FRED",
+        fuentePrimaria: "FRED (Federal Reserve Bank of St. Louis) / U.S. EIA",
+        marcoLegal: "Marcador de referencia crudo dulce liviano de EE.UU.",
+        unidad: "Dólares de EE.UU. por barril (US$/bbl)",
+        frecuencia: "Diaria (Días hábiles en EE.UU.)",
+        urlFuente: "https://fred.stlouisfed.org/series/DCOILWTICO",
+        icono: "fuel",
+        comoSeObtiene: "Precio spot físico para entrega inmediata en el nodo de oleoductos y almacenamiento de Cushing, Oklahoma. Representa el crudo ligero de alta calidad de EE.UU. Es monitoreado en Chile por su impacto directo en los costos de refinería de derivados (gasolinas y diésel) en el Golfo de México.",
+        discrepancias: "• Desfase Oficial de Publicación T-1 (EIA / FRED):\nAl igual que el Brent, la EIA recopila los precios spot al cierre bursátil de Cushing y los publica a través de FRED en la jornada hábil posterior (T-1). Por ende, el dato oficial en FRED siempre muestra la fecha del día hábil anterior.\n• Spread Brent-WTI: El diferencial entre Brent y WTI responde a cuellos de botella de transporte continental en EE.UU. y fletes marítimos internacionales hacia Chile."
+      },
+      tpm: {
+        nombre: "Tasa de Política Monetaria (TPM)",
+        emisor: "Banco Central de Chile (BCCh)",
+        fuentePrimaria: "Banco Central de Chile (Política Monetaria y RPM)",
+        marcoLegal: "Artículos 34 y 35 Ley N° 18.840 (LOC BCCh)",
+        unidad: "Porcentaje anual (%)",
+        frecuencia: "8 Reuniones de Política Monetaria (RPM) al año",
+        urlFuente: "https://www.bcentral.cl/areas/politica-monetaria",
+        icono: "percent",
+        comoSeObtiene: "La TPM no es un precio de mercado libre; es una decisión discrecional de política macroeconómica votada formalmente por el Consejo del Banco Central de Chile en sus Reuniones de Política Monetaria (RPM). Define la tasa de interés objetivo para las operaciones de préstamos interbancarios a un día (overnight) que el Banco Central conduce para anclar la inflación en la meta del 3% a dos años plazo.",
+        discrepancias: "Permanece fija entre reuniones. En el Cuadro de la Minuta Semanal se clasifica como '▬ Estable' en aquellas semanas donde no sesiona el Consejo del Banco Central."
+      },
+      ipc: {
+        nombre: "Índice de Precios al Consumidor (IPC)",
+        emisor: "Instituto Nacional de Estadísticas (INE)",
+        fuentePrimaria: "Instituto Nacional de Estadísticas (INE - Precios al Consumidor)",
+        marcoLegal: "Ley N° 17.374 y Decreto Supremo N° 35 Ministerio de Economía",
+        unidad: "Variación mensual (%), acumulada en el año y a doce meses",
+        frecuencia: "Mensual (Día 8 de cada mes a las 08:00 hrs)",
+        urlFuente: "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor",
+        icono: "trending-up",
+        comoSeObtiene: "El INE recolecta mes a mes más de 120.000 cotizaciones de bienes y servicios en las 16 capitales regionales del país para calcular el costo de una canasta representativa de 303 productos (base anual 2023=100). Cuantifica la variación ponderada del gasto de los hogares de acuerdo a la Encuesta de Presupuestos Familiares (EPF).",
+        discrepancias: "Es una cifra mensual única que se publica una sola vez cada 30 días. Su publicación determina directamente el reajuste legal diario de la UF para el ciclo que comienza el día 10 de ese mismo mes."
+      },
+      desempleo: {
+        nombre: "Tasa de Desocupación Nacional (Desempleo)",
+        emisor: "Instituto Nacional de Estadísticas (INE)",
+        fuentePrimaria: "Instituto Nacional de Estadísticas (INE - Encuesta Nacional de Empleo)",
+        marcoLegal: "Ley N° 17.374 (Encuesta Nacional de Empleo - ENE)",
+        unidad: "Porcentaje de la Fuerza de Trabajo (%)",
+        frecuencia: "Trimestre Móvil (Junio - Agosto 2026: 9,6%)",
+        urlFuente: "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
+        icono: "users",
+        comoSeObtiene: "Se estima mediante la Encuesta Nacional de Empleo (ENE), realizada a más de 35.000 hogares en todo el territorio chileno. Mide el porcentaje de personas de 15 años o más que pertenecen a la fuerza de trabajo, no estuvieron ocupadas durante la semana de referencia, buscaron activamente empleo en las 4 semanas anteriores y estaban disponibles para comenzar a trabajar de inmediato:\n\nTasa Desocupación = (Personas Desocupadas / Fuerza de Trabajo) * 100",
+        discrepancias: "El dato reportado no corresponde a un mes calendario aislado, sino al promedio de un trimestre móvil de tres meses consecutivos. El último reporte oficial publicado por el INE el 30 de septiembre corresponde al trimestre Junio – Agosto (JJA), situándose en 9,6% a nivel nacional. El boletín de Julio – Septiembre se difunde conforme a calendario oficial el 30 de octubre."
+      }
+    };
+
+    let notaTecnicaActiva = "uf";
+
+    function normalizarClaveNota(clave) {
+      if (!clave) return "uf";
+      const s = String(clave).toLowerCase();
+      if (s.includes("uf")) return "uf";
+      if (s.includes("dolar") || s.includes("dólar") || s.includes("usd")) return "dolar";
+      if (s.includes("euro") || s.includes("eur")) return "euro";
+      if (s.includes("yuan") || s.includes("cny")) return "yuan";
+      if (s.includes("cobre")) return "cobre";
+      if (s.includes("brent")) return "petroleo_brent";
+      if (s.includes("wti")) return "petroleo_wti";
+      if (s.includes("tpm")) return "tpm";
+      if (s.includes("ipc")) return "ipc";
+      if (s.includes("desempleo") || s.includes("empleo")) return "desempleo";
+      return "uf";
+    }
+
+    function abrirModalNotasTecnicas(claveInicial = "uf") {
+      const modal = document.getElementById("modal-notas-tecnicas");
+      if (!modal) return;
+      modal.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+      
+      const claveNorm = normalizarClaveNota(claveInicial);
+      renderizarTabsNotasTecnicas(claveNorm);
+      seleccionarTabNotaTecnica(claveNorm);
+    }
+
+    function cerrarModalNotasTecnicas() {
+      const modal = document.getElementById("modal-notas-tecnicas");
+      if (!modal) return;
+      modal.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    function renderizarTabsNotasTecnicas(claveSeleccionada) {
+      const contenedorTabs = document.getElementById("tabs-modal-indicadores");
+      if (!contenedorTabs) return;
+      contenedorTabs.innerHTML = "";
+
+      Object.keys(NOTAS_TECNICAS).forEach(k => {
+        const item = NOTAS_TECNICAS[k];
+        const esActivo = k === claveSeleccionada;
+        const btn = document.createElement("button");
+        btn.id = `tab-nota-${k}`;
+        btn.className = `w-full text-left px-3 py-2.5 rounded-xl font-medium transition flex items-center justify-between gap-2 text-xs flex-shrink-0 ${
+          esActivo ? 'bg-blue-600 text-white shadow-xs font-semibold' : 'text-slate-600 hover:bg-slate-200/60 hover:text-slate-900 bg-white md:bg-transparent border border-slate-200 md:border-transparent'
+        }`;
+        btn.onclick = () => seleccionarTabNotaTecnica(k);
+        btn.innerHTML = `
+          <span class="truncate">${item.nombre.split('(')[0].trim()}</span>
+          <i data-lucide="${item.icono}" class="w-3.5 h-3.5 flex-shrink-0 ${esActivo ? 'text-white' : 'text-slate-400'}"></i>
+        `;
+        contenedorTabs.appendChild(btn);
+      });
+      lucide.createIcons();
+    }
+
+    function seleccionarTabNotaTecnica(clave) {
+      const item = NOTAS_TECNICAS[clave];
+      if (!item) return;
+      notaTecnicaActiva = clave;
+
+      // Actualizar estilos visuales de los tabs
+      Object.keys(NOTAS_TECNICAS).forEach(k => {
+        const tabEl = document.getElementById(`tab-nota-${k}`);
+        if (!tabEl) return;
+        const esActivo = k === clave;
+        tabEl.className = `w-full text-left px-3 py-2.5 rounded-xl font-medium transition flex items-center justify-between gap-2 text-xs flex-shrink-0 ${
+          esActivo ? 'bg-blue-600 text-white shadow-xs font-semibold' : 'text-slate-600 hover:bg-slate-200/60 hover:text-slate-900 bg-white md:bg-transparent border border-slate-200 md:border-transparent'
+        }`;
+        const iconEl = tabEl.querySelector("i");
+        if (iconEl) {
+          iconEl.className = `w-3.5 h-3.5 flex-shrink-0 ${esActivo ? 'text-white' : 'text-slate-400'}`;
+        }
+      });
+
+      // Renderizar el cuerpo de la ficha
+      const contenedorContenido = document.getElementById("contenido-modal-tecnico");
+      if (!contenedorContenido) return;
+
+      contenedorContenido.innerHTML = `
+        <!-- Encabezado de la Ficha -->
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h4 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="${item.icono}" class="w-4 h-4 text-blue-600"></i>
+              <span>${item.nombre}</span>
+            </h4>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
+              ${item.emisor}
+            </span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-slate-200/70 text-[11px]">
+            <div>
+              <span class="font-bold text-slate-800">Fuente Primaria Oficial:</span>
+              <p class="mt-0.5">
+                <a href="${item.urlFuente}" target="_blank" rel="noopener noreferrer" class="text-blue-700 hover:text-blue-900 font-semibold underline inline-flex items-center gap-1">
+                  <span>${item.fuentePrimaria || item.emisor}</span>
+                  <i data-lucide="external-link" class="w-3 h-3"></i>
+                </a>
+              </p>
+            </div>
+            <div>
+              <span class="font-bold text-slate-800">Marco Legal / Normativo:</span>
+              <p class="text-slate-600 mt-0.5">${item.marcoLegal}</p>
+            </div>
+            <div class="sm:col-span-2">
+              <span class="font-bold text-slate-800">Unidad & Frecuencia:</span>
+              <p class="text-slate-600 mt-0.5">${item.unidad} • ${item.frecuencia}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ¿Cómo se obtiene y calcula? -->
+        <div class="p-4 bg-white border border-slate-200 rounded-xl shadow-xs space-y-2">
+          <div class="flex items-center gap-2 font-bold text-slate-900 text-sm">
+            <div class="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center">
+              <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+            </div>
+            <span>¿Cómo se obtiene y calcula oficialmente?</span>
+          </div>
+          <div class="text-slate-600 text-[12px] leading-relaxed whitespace-pre-line pl-8">
+            ${item.comoSeObtiene}
+          </div>
+        </div>
+
+        <!-- Advertencias de Discrepancia y Rigor Metodológico -->
+        ${item.discrepancias ? `
+        <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-xl space-y-2">
+          <div class="flex items-center gap-2 font-bold text-amber-950 text-sm">
+            <div class="w-6 h-6 rounded-md bg-amber-100 text-amber-700 flex items-center justify-center">
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+            </div>
+            <span>Rigor Metodológico y Explicación de Discrepancias</span>
+          </div>
+          <div class="text-amber-900/90 text-[11.5px] leading-relaxed whitespace-pre-line pl-8">
+            ${item.discrepancias}
+          </div>
+        </div>
+        ` : ''}
+      `;
+
+      // Actualizar enlace inferior hacia la fuente primaria
+      const lnkFuente = document.getElementById("lnk-modal-fuente-primaria");
+      if (lnkFuente) {
+        lnkFuente.href = item.urlFuente;
+        lnkFuente.innerHTML = `<span>Abrir Fuente Primaria Oficial (${item.fuentePrimaria || item.emisor})</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i>`;
+      }
+
+      lucide.createIcons();
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") cerrarModalNotasTecnicas();
+    });
+
+    window.addEventListener("DOMContentLoaded", inicializarDashboard);
+  </script>
+</body>
+</html>

@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Datos Macroeconómicos de Chile | Universidad Central de Chile</title>
+  <meta name="description" content="Plataforma oficial de series macroeconómicas, cruce de variables y retroalimentación analítica de la Universidad Central de Chile (UCEN).">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .tab-active {
+      background-color: #ffffff;
+      color: #1e293b;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+      font-weight: 700;
+    }
+    .tab-inactive {
+      color: #64748b;
+      font-weight: 500;
+    }
+    .tab-inactive:hover {
+      color: #0f172a;
+      background-color: rgba(241, 245, 249, 0.7);
+    }
+    /* Custom scrollbar for horizontal containers */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Header Institucional Superior -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Fila Principal: Branding, Versión y SLA -->
+      <div class="h-16 flex items-center justify-between">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+            <i data-lucide="line-chart" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-bold text-slate-900 text-base sm:text-lg leading-tight tracking-tight">
+                Datos Macroeconómicos de Chile
+              </h1>
+              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                UCEN
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium">Observatorio Económico • Series Primarias Certificadas</p>
+          </div>
+        </div>
+
+        <!-- Bloque Derecho: Switcher de Versión & SLA 99.9% -->
+        <div class="flex items-center space-x-2.5 sm:space-x-4">
+          <!-- SLA Badge con Popover -->
+          <div class="relative group cursor-pointer inline-flex">
+            <span class="text-[11px] font-bold px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-lg flex items-center gap-1.5 border border-emerald-200">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="hidden md:inline">SLA</span> 99.9%
+              <i data-lucide="info" class="w-3 h-3 text-emerald-600"></i>
+            </span>
+            <div class="absolute right-0 top-full mt-2 w-72 p-3.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 leading-relaxed border border-slate-700">
+              <p class="font-bold text-emerald-400 mb-1 flex items-center gap-1.5">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <span>Alta Disponibilidad Flat Data</span>
+              </p>
+              Arquitectura estática desacoplada sin dependencias dinámicas caídas. Datos distribuidos en CDN global de GitHub con actualización automática diaria programada.
+            </div>
+          </div>
+
+          <!-- Selector de Versión -->
+          <div class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-semibold">
+            <span class="px-2.5 py-1 bg-white text-slate-900 rounded-md shadow-sm border border-slate-200 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+              <span>V2.0</span>
+            </span>
+            <a href="../V1/index.html" class="px-2.5 py-1 text-slate-600 hover:text-slate-900 transition flex items-center gap-1" title="Ver versión anterior legado">
+              <span>V1.0</span>
+              <i data-lucide="external-link" class="w-3 h-3 opacity-60"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fila de Navegación por Pestañas (SPA) -->
+      <nav class="flex space-x-1.5 overflow-x-auto py-2 border-t border-slate-100 no-scrollbar">
+        <button onclick="cambiarPestana('panel')" id="btn-tab-panel" class="tab-active px-3.5 py-1.5 rounded-lg text-xs sm:text-sm flex items-center gap-2 transition whitespace-nowrap">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-blue-600"></i>
+          <span>Panel Macroeconómico</span>
+        </button>
+
+        <button onclick="cambiarPestana('cruce')" id="btn-tab-cruce" class="tab-inactive px-3.5 py-1.5 rounded-lg text-xs sm:text-sm flex items-center gap-2 transition whitespace-nowrap">
+          <i data-lucide="git-compare" class="w-4 h-4 text-indigo-600"></i>
+          <span>Cruce de Variables & Correlaciones</span>
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-indigo-100 text-indigo-700">NUEVO</span>
+        </button>
+
+        <button onclick="cambiarPestana('descargas')" id="btn-tab-descargas" class="tab-inactive px-3.5 py-1.5 rounded-lg text-xs sm:text-sm flex items-center gap-2 transition whitespace-nowrap">
+          <i data-lucide="download-cloud" class="w-4 h-4 text-emerald-600"></i>
+          <span>Centro de Descargas</span>
+        </button>
+
+        <button onclick="cambiarPestana('gobernanza')" id="btn-tab-gobernanza" class="tab-inactive px-3.5 py-1.5 rounded-lg text-xs sm:text-sm flex items-center gap-2 transition whitespace-nowrap">
+          <i data-lucide="shield-check" class="w-4 h-4 text-slate-600"></i>
+          <span>Fuentes Oficiales & Metodología</span>
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+
+    <!-- ===================================================================== -->
+    <!-- PESTAÑA 1: PANEL MACROECONÓMICO (Dashboard)                           -->
+    <!-- ===================================================================== -->
+    <div id="tab-panel" class="space-y-6">
+      
+      <!-- Cabecera de Estado y Actualización -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-5 shadow-sm">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>
+              En Línea
+            </span>
+            <span class="text-xs text-blue-200">Actualización diaria certificada</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight">Indicadores Macroeconómicos en Vivo</h2>
+          <p class="text-xs text-blue-100/80 mt-0.5">Valores oficiales con formato estándar chileno (<span class="font-semibold text-white">separador de miles con punto y decimal con coma</span>).</p>
+        </div>
+        <div class="text-left sm:text-right shrink-0">
+          <p id="timestamp-general" class="text-xs font-mono text-blue-200 bg-white/10 px-3 py-1.5 rounded-xl border border-white/10">
+            Actualizando fuentes...
+          </p>
+        </div>
+      </div>
+
+      <!-- 1. Grid de Tarjetas KPI en Vivo -->
+      <section>
+        <div id="indicadores-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
+          <!-- Tarjetas renderizadas dinámicamente -->
+        </div>
+      </section>
+
+      <!-- 2. Gráfico Interactivo de Evolución Multivariable -->
+      <section class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-100">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i>
+                <span id="grafico-titulo-var">Evolución Histórica Multivariable</span>
+              </h3>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5" id="grafico-subtitulo-var">
+              Selecciona una variable y ajusta el rango temporal decenal (2016 - 2026).
+            </p>
+          </div>
+
+          <!-- Controles del Gráfico: Variable y Rango -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <!-- Selector de Variable -->
+            <div class="relative">
+              <select id="select-variable" onchange="cambiarVariableGrafico(this.value)" class="appearance-none bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                <optgroup label="Divisas Oficiales">
+                  <option value="dolar" selected>Dólar Observado (USD/CLP)</option>
+                  <option value="euro">Euro Observado (EUR/CLP)</option>
+                  <option value="yuan">Yuan Chino (CNY/CLP)</option>
+                </optgroup>
+                <optgroup label="Commodities Estratégicos">
+                  <option value="cobre">Cobre Físico (US$/lb - LME)</option>
+                  <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
+                  <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
+                </optgroup>
+                <optgroup label="Tasas e Inflación">
+                  <option value="uf">Unidad de Fomento (UF)</option>
+                  <option value="tpm">Tasa de Política Monetaria (TPM)</option>
+                  <option value="ipc">IPC Mensual (%)</option>
+                  <option value="desempleo">Desocupación Nacional (%)</option>
+                </optgroup>
+              </select>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+
+            <!-- Botones de Rango Temporal Adaptativo -->
+            <div id="contenedor-rangos" class="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs font-medium">
+              <button onclick="filtrarRango('1M')" data-rango="1M" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">1M</button>
+              <button onclick="filtrarRango('3M')" data-rango="3M" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">3M</button>
+              <button onclick="filtrarRango('6M')" data-rango="6M" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">6M</button>
+              <button onclick="filtrarRango('1A')" data-rango="1A" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">1A</button>
+              <button onclick="filtrarRango('3A')" data-rango="3A" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">3A</button>
+              <button onclick="filtrarRango('5A')" data-rango="5A" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">5A</button>
+              <button onclick="filtrarRango('10A')" data-rango="10A" class="px-2 py-1 rounded-lg bg-white text-blue-600 font-bold shadow-sm transition">10A</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badge Informativo de Fuente -->
+        <div id="badge-fuente-grafico" class="mb-3 flex items-center justify-between text-xs bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/70">
+          <span class="text-slate-600 font-medium flex items-center gap-1.5">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-blue-600"></i>
+            <span id="fuente-grafico-texto">Fuente: Banco Central de Chile (BDE Oficial)</span>
+          </span>
+          <a id="fuente-grafico-link" href="#" target="_blank" class="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1">
+            <span>Ver fuente oficial</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+        </div>
+
+        <!-- Canvas Gráfico Chart.js -->
+        <div class="relative w-full h-80 sm:h-96">
+          <canvas id="canvas-grafico"></canvas>
+        </div>
+      </section>
+
+      <!-- 3. Cuadro Oficial para la Minuta Semanal UCEN -->
+      <section class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <i data-lucide="file-spreadsheet" class="w-5 h-5 text-indigo-600"></i>
+                <span>Cuadro Oficial para la Minuta Semanal UCEN</span>
+              </h3>
+              <span class="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">
+                Sincronización Automática
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Datos formateados con convención direccional para la edición editorial semanal de la Facultad de Economía UCEN.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="copiarTablaMinuta()" class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition border border-slate-300">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span id="btn-copiar-texto">Copiar Tabla</span>
+            </button>
+            <a href="../data/cuadro_minuta_semanal.json" target="_blank" class="inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl transition border border-indigo-200">
+              <i data-lucide="code" class="w-3.5 h-3.5"></i>
+              <span>API JSON</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-100/80 text-slate-800 uppercase font-bold text-[11px] tracking-wider border-b border-slate-200">
+              <tr>
+                <th scope="col" class="py-3 px-4">Variable Macroeconómica</th>
+                <th scope="col" class="py-3 px-4 text-right">Cierre Semanal</th>
+                <th scope="col" class="py-3 px-4 text-center">Variación Semanal</th>
+                <th scope="col" class="py-3 px-4">Fuente Legal Oficial</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-minuta-body" class="divide-y divide-slate-100 font-medium">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- PESTAÑA 2: CRUCE DE VARIABLES & CORRELACIONES (NUEVA HERRAMIENTA)       -->
+    <!-- ===================================================================== -->
+    <div id="tab-cruce" class="hidden space-y-6">
+
+      <!-- Header del Laboratorio de Relaciones Macro -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-md border border-slate-800">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-indigo-500/30 text-indigo-300 border border-indigo-400/30">
+                <i data-lucide="sparkles" class="w-3 h-3 mr-1"></i>
+                Laboratorio Cuantitativo
+              </span>
+              <span class="text-xs text-slate-400">Análisis Bivariado Empírico</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold tracking-tight">Cruce de Variables & Relaciones Macroeconómicas</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+              Contrasta la dinámica simultánea de dos variables macroeconómicas de Chile mediante series temporales de doble eje Y o evalúa su grado de asociación lineal mediante diagramas de dispersión con regresión por mínimos cuadrados ordinarios (MCO) y coeficiente de Pearson ($r$).
+            </p>
+          </div>
+
+          <!-- Presets Rápidos de Análisis -->
+          <div class="bg-white/5 p-3 rounded-xl border border-white/10 shrink-0">
+            <p class="text-[11px] font-bold text-indigo-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+              <span>Presets Clásicos</span>
+            </p>
+            <div class="grid grid-cols-2 gap-1.5 text-xs">
+              <button onclick="aplicarPresetCruce('cobre', 'dolar')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
+                <span>🪙 Cobre vs Dólar</span>
+              </button>
+              <button onclick="aplicarPresetCruce('tpm', 'ipc')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
+                <span>🏦 TPM vs Inflación</span>
+              </button>
+              <button onclick="aplicarPresetCruce('petroleo_brent', 'dolar')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
+                <span>🛢️ Petróleo vs Dólar</span>
+              </button>
+              <button onclick="aplicarPresetCruce('dolar', 'euro')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
+                <span>💶 Dólar vs Euro</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Configuración del Cruce -->
+      <section class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- Variable X (Eje Izquierdo / Eje X) -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
+              <span>Variable X (Base / Eje Izquierdo)</span>
+            </label>
+            <div class="relative">
+              <select id="cruce-var-x" onchange="actualizarCruceVariables()" class="w-full appearance-none bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                <option value="cobre" selected>Cobre Físico (US$/lb - LME)</option>
+                <option value="dolar">Dólar Observado ($ CLP)</option>
+                <option value="euro">Euro Observado ($ CLP)</option>
+                <option value="yuan">Yuan Chino ($ CLP)</option>
+                <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
+                <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
+                <option value="uf">Unidad de Fomento (UF)</option>
+                <option value="tpm">Tasa Política Monetaria (TPM %)</option>
+                <option value="ipc">IPC Mensual (%)</option>
+                <option value="desempleo">Desocupación Nacional (%)</option>
+              </select>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+          </div>
+
+          <!-- Variable Y (Eje Derecho / Eje Y) -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+              <span>Variable Y (Contraste / Eje Derecho)</span>
+            </label>
+            <div class="relative">
+              <select id="cruce-var-y" onchange="actualizarCruceVariables()" class="w-full appearance-none bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 transition">
+                <option value="cobre">Cobre Físico (US$/lb - LME)</option>
+                <option value="dolar" selected>Dólar Observado ($ CLP)</option>
+                <option value="euro">Euro Observado ($ CLP)</option>
+                <option value="yuan">Yuan Chino ($ CLP)</option>
+                <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
+                <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
+                <option value="uf">Unidad de Fomento (UF)</option>
+                <option value="tpm">Tasa Política Monetaria (TPM %)</option>
+                <option value="ipc">IPC Mensual (%)</option>
+                <option value="desempleo">Desocupación Nacional (%)</option>
+              </select>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+          </div>
+
+          <!-- Rango Temporal -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Ventana de Análisis</label>
+            <div id="cruce-contenedor-rangos" class="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs font-medium">
+              <button onclick="cambiarRangoCruce('1A')" data-rango-cruce="1A" class="flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition text-center">1A</button>
+              <button onclick="cambiarRangoCruce('3A')" data-rango-cruce="3A" class="flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition text-center">3A</button>
+              <button onclick="cambiarRangoCruce('5A')" data-rango-cruce="5A" class="flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition text-center">5A</button>
+              <button onclick="cambiarRangoCruce('todo')" data-rango-cruce="todo" class="flex-1 py-1.5 rounded-lg bg-white text-blue-600 font-bold shadow-sm transition text-center">Todo</button>
+            </div>
+          </div>
+
+          <!-- Tipo de Visualización (Dual Axis vs Scatter) -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Modo de Visualización</label>
+            <div class="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs font-semibold">
+              <button onclick="cambiarModoVisualizacionCruce('dual_axis')" id="btn-modo-dual" class="flex-1 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition flex items-center justify-center gap-1.5">
+                <i data-lucide="line-chart" class="w-3.5 h-3.5 text-blue-600"></i>
+                <span>Doble Eje Temporal</span>
+              </button>
+              <button onclick="cambiarModoVisualizacionCruce('scatter')" id="btn-modo-scatter" class="flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
+                <i data-lucide="scatter-chart" class="w-3.5 h-3.5 text-indigo-600"></i>
+                <span>Dispersión & Regresión</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Lienzo Gráfico y Estadísticas en Vivo -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Canvas Principal (3 Columnas) -->
+        <div class="lg:col-span-3 bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-3 border-b border-slate-100">
+            <div>
+              <h4 id="cruce-grafico-titulo" class="font-bold text-slate-900 text-base">
+                Cobre (US$/lb) vs Dólar Observado ($ CLP)
+              </h4>
+              <p id="cruce-grafico-subtitulo" class="text-xs text-slate-500">
+                Serie temporal con escalas independientes normalizadas para contraste de ciclos.
+              </p>
+            </div>
+            <div id="cruce-badge-escala" class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg border border-slate-200 flex items-center gap-1">
+              <i data-lucide="sliders-horizontal" class="w-3 h-3 text-slate-500"></i>
+              <span id="cruce-info-fechas">Calculando observaciones...</span>
+            </div>
+          </div>
+
+          <div class="relative w-full h-80 sm:h-96">
+            <canvas id="canvas-cruce"></canvas>
+          </div>
+        </div>
+
+        <!-- Panel Lateral de Métricas Bivariadas y Rigor Empírico (1 Columna) -->
+        <div class="space-y-4">
+          
+          <!-- Tarjeta 1: Coeficiente de Correlación de Pearson -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+              <span>Correlación de Pearson (r)</span>
+              <i data-lucide="activity" class="w-4 h-4 text-blue-600"></i>
+            </div>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span id="cruce-stat-r" class="text-3xl font-extrabold text-slate-900">-0,65</span>
+              <span id="cruce-stat-r-calidad" class="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">
+                Inversa Fuerte
+              </span>
+            </div>
+
+            <!-- Gauge visual de correlación de -1 a +1 -->
+            <div class="mt-3">
+              <div class="flex justify-between text-[10px] text-slate-400 font-mono mb-1">
+                <span>-1.0 (Inversa)</span>
+                <span>0.0</span>
+                <span>+1.0 (Directa)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden relative">
+                <!-- Marca central cero -->
+                <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-300"></div>
+                <!-- Barra de correlación -->
+                <div id="cruce-gauge-bar" class="h-full bg-blue-600 rounded-full transition-all duration-500" style="width: 50%; margin-left: 25%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarjeta 2: Varianza Explicada (R²) y Modelo de Regresión -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm space-y-2.5">
+            <div>
+              <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <span>Coeficiente R²</span>
+                <span class="text-xs font-mono font-bold text-slate-800" id="cruce-stat-r2">42,6%</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-0.5">Varianza de Y explicada linealmente por X.</p>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100">
+              <span class="text-[11px] font-bold text-slate-500 uppercase">Ecuación MCO Estimada:</span>
+              <p id="cruce-stat-ecuacion" class="font-mono text-xs font-bold text-indigo-700 bg-indigo-50/80 p-2 rounded-lg mt-1 border border-indigo-100 text-center">
+                Y = 72,09 · X + 528,77
+              </p>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+              <span class="font-medium">Muestra Pareada (N):</span>
+              <span id="cruce-stat-n" class="font-bold text-slate-800">2.417 días</span>
+            </div>
+          </div>
+
+          <!-- Tarjeta 3: Interpretación Pedagógica en Tiempo Real -->
+          <div class="bg-gradient-to-br from-slate-50 to-blue-50/50 rounded-2xl border border-blue-100 p-4">
+            <h5 class="text-xs font-bold text-slate-900 flex items-center gap-1.5 mb-1.5">
+              <i data-lucide="book-open" class="w-4 h-4 text-blue-600"></i>
+              <span>Interpretación Macroeconómica</span>
+            </h5>
+            <p id="cruce-stat-interpretacion" class="text-xs text-slate-600 leading-relaxed">
+              Calculando interpretación teórica y empírica para la relación seleccionada...
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- PESTAÑA 3: CENTRO DE DESCARGAS HISTÓRICAS                              -->
+    <!-- ===================================================================== -->
+    <div id="tab-descargas" class="hidden space-y-6">
+
+      <section class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-100">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="download-cloud" class="w-5 h-5 text-emerald-600"></i>
+              <span>Centro de Descarga de Series Oficiales</span>
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Filtra por categorías o indicadores individuales y exporta la serie decenal completa (2016-2026) en JSON o CSV.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="ejecutarDescarga('csv')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+              <span>Descargar CSV</span>
+            </button>
+            <button onclick="ejecutarDescarga('json')" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="file-json" class="w-4 h-4"></i>
+              <span>Descargar JSON</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Presets y Checkboxes de Variables -->
+        <div class="space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">1. Selección de Variables</span>
+            <div class="flex gap-1.5 text-xs font-semibold">
+              <button onclick="seleccionarPresetDescarga('todas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Todas</button>
+              <button onclick="seleccionarPresetDescarga('divisas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Divisas</button>
+              <button onclick="seleccionarPresetDescarga('commodities')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Commodities</button>
+              <button onclick="seleccionarPresetDescarga('tasas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Tasas/Precios</button>
+              <button onclick="seleccionarPresetDescarga('ninguna')" class="px-2.5 py-1 text-slate-400 hover:text-slate-600 transition">Limpiar</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-xs">
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="dolar" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">Dólar Observado</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="euro" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">Euro Observado</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="yuan" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">Yuan Chino</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="cobre" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">Cobre (LME)</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="petroleo_brent" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">Petróleo Brent</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="petroleo_wti" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">Petróleo WTI</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="uf" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">Unidad Fomento</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="tpm" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">Tasa TPM</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="ipc" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">IPC Mensual</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+              <input type="checkbox" value="desempleo" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+              <span class="font-medium text-slate-800">Desempleo ENE</span>
+            </label>
+          </div>
+
+          <!-- Selector de Años -->
+          <div class="pt-4 border-t border-slate-100">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">2. Rango de Años (2016 - 2026)</span>
+              <div class="flex gap-1.5 text-xs font-semibold">
+                <button onclick="seleccionarPresetAnos('todos')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition">Todos</button>
+                <button onclick="seleccionarPresetAnos('ultimos3')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition">Últimos 3</button>
+                <button onclick="seleccionarPresetAnos('2026')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition">2026</button>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2 text-xs">
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2026" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2026</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2025" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2025</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2024" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2024</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2023" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2023</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2022" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2022</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2021" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2021</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2020" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2020</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2019" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2019</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2018" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2018</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2017" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2017</span>
+              </label>
+              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                <input type="checkbox" value="2016" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                <span class="font-semibold text-slate-800">2016</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Resumen de Exportación -->
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+            <span id="resumen-descarga-texto">10 variables seleccionadas • 11 años seleccionados</span>
+            <span class="font-mono text-slate-400">Codificación UTF-8</span>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- PESTAÑA 4: FUENTES OFICIALES & METODOLOGÍA                             -->
+    <!-- ===================================================================== -->
+    <div id="tab-gobernanza" class="hidden space-y-6">
+
+      <section class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-100">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-5 h-5 text-blue-600"></i>
+              <span>Gobernanza Estadística y Fuentes Primarias Oficiales</span>
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Principio rector: Cero tolerancia a datos especulativos o replicadores tributarios no oficiales.
+            </p>
+          </div>
+          <button onclick="abrirModalNotasTecnicas('uf')" class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-blue-200">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+            <span>Ver Fichas Metodológicas</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-slate-800">Banco Central de Chile (BCCh)</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full">Emisor Legal</span>
+            </div>
+            <p class="text-xs text-slate-600">Dólar Observado, Euro, Yuan Chino, Tasa de Política Monetaria (TPM) y Unidad de Fomento (fijación).</p>
+            <a href="https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx" target="_blank" class="text-xs text-blue-600 hover:underline font-semibold flex items-center gap-1">
+              <span>si3.bcentral.cl / BDE</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-slate-800">Instituto Nacional de Estadísticas (INE)</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">Autoridad Estadística</span>
+            </div>
+            <p class="text-xs text-slate-600">Índice de Precios al Consumidor (IPC mensual) y Encuesta Nacional de Empleo (ENE - trimestres móviles).</p>
+            <a href="https://www.ine.gob.cl" target="_blank" class="text-xs text-blue-600 hover:underline font-semibold flex items-center gap-1">
+              <span>ine.gob.cl</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-slate-800">Cochilco / London Metal Exchange (LME)</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full">Mercado Físico</span>
+            </div>
+            <p class="text-xs text-slate-600">Precio contado (Cash Settlement) Cátodos de Cobre Grado A en la Rueda Diaria BML.</p>
+            <a href="https://www.cochilco.cl/web/la-rueda-diaria/" target="_blank" class="text-xs text-blue-600 hover:underline font-semibold flex items-center gap-1">
+              <span>cochilco.cl</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-slate-800">U.S. EIA & Federal Reserve Bank of St. Louis</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 bg-purple-100 text-purple-800 rounded-full">Referencia Internacional</span>
+            </div>
+            <p class="text-xs text-slate-600">Petróleo Spot Brent (DCOILBRENTEU) y Petróleo Spot WTI (DCOILWTICO).</p>
+            <a href="https://fred.stlouisfed.org" target="_blank" class="text-xs text-blue-600 hover:underline font-semibold flex items-center gap-1">
+              <span>fred.stlouisfed.org</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Modal de Notas Técnicas y Metodología Oficial -->
+  <div id="modal-notas-tecnicas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-base">Fichas Metodológicas y Marco Legal</h3>
+            <p class="text-xs text-slate-500">Definiciones canónicas y restricciones estadísticas oficiales.</p>
+          </div>
+        </div>
+        <button onclick="cerrarModalNotasTecnicas()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Selector Tabs + Contenido) -->
+      <div class="flex-1 overflow-y-auto flex flex-col md:flex-row">
+        <!-- Sidebar Tabs -->
+        <div class="w-full md:w-56 bg-slate-50 border-r border-slate-200 p-2 space-y-1 shrink-0" id="tabs-modal-indicadores">
+          <!-- Botones de tabs renderizados dinámicamente -->
+        </div>
+
+        <!-- Contenido Detallado -->
+        <div class="flex-1 p-6 space-y-4" id="contenido-modal-ficha">
+          <!-- Render dinámico -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+        <span class="flex items-center gap-1">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-600"></i>
+          <span>Gobernanza de Datos Abiertos UCEN</span>
+        </span>
+        <button onclick="cerrarModalNotasTecnicas()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-lg transition">
+          Entendido
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer Institucional -->
+  <footer class="bg-white border-t border-slate-200/80 py-6 mt-12 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-slate-700">Universidad Central de Chile (UCEN)</span>
+        <span>•</span>
+        <span>Facultad de Economía, Gobierno y Comunicaciones</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <span>Portal V2.0</span>
+        <span>•</span>
+        <a href="../V1/index.html" class="hover:text-blue-600 transition">Ver Versión 1.0 (Legado)</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- LÓGICA Y SCRIPTS DE VISUALIZACIÓN                                     -->
+  <!-- ===================================================================== -->
+  <script>
+    // Prefijo de rutas de datos
+    const DATA_PREFIX = "../data/";
+
+    // =========================================================================
+    // 1. BIBLIOTECA DE FORMATEO ESTÁNDAR CHILENO (es-CL)
+    // =========================================================================
+    const FormatCL = {
+      // Número genérico: separador de miles con punto, decimal con coma
+      num: function(val, dec = 2) {
+        if (val === null || val === undefined || isNaN(val)) return "N/D";
+        return Number(val).toLocaleString("es-CL", {
+          minimumFractionDigits: dec,
+          maximumFractionDigits: dec
+        });
+      },
+      // Pesos Chilenos (CLP)
+      clp: function(val, dec = 2) {
+        if (val === null || val === undefined || isNaN(val)) return "N/D";
+        return "$" + this.num(val, dec);
+      },
+      // Dólares Estadounidenses (US$)
+      usd: function(val, dec = 2) {
+        if (val === null || val === undefined || isNaN(val)) return "N/D";
+        return "US$ " + this.num(val, dec);
+      },
+      // Porcentajes (%)
+      pct: function(val, dec = 2, conSigno = false) {
+        if (val === null || val === undefined || isNaN(val)) return "N/D";
+        const n = Number(val);
+        const s = conSigno && n > 0 ? "+" : "";
+        return `${s}${this.num(n, dec)}%`;
+      },
+      // Formateo inteligente según metadatos de unidad
+      auto: function(val, unidad, dec = 2) {
+        if (unidad === "CLP") return this.clp(val, dec);
+        if (unidad === "US$/lb" || unidad === "US$/bbl" || unidad === "US$") return this.usd(val, dec);
+        if (unidad === "%") return this.pct(val, dec);
+        return this.num(val, dec);
+      }
+    };
+
+    // =========================================================================
+    // 2. METADATOS Y NOTAS TÉCNICAS OFICIALES
+    // =========================================================================
+    
+    const NOTAS_TECNICAS = {
+      uf: {
+        nombre: "Unidad de Fomento (UF)",
+        emisor: "Banco Central de Chile & SII",
+        fuentePrimaria: "Servicio de Impuestos Internos (SII) - Serie Oficial",
+        marcoLegal: "Decreto Ley Nº 3.588 de 1980 y D.F.L. Nº 320 de 1960",
+        unidad: "Pesos Chilenos ($ CLP por UF)",
+        frecuencia: "Diaria (Reajuste legal a las 00:00 hrs)",
+        urlFuente: "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
+        icono: "badge-percent",
+        descripcion: "Unidad de cuenta reajustable según la variación del IPC del mes anterior. Se devenga diariamente entre el día 10 del mes en curso y el día 9 del mes siguiente.",
+        metodologia: "Calculada y fijada por el Banco Central de Chile conforme al acuerdo de Consejo N° 05-07-900105. El SII publica los valores certificados para efectos tributarios y comerciales.",
+        discrepancias: "En este portal sólo se publican días efectivamente devengados y vigentes hasta hoy. No se incorporan valores futuros proyectados.",
+        usoMinuta: "Utilizada para deflactar contratos a largo plazo, créditos hipotecarios y comparar pasivos financieros indexados."
+      },
+      dolar: {
+        nombre: "Dólar Observado (USD/CLP)",
+        emisor: "Banco Central de Chile (BCCh)",
+        fuentePrimaria: "Base de Datos Estadísticos (BDE) - Banco Central",
+        marcoLegal: "Compendio de Normas de Cambios Internacionales, Cap. I, Nº 6",
+        unidad: "Pesos Chilenos por Dólar ($ CLP)",
+        frecuencia: "Días hábiles bancarios (publicación 09:00 hrs)",
+        urlFuente: "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
+        icono: "dollar-sign",
+        descripcion: "Promedio ponderado por volumen de las operaciones cambiarias interbancarias al contado spot formal del día hábil anterior.",
+        metodologia: "Cálculo formal realizado por la División de Mercados Financieros del BCCh a partir de reportes obligatorios de bancos comerciales (SISCAB).",
+        discrepancias: "No debe confundirse con el tipo de cambio spot continuo intradiario de plataformas financieras (Yahoo/Google) ni con el dólar aduanero del SII.",
+        usoMinuta: "Variable ancla para cuantificar presiones cambiarias, inflación importada y términos de intercambio."
+      },
+      euro: {
+        nombre: "Euro Observado (EUR/CLP)",
+        emisor: "Banco Central de Chile (BCCh)",
+        fuentePrimaria: "Base de Datos Estadísticos (BDE) - Paridades de Monedas Extranjeras",
+        marcoLegal: "Compendio de Normas de Cambios Internacionales, Cap. I, Nº 7",
+        unidad: "Pesos Chilenos por Euro ($ CLP)",
+        frecuencia: "Días hábiles bancarios",
+        urlFuente: "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
+        icono: "coins",
+        descripcion: "Tipo de cambio oficial del Euro expresado en moneda nacional, derivado de la paridad internacional EUR/USD y el Dólar Observado.",
+        metodologia: "Calculado a partir de la paridad EUR/USD fijada en mercados internacionales multiplicada por el Dólar Observado del BCCh.",
+        discrepancias: "Representa la paridad oficial formal del Banco Central, no cotizaciones bursátiles retail ni ventanillas de casas de cambio.",
+        usoMinuta: "Monitoreo del comercio exterior con la Unión Europea e indexación de reservas internacionales."
+      },
+      yuan: {
+        nombre: "Yuan Chino (CNY/CLP)",
+        emisor: "Banco Central de Chile (BCCh)",
+        fuentePrimaria: "Base de Datos Estadísticos (BDE) - Banco Central",
+        marcoLegal: "Compendio de Normas de Cambios Internacionales del BCCh",
+        unidad: "Pesos Chilenos por Yuan ($ CLP)",
+        frecuencia: "Días hábiles bancarios",
+        urlFuente: "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
+        icono: "circle-dollar-sign",
+        descripcion: "Paridad oficial del Renminbi/Yuan chino frente al peso chileno, esencial para el seguimiento del principal socio comercial de Chile.",
+        metodologia: "Determinada mediante el cruce de la paridad oficial USD/CNY (People's Bank of China) y el Dólar Observado del Banco Central de Chile.",
+        discrepancias: "Corresponde al Yuan onshore (CNY) oficial certificado por el BCCh, no al tipo offshore intradiario (CNH).",
+        usoMinuta: "Análisis de competitividad del comercio bilateral de cobre, cerezas, litio y celulosa hacia China."
+      },
+      cobre: {
+        nombre: "Cobre Físico (LME / Cochilco)",
+        emisor: "London Metal Exchange (LME) & Cochilco",
+        fuentePrimaria: "Comisión Chilena del Cobre (Cochilco - La Rueda Diaria BML)",
+        marcoLegal: "Decreto Ley Nº 1.349 de 1976 (Cochilco)",
+        unidad: "Dólares por Libra (US$/lb)",
+        frecuencia: "Días hábiles bursátiles (sesión matinal de Londres)",
+        urlFuente: "https://www.cochilco.cl/web/la-rueda-diaria/",
+        icono: "gem",
+        descripcion: "Precio oficial Cash Settlement (contado) para cátodos de cobre de Grado A en la Bolsa de Metales de Londres (LME).",
+        metodologia: "Cotización física oficial de cierre en el Ring del LME, certificada y convertida a US$/lb por Cochilco para el mercado chileno.",
+        discrepancias: "Prohibido sustituir por contratos de futuros bursátiles de meses posteriores en COMEX (HG=F), los cuales incorporan primas de financiamiento.",
+        usoMinuta: "Principal determinante de los términos de intercambio de Chile, ingresos fiscales de Codelco y royalty minero."
+      },
+      petroleo_brent: {
+        nombre: "Petróleo Spot Brent (Mar del Norte)",
+        emisor: "U.S. Energy Information Administration (EIA) & FRED",
+        fuentePrimaria: "Federal Reserve Bank of St. Louis (FRED - Serie DCOILBRENTEU)",
+        marcoLegal: "EIA - U.S. Department of Energy Official Statistical Release",
+        unidad: "Dólares por Barril (US$/bbl)",
+        frecuencia: "Días hábiles (desfase T-1 por cierre de mercado)",
+        urlFuente: "https://fred.stlouisfed.org/series/DCOILBRENTEU",
+        icono: "flame",
+        descripcion: "Precio spot físico del crudo Brent del Mar del Norte, referencia líder para las importaciones chilenas de hidrocarburos.",
+        metodologia: "Medición spot recopilada por la EIA estadounidense y distribuida por la Reserva Federal de St. Louis.",
+        discrepancias: "Corresponde a transacciones spot físicas; no debe confundirse con el futuro activo intradiario de ICE (B=F).",
+        usoMinuta: "Variable clave para el Mecanismo de Estabilización de Precios de los Combustibles (MEPCO) e inflación energética de ENAP."
+      },
+      petroleo_wti: {
+        nombre: "Petróleo Spot WTI (Cushing, Oklahoma)",
+        emisor: "U.S. Energy Information Administration (EIA) & FRED",
+        fuentePrimaria: "Federal Reserve Bank of St. Louis (FRED - Serie DCOILWTICO)",
+        marcoLegal: "EIA - U.S. Department of Energy Official Statistical Release",
+        unidad: "Dólares por Barril (US$/bbl)",
+        frecuencia: "Días hábiles (desfase T-1)",
+        urlFuente: "https://fred.stlouisfed.org/series/DCOILWTICO",
+        icono: "fuel",
+        descripcion: "Precio spot del crudo West Texas Intermediate (WTI) entregado en Cushing, Oklahoma.",
+        metodologia: "Cotización spot oficial publicada por la EIA y reflejada en el repositorio FRED de la Reserva Federal de St. Louis.",
+        discrepancias: "No confundir con el contrato de futuros NYMEX (CL=F) que refleja entregas financieras de meses posteriores.",
+        usoMinuta: "Monitoreo del costo de refinería y canasta de importación de combustibles en Chile."
+      },
+      tpm: {
+        nombre: "Tasa de Política Monetaria (TPM)",
+        emisor: "Banco Central de Chile (BCCh)",
+        fuentePrimaria: "Reuniones de Política Monetaria (RPM) - Banco Central",
+        marcoLegal: "Ley Orgánica Constitucional del Banco Central (Ley Nº 18.840, Art. 3º)",
+        unidad: "Porcentaje Anual (%)",
+        frecuencia: "8 reuniones al año (calendario oficial RPM)",
+        urlFuente: "https://www.bcentral.cl/areas/politica-monetaria",
+        icono: "landmark",
+        descripcion: "Tasa de interés interbancaria objetivo a un día que fija el Consejo del Banco Central para conducir la política monetaria.",
+        metodologia: "Determinada colegiadamente en las Reuniones de Política Monetaria (RPM) del Consejo del BCCh.",
+        discrepancias: "La TPM es una tasa objetivo anual; no confundir con tasas efectivas captadas por bancos (TAB/TIP) ni con la inflación.",
+        usoMinuta: "Pilar central para evaluar la postura monetaria (expansiva, neutral o contractiva) y la curva de rendimientos financieros."
+      },
+      ipc: {
+        nombre: "Índice de Precios al Consumidor (IPC)",
+        emisor: "Instituto Nacional de Estadísticas (INE)",
+        fuentePrimaria: "INE Chile - Precios e Inflación (Boletín Mensual)",
+        marcoLegal: "Ley Nº 17.374 y Decretos Supremos del Ministerio de Economía",
+        unidad: "Variación Porcentual Mensual / Anual (%)",
+        frecuencia: "Mensual (Día 8 de cada mes a las 08:00 hrs)",
+        urlFuente: "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor",
+        icono: "trending-up",
+        descripcion: "Medida del cambio en el nivel de precios de una canasta de bienes y servicios representativa del consumo de los hogares urbanos.",
+        metodologia: "Cálculo mediante índice de Laspeyres encadenado base 2023=100 con 303 productos y más de 120.000 cotizaciones mensuales.",
+        discrepancias: "Publicación mensual estricta; no existen mediciones oficiales semanales del IPC.",
+        usoMinuta: "Indicador madre para el cálculo del reajuste de la UF, salarios reales y decisiones del Banco Central."
+      },
+      desempleo: {
+        nombre: "Tasa de Desocupación Nacional (ENE)",
+        emisor: "Instituto Nacional de Estadísticas (INE)",
+        fuentePrimaria: "Encuesta Nacional de Empleo (ENE) - INE",
+        marcoLegal: "Ley Nº 17.374 Orgánica del INE",
+        unidad: "Porcentaje de la Fuerza de Trabajo (%)",
+        frecuencia: "Mensual en trimestres móviles (último día hábil del mes)",
+        urlFuente: "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
+        icono: "users",
+        descripcion: "Porcentaje de personas desocupadas (cesantes y que buscan trabajo por primera vez) respecto a la fuerza de trabajo total.",
+        metodologia: "Muestreo probabilístico nacional en trimestres móviles conforme a estándares de la Organización Internacional del Trabajo (OIT).",
+        discrepancias: "Se publica con un mes calendario de rezago (ej. trimestre Jun-Ago se publica el último día hábil de Septiembre).",
+        usoMinuta: "Termómetro de holguras de capacidad en el mercado laboral y brechas de género en participación formal."
+      }
+    };
+    
+
+    // Estado global de datos
+    let seriesHistoricas = null;
+    let indicadoresHoy = null;
+    let cuadroMinuta = null;
+
+    // Estado Gráfico Principal (Pestaña 1)
+    let chartPrincipal = null;
+    let variableActualGrafico = "dolar";
+    let rangoActualGrafico = "10A";
+
+    // Estado Gráfico Cruce (Pestaña 2)
+    let chartCruce = null;
+    let cruceVarX = "cobre";
+    let cruceVarY = "dolar";
+    let cruceRango = "todo";
+    let cruceModo = "dual_axis"; // "dual_axis" | "scatter"
+
+    // =========================================================================
+    // 3. NAVEGACIÓN ENTRE PESTAÑAS (SPA)
+    // =========================================================================
+    function cambiarPestana(idTab) {
+      const pestanas = ["panel", "cruce", "descargas", "gobernanza"];
+      pestanas.forEach(p => {
+        const el = document.getElementById("tab-" + p);
+        const btn = document.getElementById("btn-tab-" + p);
+        if (p === idTab) {
+          el.classList.remove("hidden");
+          btn.className = "tab-active px-3.5 py-1.5 rounded-lg text-xs sm:text-sm flex items-center gap-2 transition whitespace-nowrap";
+        } else {
+          el.classList.add("hidden");
+          btn.className = "tab-inactive px-3.5 py-1.5 rounded-lg text-xs sm:text-sm flex items-center gap-2 transition whitespace-nowrap";
+        }
+      });
+
+      // Si se activa el cruce o panel, redimensionar gráficos
+      if (idTab === "cruce") {
+        setTimeout(() => {
+          if (chartCruce) chartCruce.resize();
+          else inicializarGraficoCruce();
+        }, 50);
+      } else if (idTab === "panel") {
+        setTimeout(() => {
+          if (chartPrincipal) chartPrincipal.resize();
+        }, 50);
+      }
+    }
+
+    // =========================================================================
+    // 4. CARGA DE DATOS ASÍNCRONA CON CACHE-BUSTING
+    // =========================================================================
+    async function inicializarDashboard() {
+      lucide.createIcons();
+      await Promise.all([
+        cargarIndicadoresHoy(),
+        cargarCuadroMinuta(),
+        cargarSeriesHistoricas()
+      ]);
+      lucide.createIcons();
+    }
+
+    async function cargarIndicadoresHoy() {
+      try {
+        let res;
+        try {
+          res = await fetch(DATA_PREFIX + "indicadores_hoy.json?v=" + Date.now(), { cache: "no-store" });
+          if (!res.ok) throw new Error();
+        } catch {
+          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/indicadores_hoy.json?v=" + Date.now(), { cache: "no-store" });
+        }
+        const data = await res.json();
+        indicadoresHoy = data;
+
+        // Fecha de actualización
+        if (data.metadatos && data.metadatos.fecha_actualizacion_utc) {
+          const fechaUtc = new Date(data.metadatos.fecha_actualizacion_utc);
+          document.getElementById("timestamp-general").textContent = `Actualizado: ${fechaUtc.toLocaleDateString("es-CL", { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} ${fechaUtc.toLocaleTimeString("es-CL", { hour: '2-digit', minute: '2-digit' })} hrs`;
+        }
+
+        renderizarTarjetasKpi(data.indicadores);
+      } catch (e) {
+        console.error("Error al cargar indicadores_hoy.json:", e);
+      }
+    }
+
+    function renderizarTarjetasKpi(indMap) {
+      const grid = document.getElementById("indicadores-grid");
+      grid.innerHTML = "";
+
+      const configKpis = [
+        { key: "uf", nombre: "Unidad de Fomento (UF)", cat: "Indexación", val: indMap.uf ? FormatCL.clp(indMap.uf.valor, 2) : "N/D", delta: indMap.uf?.var_ww, url: NOTAS_TECNICAS.uf.urlFuente, border: "hover:border-blue-400" },
+        { key: "dolar", nombre: "Dólar Observado", cat: "Divisa Spot", val: indMap.dolar ? FormatCL.clp(indMap.dolar.valor, 2) : "N/D", delta: indMap.dolar?.var_ww, url: NOTAS_TECNICAS.dolar.urlFuente, border: "hover:border-emerald-400" },
+        { key: "euro", nombre: "Euro Observado", cat: "Divisa Spot", val: indMap.euro ? FormatCL.clp(indMap.euro.valor, 2) : "N/D", delta: indMap.euro?.var_ww, url: NOTAS_TECNICAS.euro.urlFuente, border: "hover:border-indigo-400" },
+        { key: "yuan", nombre: "Yuan Chino", cat: "Divisa Spot", val: indMap.yuan ? FormatCL.clp(indMap.yuan.valor, 2) : "N/D", delta: indMap.yuan?.var_ww, url: NOTAS_TECNICAS.yuan.urlFuente, border: "hover:border-sky-400" },
+        { key: "cobre", nombre: "Cobre Físico (LME)", cat: "Commodity", val: indMap.cobre ? FormatCL.usd(indMap.cobre.valor, 2) : "N/D", delta: indMap.cobre?.var_ww, url: NOTAS_TECNICAS.cobre.urlFuente, border: "hover:border-amber-400" },
+        { key: "petroleo_brent", nombre: "Petróleo Brent", cat: "Energía", val: indMap.petroleo_brent ? FormatCL.usd(indMap.petroleo_brent.valor, 2) : "N/D", delta: indMap.petroleo_brent?.var_ww, url: NOTAS_TECNICAS.petroleo_brent.urlFuente, border: "hover:border-rose-400" },
+        { key: "petroleo_wti", nombre: "Petróleo WTI", cat: "Energía", val: indMap.petroleo_wti ? FormatCL.usd(indMap.petroleo_wti.valor, 2) : "N/D", delta: indMap.petroleo_wti?.var_ww, url: NOTAS_TECNICAS.petroleo_wti.urlFuente, border: "hover:border-orange-400" },
+        { key: "tpm", nombre: "Tasa Política Monetaria", cat: "Tasa BCCh", val: indMap.tpm ? FormatCL.pct(indMap.tpm.valor, 2) : "N/D", delta: indMap.tpm?.var_ww, url: NOTAS_TECNICAS.tpm.urlFuente, border: "hover:border-purple-400" },
+        { key: "ipc_mensual", nombre: "IPC Mensual", cat: "Inflación", val: indMap.ipc_mensual ? FormatCL.pct(indMap.ipc_mensual.valor, 1, true) : "N/D", delta: "INE Oficial", url: NOTAS_TECNICAS.ipc.urlFuente, border: "hover:border-red-400" },
+        { key: "desempleo", nombre: "Desempleo Nacional", cat: "Laboral", val: indMap.desempleo ? FormatCL.pct(indMap.desempleo.valor, 1) : "N/D", delta: "ENE Trimestre", url: NOTAS_TECNICAS.desempleo.urlFuente, border: "hover:border-teal-400" }
+      ];
+
+      configKpis.forEach(k => {
+        const card = document.createElement("div");
+        card.className = `bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md cursor-pointer ${k.border} flex flex-col justify-between`;
+        card.onclick = () => seleccionarVariableYScroll(k.key === "ipc_mensual" ? "ipc" : k.key);
+
+        // Estilo de variación semanal
+        let badgeColor = "bg-slate-100 text-slate-700";
+        if (k.delta && k.delta.includes("Alza")) badgeColor = "bg-emerald-50 text-emerald-800 border border-emerald-200";
+        else if (k.delta && k.delta.includes("Baja")) badgeColor = "bg-rose-50 text-rose-800 border border-rose-200";
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="font-bold text-slate-500 uppercase tracking-tight">${k.cat}</span>
+              <a href="${k.url}" target="_blank" onclick="event.stopPropagation()" class="text-slate-400 hover:text-blue-600 transition" title="Ver fuente oficial primigenia">
+                <i data-lucide="external-link" class="w-3 h-3"></i>
+              </a>
+            </div>
+            <h4 class="font-bold text-xs text-slate-900 leading-snug">${k.nombre}</h4>
+          </div>
+
+          <div class="mt-2.5">
+            <div class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">${k.val}</div>
+            <div class="mt-1.5 flex items-center justify-between">
+              <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md ${badgeColor}">
+                ${k.delta || "Estable"}
+              </span>
+              <button onclick="event.stopPropagation(); abrirModalNotasTecnicas('${k.key === 'ipc_mensual' ? 'ipc' : k.key}')" class="text-[10px] text-blue-600 hover:underline font-semibold">
+                Ficha
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function seleccionarVariableYScroll(key) {
+      const sel = document.getElementById("select-variable");
+      if (sel) {
+        sel.value = key;
+        cambiarVariableGrafico(key);
+        document.getElementById("tab-panel").scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    // =========================================================================
+    // 5. CUADRO OFICIAL PARA LA MINUTA SEMANAL UCEN
+    // =========================================================================
+    async function cargarCuadroMinuta() {
+      try {
+        let res;
+        try {
+          res = await fetch(DATA_PREFIX + "cuadro_minuta_semanal.json?v=" + Date.now(), { cache: "no-store" });
+          if (!res.ok) throw new Error();
+        } catch {
+          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/cuadro_minuta_semanal.json?v=" + Date.now(), { cache: "no-store" });
+        }
+        const data = await res.json();
+        cuadroMinuta = data;
+
+        const tbody = document.getElementById("tabla-minuta-body");
+        tbody.innerHTML = "";
+
+        data.forEach(item => {
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+
+          // Formatear variación semanal con estilo elegante
+          let varClass = "text-slate-600 bg-slate-100";
+          if (item.variacion_ww.includes("Alza")) varClass = "text-emerald-800 bg-emerald-50 border border-emerald-200";
+          else if (item.variacion_ww.includes("Baja")) varClass = "text-rose-800 bg-rose-50 border border-rose-200";
+
+          tr.innerHTML = `
+            <td class="py-3 px-4 font-semibold text-slate-900">${item.variable}</td>
+            <td class="py-3 px-4 text-right font-mono font-bold text-slate-800">${item.cierre_semanal}</td>
+            <td class="py-3 px-4 text-center">
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${varClass}">
+                ${item.variacion_ww}
+              </span>
+            </td>
+            <td class="py-3 px-4">
+              <a href="${item.url_fuente_oficial}" target="_blank" class="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-medium">
+                <span>${item.fuente_oficial}</span>
+                <i data-lucide="external-link" class="w-3 h-3"></i>
+              </a>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error("Error al cargar cuadro_minuta_semanal.json:", e);
+      }
+    }
+
+    function copiarTablaMinuta() {
+      if (!cuadroMinuta) return;
+      let texto = "Variable Macroeconómica\tCierre Semanal\tVariación Semanal\tFuente Oficial\n";
+      cuadroMinuta.forEach(r => {
+        texto += `${r.variable}\t${r.cierre_semanal}\t${r.variacion_ww}\t${r.fuente_oficial}\n`;
+      });
+      navigator.clipboard.writeText(texto).then(() => {
+        const btn = document.getElementById("btn-copiar-texto");
+        btn.textContent = "¡Copiado!";
+        setTimeout(() => { btn.textContent = "Copiar Tabla"; }, 2000);
+      });
+    }
+
+    // =========================================================================
+    // 6. GRÁFICO HISTÓRICO MULTIVARIABLE (PESTAÑA 1)
+    // =========================================================================
+    async function cargarSeriesHistoricas() {
+      try {
+        let res;
+        try {
+          res = await fetch(DATA_PREFIX + "series_historicas.json?v=" + Date.now(), { cache: "no-store" });
+          if (!res.ok) throw new Error();
+        } catch {
+          res = await fetch("https://raw.githubusercontent.com/jpqb/datos_economicos_chile/main/data/series_historicas.json?v=" + Date.now(), { cache: "no-store" });
+        }
+        const data = await res.json();
+        seriesHistoricas = data;
+
+        actualizarGraficoPrincipal();
+        actualizarCruceVariables();
+      } catch (e) {
+        console.error("Error al cargar series_historicas.json:", e);
+      }
+    }
+
+    function cambiarVariableGrafico(nuevaVar) {
+      variableActualGrafico = nuevaVar;
+      const meta = NOTAS_TECNICAS[nuevaVar] || { nombre: nuevaVar, emisor: "Oficial", urlFuente: "#" };
+      document.getElementById("grafico-titulo-var").textContent = meta.nombre;
+      document.getElementById("fuente-grafico-texto").textContent = `Fuente: ${meta.fuentePrimaria || meta.emisor}`;
+      document.getElementById("fuente-grafico-link").href = meta.urlFuente;
+
+      actualizarGraficoPrincipal();
+    }
+
+    function filtrarRango(rango) {
+      rangoActualGrafico = rango;
+      const contenedor = document.getElementById("contenedor-rangos");
+      contenedor.querySelectorAll("button").forEach(b => {
+        if (b.dataset.rango === rango) {
+          b.className = "px-2 py-1 rounded-lg bg-white text-blue-600 font-bold shadow-sm transition";
+        } else {
+          b.className = "px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition";
+        }
+      });
+      actualizarGraficoPrincipal();
+    }
+
+    function recortarSeriePorRango(serie, rango) {
+      if (rango === "10A" || rango === "todo" || !serie) return serie;
+      const ahora = new Date();
+      let dias = 3650;
+      if (rango === "1M") dias = 30;
+      else if (rango === "3M") dias = 90;
+      else if (rango === "6M") dias = 180;
+      else if (rango === "1A") dias = 365;
+      else if (rango === "3A") dias = 365 * 3;
+      else if (rango === "5A") dias = 365 * 5;
+
+      const cutoff = new Date(ahora.getTime() - dias * 24 * 60 * 60 * 1000);
+      const cutoffStr = cutoff.toISOString().split("T")[0];
+      return serie.filter(p => p.fecha >= cutoffStr);
+    }
+
+    function actualizarGraficoPrincipal() {
+      if (!seriesHistoricas || !seriesHistoricas[variableActualGrafico]) return;
+
+      const objVar = seriesHistoricas[variableActualGrafico];
+      const serieFiltrada = recortarSeriePorRango(objVar.serie, rangoActualGrafico);
+      const etiquetas = serieFiltrada.map(p => p.fecha);
+      const valores = serieFiltrada.map(p => p.valor);
+      const unidad = objVar.unidad || "";
+
+      const ctx = document.getElementById("canvas-grafico").getContext("2d");
+
+      if (chartPrincipal) chartPrincipal.destroy();
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+      gradient.addColorStop(0, "rgba(37, 99, 235, 0.2)");
+      gradient.addColorStop(1, "rgba(37, 99, 235, 0.0)");
+
+      chartPrincipal = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: etiquetas,
+          datasets: [{
+            label: `${objVar.nombre} (${unidad})`,
+            data: valores,
+            borderColor: "#2563eb",
+            backgroundColor: gradient,
+            borderWidth: 2,
+            fill: true,
+            pointRadius: serieFiltrada.length > 100 ? 0 : 2,
+            pointHoverRadius: 5,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: "#0f172a",
+              titleColor: "#94a3b8",
+              bodyColor: "#ffffff",
+              padding: 10,
+              displayColors: false,
+              callbacks: {
+                title: function(items) {
+                  if (!items.length) return "";
+                  const fStr = items[0].label;
+                  return new Date(fStr + "T00:00:00").toLocaleDateString("es-CL", { weekday: "short", day: "numeric", month: "long", year: "numeric" });
+                },
+                label: function(item) {
+                  const val = item.parsed.y;
+                  return `${objVar.nombre}: ${FormatCL.auto(val, unidad)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: {
+                maxTicksLimit: 8,
+                color: "#64748b",
+                font: { size: 10 }
+              }
+            },
+            y: {
+              grid: { color: "#f1f5f9" },
+              ticks: {
+                color: "#64748b",
+                font: { size: 10 },
+                callback: function(v) {
+                  return FormatCL.auto(v, unidad);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 7. CRUCE DE VARIABLES & RELACIONES MACROECONÓMICAS (PESTAÑA 2)
+    // =========================================================================
+    function aplicarPresetCruce(varX, varY) {
+      document.getElementById("cruce-var-x").value = varX;
+      document.getElementById("cruce-var-y").value = varY;
+      actualizarCruceVariables();
+    }
+
+    function cambiarRangoCruce(rango) {
+      cruceRango = rango;
+      const cont = document.getElementById("cruce-contenedor-rangos");
+      cont.querySelectorAll("button").forEach(b => {
+        if (b.dataset.rangoCruce === rango) {
+          b.className = "flex-1 py-1.5 rounded-lg bg-white text-blue-600 font-bold shadow-sm transition text-center";
+        } else {
+          b.className = "flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition text-center";
+        }
+      });
+      actualizarCruceVariables();
+    }
+
+    function cambiarModoVisualizacionCruce(modo) {
+      cruceModo = modo;
+      const btnDual = document.getElementById("btn-modo-dual");
+      const btnScatter = document.getElementById("btn-modo-scatter");
+      if (modo === "dual_axis") {
+        btnDual.className = "flex-1 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition flex items-center justify-center gap-1.5 font-bold";
+        btnScatter.className = "flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5 font-normal";
+      } else {
+        btnScatter.className = "flex-1 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition flex items-center justify-center gap-1.5 font-bold";
+        btnDual.className = "flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5 font-normal";
+      }
+      actualizarCruceVariables();
+    }
+
+    function emparejarObservaciones(serieX, serieY, esMensualX, esMensualY) {
+      if (!serieX || !serieY) return [];
+
+      const requiereMensual = esMensualX || esMensualY;
+
+      if (requiereMensual) {
+        // Agrupar por mes YYYY-MM
+        const mapaX = {};
+        serieX.forEach(p => {
+          const m = p.fecha.substring(0, 7);
+          if (!mapaX[m]) mapaX[m] = [];
+          mapaX[m].push(p.valor);
+        });
+        const mapaY = {};
+        serieY.forEach(p => {
+          const m = p.fecha.substring(0, 7);
+          if (!mapaY[m]) mapaY[m] = [];
+          mapaY[m].push(p.valor);
+        });
+
+        const mesesComunes = Object.keys(mapaX).filter(m => mapaY[m]).sort();
+        return mesesComunes.map(m => {
+          const promX = mapaX[m].reduce((a, b) => a + b, 0) / mapaX[m].length;
+          const promY = mapaY[m].reduce((a, b) => a + b, 0) / mapaY[m].length;
+          return { fecha: m, x: promX, y: promY };
+        });
+      } else {
+        // Emparejamiento por día exacto
+        const mapaY = new Map(serieY.map(p => [p.fecha, p.valor]));
+        const pareados = [];
+        serieX.forEach(p => {
+          if (mapaY.has(p.fecha)) {
+            pareados.push({ fecha: p.fecha, x: p.valor, y: mapaY.get(p.fecha) });
+          }
+        });
+        return pareados.sort((a, b) => a.fecha.localeCompare(b.fecha));
+      }
+    }
+
+    function calcularEstadisticasBivariadas(pareados) {
+      const n = pareados.length;
+      if (n < 3) return null;
+
+      let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+      let minX = Infinity, maxX = -Infinity;
+
+      for (let i = 0; i < n; i++) {
+        const x = pareados[i].x;
+        const y = pareados[i].y;
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumX2 += x * x;
+        sumY2 += y * y;
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+      }
+
+      const meanX = sumX / n;
+      const meanY = sumY / n;
+      const cov = sumXY - n * meanX * meanY;
+      const varX = sumX2 - n * meanX * meanX;
+      const varY = sumY2 - n * meanY * meanY;
+
+      const r = (varX > 0 && varY > 0) ? (cov / Math.sqrt(varX * varY)) : 0;
+      const r2 = r * r;
+      const slope = varX > 0 ? (cov / varX) : 0;
+      const intercept = meanY - slope * meanX;
+
+      return {
+        n,
+        r,
+        r2,
+        slope,
+        intercept,
+        meanX,
+        meanY,
+        minX,
+        maxX,
+        fechaInicio: pareados[0].fecha,
+        fechaFin: pareados[n - 1].fecha
+      };
+    }
+
+    function obtenerInterpretacionPedagogica(keyX, keyY, stats) {
+      if (!stats) return "Datos insuficientes para la ventana temporal seleccionada.";
+
+      const r = stats.r;
+      const rFormato = FormatCL.num(r, 2);
+      const r2Pct = FormatCL.pct(stats.r2 * 100, 1);
+
+      // Banco de casos específicos clásicos
+      if ((keyX === "cobre" && keyY === "dolar") || (keyX === "dolar" && keyY === "cobre")) {
+        return `<strong>Términos de intercambio y canal cambiario:</strong> La correlación obtenida (r = ${rFormato}) refleja la interacción histórica en Chile. En periodos normales de precios del cobre, un alza incrementa el flujo de divisas por exportaciones, apreciando el peso y reduciendo el tipo de cambio USD/CLP (relación inversa). En periodos inflacionarios globales, factores exógenos pueden inducir co-movimientos moderados.`;
+      }
+      if ((keyX === "tpm" && keyY === "ipc") || (keyX === "ipc" && keyY === "tpm")) {
+        return `<strong>Mecanismo de transmisión de política monetaria:</strong> La asociación (r = ${rFormato}) denota la respuesta reactiva del Banco Central: ante brotes inflacionarios sostenidos, el Consejo incrementa la TPM para contraer la demanda agregada y anclar las expectativas a 24 meses (regla tipo Taylor).`;
+      }
+      if ((keyX === "petroleo_brent" && keyY === "dolar") || (keyX === "dolar" && keyY === "petroleo_brent")) {
+        return `<strong>Presión de términos de intercambio importados:</strong> (r = ${rFormato}). Un incremento en el crudo internacional presiona la cuenta corriente chilena (mayor demanda de dólares para importar energía), lo que tiende a depreciar el tipo de cambio y encarecer la canasta básica energética local (MEPCO).`;
+      }
+      if ((keyX === "uf" && keyY === "ipc") || (keyX === "ipc" && keyY === "uf")) {
+        return `<strong>Indexación legal:</strong> La UF acumula la inflación mensual con un rezago regulatorio entre el día 10 del mes actual y el 9 del siguiente.`;
+      }
+
+      // Interpretación genérica según magnitud
+      const direccion = r > 0 ? "directa (positiva)" : "inversa (negativa)";
+      let fuerza = "débil o nula";
+      if (Math.abs(r) >= 0.7) fuerza = "fuerte";
+      else if (Math.abs(r) >= 0.4) fuerza = "moderada";
+
+      return `La relación lineal empírica entre ambas variables es <strong>${fuerza} y ${direccion}</strong> (r = ${rFormato}, R² = ${r2Pct}). Esto indica que variaciones en la variable base explican aproximadamente el ${r2Pct} de la dispersión observada en la variable de contraste en la ventana seleccionada (${stats.fechaInicio} a ${stats.fechaFin}).`;
+    }
+
+    function actualizarCruceVariables() {
+      if (!seriesHistoricas) return;
+
+      cruceVarX = document.getElementById("cruce-var-x").value;
+      cruceVarY = document.getElementById("cruce-var-y").value;
+
+      const objX = seriesHistoricas[cruceVarX];
+      const objY = seriesHistoricas[cruceVarY];
+      if (!objX || !objY) return;
+
+      // Filtrar por rango
+      const serieXFiltrada = recortarSeriePorRango(objX.serie, cruceRango);
+      const serieYFiltrada = recortarSeriePorRango(objY.serie, cruceRango);
+
+      const esMensualX = (cruceVarX === "ipc" || cruceVarX === "desempleo");
+      const esMensualY = (cruceVarY === "ipc" || cruceVarY === "desempleo");
+
+      const pareados = emparejarObservaciones(serieXFiltrada, serieYFiltrada, esMensualX, esMensualY);
+      const stats = calcularEstadisticasBivariadas(pareados);
+
+      // Actualizar tarjeta de métricas
+      if (stats) {
+        document.getElementById("cruce-stat-r").textContent = FormatCL.num(stats.r, 2);
+        document.getElementById("cruce-stat-r2").textContent = FormatCL.pct(stats.r2 * 100, 1);
+        document.getElementById("cruce-stat-n").textContent = `${FormatCL.num(stats.n, 0)} obs.`;
+        document.getElementById("cruce-info-fechas").textContent = `${stats.fechaInicio} a ${stats.fechaFin}`;
+
+        // Etiqueta cualitativa y barra gauge
+        let catR = "Débil";
+        if (Math.abs(stats.r) >= 0.7) catR = stats.r > 0 ? "Directa Fuerte" : "Inversa Fuerte";
+        else if (Math.abs(stats.r) >= 0.4) catR = stats.r > 0 ? "Directa Moderada" : "Inversa Moderada";
+        document.getElementById("cruce-stat-r-calidad").textContent = catR;
+
+        // Ecuación
+        const signoB = stats.intercept >= 0 ? "+" : "-";
+        document.getElementById("cruce-stat-ecuacion").textContent = `Y = ${FormatCL.num(stats.slope, 2)} · X ${signoB} ${FormatCL.num(Math.abs(stats.intercept), 2)}`;
+
+        // Gauge (-1 a +1 escalado a 0% - 100%)
+        const pctPos = ((stats.r + 1) / 2) * 100;
+        const gaugeBar = document.getElementById("cruce-gauge-bar");
+        if (stats.r >= 0) {
+          gaugeBar.style.left = "50%";
+          gaugeBar.style.width = `${pctPos - 50}%`;
+          gaugeBar.className = "h-full bg-emerald-600 rounded-full transition-all duration-300";
+        } else {
+          gaugeBar.style.left = `${pctPos}%`;
+          gaugeBar.style.width = `${50 - pctPos}%`;
+          gaugeBar.className = "h-full bg-blue-600 rounded-full transition-all duration-300";
+        }
+
+        // Interpretación
+        document.getElementById("cruce-stat-interpretacion").innerHTML = obtenerInterpretacionPedagogica(cruceVarX, cruceVarY, stats);
+      }
+
+      // Título del gráfico
+      document.getElementById("cruce-grafico-titulo").textContent = `${objX.nombre} vs ${objY.nombre}`;
+      if (cruceModo === "dual_axis") {
+        document.getElementById("cruce-grafico-subtitulo").textContent = "Evolución cronológica superpuesta con escalas independientes calibradas (Eje izquierdo vs Eje derecho).";
+      } else {
+        document.getElementById("cruce-grafico-subtitulo").textContent = "Diagrama de dispersión bivariado con recta de regresión ajustada por Mínimos Cuadrados Ordinarios (MCO).";
+      }
+
+      renderizarGraficoCruce(pareados, stats, objX, objY);
+    }
+
+    function renderizarGraficoCruce(pareados, stats, objX, objY) {
+      const ctx = document.getElementById("canvas-cruce").getContext("2d");
+      if (chartCruce) chartCruce.destroy();
+
+      if (cruceModo === "dual_axis") {
+        // Modo Dual-Axis Time Series
+        const fechas = pareados.map(p => p.fecha);
+        const valoresX = pareados.map(p => p.x);
+        const valoresY = pareados.map(p => p.y);
+
+        chartCruce = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: fechas,
+            datasets: [
+              {
+                label: `${objX.nombre} (${objX.unidad})`,
+                data: valoresX,
+                borderColor: "#2563eb", // Azul Eje Izquierdo
+                backgroundColor: "rgba(37, 99, 235, 0.05)",
+                borderWidth: 2,
+                yAxisID: "y1",
+                pointRadius: fechas.length > 100 ? 0 : 2,
+                tension: 0.1
+              },
+              {
+                label: `${objY.nombre} (${objY.unidad})`,
+                data: valoresY,
+                borderColor: "#d97706", // Ámbar Eje Derecho
+                backgroundColor: "rgba(217, 119, 6, 0.05)",
+                borderWidth: 2,
+                yAxisID: "y2",
+                pointRadius: fechas.length > 100 ? 0 : 2,
+                tension: 0.1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+              legend: {
+                display: true,
+                position: "top",
+                labels: { boxWidth: 12, font: { size: 11, weight: 'bold' } }
+              },
+              tooltip: {
+                backgroundColor: "#0f172a",
+                padding: 10,
+                callbacks: {
+                  title: function(items) {
+                    return "Fecha: " + items[0].label;
+                  },
+                  label: function(item) {
+                    const esY1 = item.datasetIndex === 0;
+                    const nombre = esY1 ? objX.nombre : objY.nombre;
+                    const unidad = esY1 ? objX.unidad : objY.unidad;
+                    return `${nombre}: ${FormatCL.auto(item.parsed.y, unidad)}`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: { maxTicksLimit: 8, font: { size: 10 } }
+              },
+              y1: {
+                type: "linear",
+                position: "left",
+                title: { display: true, text: `${objX.nombre} (${objX.unidad})`, color: "#2563eb", font: { size: 11, weight: 'bold' } },
+                ticks: {
+                  color: "#2563eb",
+                  font: { size: 10 },
+                  callback: v => FormatCL.auto(v, objX.unidad)
+                }
+              },
+              y2: {
+                type: "linear",
+                position: "right",
+                grid: { drawOnChartArea: false },
+                title: { display: true, text: `${objY.nombre} (${objY.unidad})`, color: "#d97706", font: { size: 11, weight: 'bold' } },
+                ticks: {
+                  color: "#d97706",
+                  font: { size: 10 },
+                  callback: v => FormatCL.auto(v, objY.unidad)
+                }
+              }
+            }
+          }
+        });
+
+      } else {
+        // Modo Scatter Plot con Regresión Lineal
+        const scatterData = pareados.map(p => ({ x: p.x, y: p.y, fecha: p.fecha }));
+
+        // Línea de regresión
+        const minX = stats ? stats.minX : 0;
+        const maxX = stats ? stats.maxX : 100;
+        const regData = stats ? [
+          { x: minX, y: stats.slope * minX + stats.intercept },
+          { x: maxX, y: stats.slope * maxX + stats.intercept }
+        ] : [];
+
+        chartCruce = new Chart(ctx, {
+          type: "scatter",
+          data: {
+            datasets: [
+              {
+                label: "Observaciones Pareadas",
+                data: scatterData,
+                backgroundColor: "rgba(37, 99, 235, 0.45)",
+                borderColor: "#1d4ed8",
+                pointRadius: 3,
+                pointHoverRadius: 6
+              },
+              {
+                label: `Línea de Regresión (MCO)`,
+                type: "line",
+                data: regData,
+                borderColor: "#ef4444",
+                borderWidth: 2.5,
+                fill: false,
+                pointRadius: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: "top",
+                labels: { boxWidth: 12, font: { size: 11, weight: 'bold' } }
+              },
+              tooltip: {
+                backgroundColor: "#0f172a",
+                padding: 10,
+                callbacks: {
+                  label: function(item) {
+                    const raw = item.raw;
+                    if (raw.fecha) {
+                      return [
+                        `Fecha: ${raw.fecha}`,
+                        `${objX.nombre}: ${FormatCL.auto(raw.x, objX.unidad)}`,
+                        `${objY.nombre}: ${FormatCL.auto(raw.y, objY.unidad)}`
+                      ];
+                    }
+                    return `Ajuste MCO: ${FormatCL.auto(raw.y, objY.unidad)}`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                title: { display: true, text: `${objX.nombre} (${objX.unidad})`, font: { size: 11, weight: 'bold' } },
+                ticks: {
+                  callback: v => FormatCL.auto(v, objX.unidad),
+                  font: { size: 10 }
+                }
+              },
+              y: {
+                title: { display: true, text: `${objY.nombre} (${objY.unidad})`, font: { size: 11, weight: 'bold' } },
+                ticks: {
+                  callback: v => FormatCL.auto(v, objY.unidad),
+                  font: { size: 10 }
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // =========================================================================
+    // 8. CENTRO DE DESCARGAS (PESTAÑA 3)
+    // =========================================================================
+    function seleccionarPresetDescarga(preset) {
+      const checkboxes = document.querySelectorAll(".chk-descarga");
+      checkboxes.forEach(c => {
+        if (preset === "todas") c.checked = true;
+        else if (preset === "ninguna") c.checked = false;
+        else if (preset === "divisas") c.checked = ["dolar", "euro", "yuan"].includes(c.value);
+        else if (preset === "commodities") c.checked = ["cobre", "petroleo_brent", "petroleo_wti"].includes(c.value);
+        else if (preset === "tasas") c.checked = ["uf", "tpm", "ipc", "desempleo"].includes(c.value);
+      });
+      actualizarResumenDescarga();
+    }
+
+    function seleccionarPresetAnos(preset) {
+      const checkboxes = document.querySelectorAll(".chk-ano");
+      checkboxes.forEach(c => {
+        if (preset === "todos") c.checked = true;
+        else if (preset === "ultimos3") c.checked = ["2026", "2025", "2024"].includes(c.value);
+        else if (preset === "2026") c.checked = c.value === "2026";
+      });
+      actualizarResumenDescarga();
+    }
+
+    function actualizarResumenDescarga() {
+      const vars = Array.from(document.querySelectorAll(".chk-descarga:checked")).map(c => c.value);
+      const anos = Array.from(document.querySelectorAll(".chk-ano:checked")).map(c => c.value);
+      document.getElementById("resumen-descarga-texto").textContent = `${vars.length} variables seleccionadas • ${anos.length} años seleccionados`;
+    }
+
+    function ejecutarDescarga(formato) {
+      if (!seriesHistoricas) return;
+
+      const vars = Array.from(document.querySelectorAll(".chk-descarga:checked")).map(c => c.value);
+      const anos = Array.from(document.querySelectorAll(".chk-ano:checked")).map(c => c.value);
+
+      if (vars.length === 0 || anos.length === 0) {
+        alert("Por favor selecciona al menos una variable y un año para exportar.");
+        return;
+      }
+
+      if (formato === "json") {
+        const exportObj = {
+          metadatos: {
+            portal: "Datos Macroeconómicos de Chile - Universidad Central de Chile",
+            fecha_exportacion_utc: new Date().toISOString(),
+            variables_incluidas: vars,
+            anos_incluidos: anos
+          },
+          series: {}
+        };
+
+        vars.forEach(v => {
+          if (seriesHistoricas[v]) {
+            exportObj.series[v] = {
+              nombre: seriesHistoricas[v].nombre,
+              unidad: seriesHistoricas[v].unidad,
+              fuente_oficial: seriesHistoricas[v].fuente_oficial,
+              serie: seriesHistoricas[v].serie.filter(p => anos.includes(p.fecha.substring(0, 4)))
+            };
+          }
+        });
+
+        const jsonStr = JSON.stringify(exportObj, null, 2);
+        descargarArchivo(jsonStr, "datos_macro_chile_ucen.json", "application/json");
+
+      } else if (formato === "csv") {
+        // Consolidar fechas únicas
+        const mapaFechas = new Map();
+        vars.forEach(v => {
+          if (seriesHistoricas[v]) {
+            seriesHistoricas[v].serie.forEach(p => {
+              const ano = p.fecha.substring(0, 4);
+              if (anos.includes(ano)) {
+                if (!mapaFechas.has(p.fecha)) mapaFechas.set(p.fecha, {});
+                mapaFechas.get(p.fecha)[v] = p.valor;
+              }
+            });
+          }
+        });
+
+        const fechasOrdenadas = Array.from(mapaFechas.keys()).sort();
+        let csvContent = "fecha," + vars.join(",") + "\n";
+
+        fechasOrdenadas.forEach(f => {
+          const fila = [f];
+          const reg = mapaFechas.get(f);
+          vars.forEach(v => {
+            fila.push(reg[v] !== undefined ? reg[v] : "");
+          });
+          csvContent += fila.join(",") + "\n";
+        });
+
+        descargarArchivo(csvContent, "datos_macro_chile_ucen.csv", "text/csv;charset=utf-8;");
+      }
+    }
+
+    function descargarArchivo(contenido, nombreArchivo, tipoMime) {
+      const blob = new Blob([contenido], { type: tipoMime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = nombreArchivo;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // =========================================================================
+    // 9. MODAL DE NOTAS TÉCNICAS Y GOBERNANZA
+    // =========================================================================
+    function abrirModalNotasTecnicas(claveInicial = "uf") {
+      const modal = document.getElementById("modal-notas-tecnicas");
+      modal.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+      renderizarTabsModal(claveInicial);
+      renderizarContenidoModal(claveInicial);
+      lucide.createIcons();
+    }
+
+    function cerrarModalNotasTecnicas() {
+      const modal = document.getElementById("modal-notas-tecnicas");
+      modal.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    function renderizarTabsModal(claveSeleccionada) {
+      const cont = document.getElementById("tabs-modal-indicadores");
+      cont.innerHTML = "";
+      Object.keys(NOTAS_TECNICAS).forEach(k => {
+        const item = NOTAS_TECNICAS[k];
+        const btn = document.createElement("button");
+        const esActivo = k === claveSeleccionada;
+        btn.className = `w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition ${
+          esActivo ? "bg-white text-blue-700 shadow-sm border border-slate-200" : "text-slate-600 hover:bg-slate-200/60"
+        }`;
+        btn.onclick = () => {
+          renderizarTabsModal(k);
+          renderizarContenidoModal(k);
+          lucide.createIcons();
+        };
+        btn.innerHTML = `<span>${item.nombre}</span> <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-40"></i>`;
+        cont.appendChild(btn);
+      });
+    }
+
+    function renderizarContenidoModal(clave) {
+      const item = NOTAS_TECNICAS[clave];
+      if (!item) return;
+
+      const cont = document.getElementById("contenido-modal-ficha");
+      cont.innerHTML = `
+        <div class="space-y-4">
+          <div class="pb-3 border-b border-slate-200 flex items-start justify-between">
+            <div>
+              <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full">Ficha Técnica Oficial</span>
+              <h3 class="text-xl font-extrabold text-slate-900 mt-1">${item.nombre}</h3>
+              <p class="text-xs text-slate-500 font-medium">${item.descripcion}</p>
+            </div>
+            <a href="${item.urlFuente}" target="_blank" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+              <span>Fuente Oficial</span>
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="font-bold text-slate-500 uppercase text-[10px] block">Emisor y Certificador Legal</span>
+              <span class="font-bold text-slate-900">${item.emisor}</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="font-bold text-slate-500 uppercase text-[10px] block">Marco Legal Regulatorio</span>
+              <span class="font-bold text-slate-900">${item.marcoLegal}</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="font-bold text-slate-500 uppercase text-[10px] block">Frecuencia Oficial</span>
+              <span class="font-bold text-slate-900">${item.frecuencia}</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="font-bold text-slate-500 uppercase text-[10px] block">Unidad de Medida</span>
+              <span class="font-bold text-slate-900">${item.unidad}</span>
+            </div>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <h5 class="font-bold text-slate-900 mb-1 flex items-center gap-1">
+                <i data-lucide="cog" class="w-3.5 h-3.5 text-blue-600"></i>
+                <span>Metodología de Obtención y Cálculo</span>
+              </h5>
+              <p class="text-slate-600 leading-relaxed">${item.metodologia}</p>
+            </div>
+
+            <div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
+              <h5 class="font-bold text-amber-900 mb-1 flex items-center gap-1">
+                <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-600"></i>
+                <span>Rigor Antiespeculativo y Advertencias de Discrepancia</span>
+              </h5>
+              <p class="text-amber-800 leading-relaxed">${item.discrepancias}</p>
+            </div>
+
+            <div class="p-3 bg-indigo-50 rounded-xl border border-indigo-200">
+              <h5 class="font-bold text-indigo-900 mb-1 flex items-center gap-1">
+                <i data-lucide="file-text" class="w-3.5 h-3.5 text-indigo-600"></i>
+                <span>Uso en la Minuta Semanal UCEN</span>
+              </h5>
+              <p class="text-indigo-800 leading-relaxed">${item.usoMinuta}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Inicializar al cargar el DOM
+    document.addEventListener("DOMContentLoaded", inicializarDashboard);
+  </script>
+</body>
+</html>
