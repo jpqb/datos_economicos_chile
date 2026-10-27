@@ -32,7 +32,6 @@
       color: #0f172a;
       background-color: rgba(241, 245, 249, 0.7);
     }
-    /* Custom scrollbar for horizontal containers */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -88,7 +87,7 @@
                 <i data-lucide="shield-check" class="w-4 h-4"></i>
                 <span>Alta Disponibilidad Flat Data</span>
               </p>
-              Arquitectura estática desacoplada sin dependencias dinámicas caídas. Datos distribuidos en CDN global de GitHub con actualización automática diaria programada.
+              Arquitectura desacoplada sin dependencias dinámicas caídas. Datos distribuidos en CDN global con actualización programada diaria.
             </div>
           </div>
 
@@ -164,7 +163,6 @@
       <!-- 1. Grid de Tarjetas KPI en Vivo -->
       <section>
         <div id="indicadores-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
-          <!-- Tarjetas renderizadas dinámicamente -->
         </div>
       </section>
 
@@ -175,7 +173,7 @@
             <div class="flex items-center gap-2">
               <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
                 <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i>
-                <span id="grafico-titulo-var">Evolución Histórica Multivariable</span>
+                <span id="grafico-titulo-var">Dólar Observado (USD/CLP)</span>
               </h3>
             </div>
             <p class="text-xs text-slate-500 mt-0.5" id="grafico-subtitulo-var">
@@ -183,9 +181,8 @@
             </p>
           </div>
 
-          <!-- Controles del Gráfico: Variable y Rango -->
+          <!-- Controles del Gráfico: Variable y Rango Adaptativo -->
           <div class="flex flex-wrap items-center gap-2.5">
-            <!-- Selector de Variable -->
             <div class="relative">
               <select id="select-variable" onchange="cambiarVariableGrafico(this.value)" class="appearance-none bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                 <optgroup label="Divisas Oficiales">
@@ -208,20 +205,11 @@
               <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
             </div>
 
-            <!-- Botones de Rango Temporal Adaptativo -->
             <div id="contenedor-rangos" class="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs font-medium">
-              <button onclick="filtrarRango('1M')" data-rango="1M" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">1M</button>
-              <button onclick="filtrarRango('3M')" data-rango="3M" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">3M</button>
-              <button onclick="filtrarRango('6M')" data-rango="6M" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">6M</button>
-              <button onclick="filtrarRango('1A')" data-rango="1A" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">1A</button>
-              <button onclick="filtrarRango('3A')" data-rango="3A" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">3A</button>
-              <button onclick="filtrarRango('5A')" data-rango="5A" class="px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">5A</button>
-              <button onclick="filtrarRango('10A')" data-rango="10A" class="px-2 py-1 rounded-lg bg-white text-blue-600 font-bold shadow-sm transition">10A</button>
             </div>
           </div>
         </div>
 
-        <!-- Badge Informativo de Fuente -->
         <div id="badge-fuente-grafico" class="mb-3 flex items-center justify-between text-xs bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/70">
           <span class="text-slate-600 font-medium flex items-center gap-1.5">
             <i data-lucide="check-circle" class="w-3.5 h-3.5 text-blue-600"></i>
@@ -233,13 +221,12 @@
           </a>
         </div>
 
-        <!-- Canvas Gráfico Chart.js -->
         <div class="relative w-full h-80 sm:h-96">
           <canvas id="canvas-grafico"></canvas>
         </div>
       </section>
 
-      <!-- 3. Cuadro Oficial para la Minuta Semanal UCEN -->
+      <!-- 3. Cuadro Oficial para la Minuta Semanal UCEN (Corregido) -->
       <section class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
           <div>
@@ -248,12 +235,12 @@
                 <i data-lucide="file-spreadsheet" class="w-5 h-5 text-indigo-600"></i>
                 <span>Cuadro Oficial para la Minuta Semanal UCEN</span>
               </h3>
-              <span class="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">
+              <span id="badge-semana-minuta" class="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">
                 Sincronización Automática
               </span>
             </div>
             <p class="text-xs text-slate-500 mt-0.5">
-              Datos formateados con convención direccional para la edición editorial semanal de la Facultad de Economía UCEN.
+              Tabulado oficial de cierre y convención direccional para la edición editorial semanal de la Facultad de Economía UCEN.
             </p>
           </div>
 
@@ -277,10 +264,10 @@
                 <th scope="col" class="py-3 px-4 text-right">Cierre Semanal</th>
                 <th scope="col" class="py-3 px-4 text-center">Variación Semanal</th>
                 <th scope="col" class="py-3 px-4">Fuente Legal Oficial</th>
+                <th scope="col" class="py-3 px-4">Lectura Analítica</th>
               </tr>
             </thead>
             <tbody id="tabla-minuta-body" class="divide-y divide-slate-100 font-medium">
-              <!-- Renderizado dinámico -->
             </tbody>
           </table>
         </div>
@@ -289,24 +276,24 @@
     </div>
 
     <!-- ===================================================================== -->
-    <!-- PESTAÑA 2: CRUCE DE VARIABLES & CORRELACIONES (NUEVA HERRAMIENTA)       -->
+    <!-- PESTAÑA 2: CRUCE DE VARIABLES & CORRELACIONES (CON VARIACIONES %)     -->
     <!-- ===================================================================== -->
     <div id="tab-cruce" class="hidden space-y-6">
 
-      <!-- Header del Laboratorio de Relaciones Macro -->
+      <!-- Header del Laboratorio Cuantitativo -->
       <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-md border border-slate-800">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div class="flex items-center gap-2 mb-1.5">
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-indigo-500/30 text-indigo-300 border border-indigo-400/30">
                 <i data-lucide="sparkles" class="w-3 h-3 mr-1"></i>
-                Laboratorio Cuantitativo
+                Laboratorio Macroeconómico
               </span>
               <span class="text-xs text-slate-400">Análisis Bivariado Empírico</span>
             </div>
-            <h2 class="text-xl sm:text-2xl font-bold tracking-tight">Cruce de Variables & Relaciones Macroeconómicas</h2>
+            <h2 class="text-xl sm:text-2xl font-bold tracking-tight">Cruce de Variables & Relaciones Empíricas</h2>
             <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
-              Contrasta la dinámica simultánea de dos variables macroeconómicas de Chile mediante series temporales de doble eje Y o evalúa su grado de asociación lineal mediante diagramas de dispersión con regresión por mínimos cuadrados ordinarios (MCO) y coeficiente de Pearson ($r$).
+              Define métricas en <strong>niveles absolutos</strong> o <strong>variaciones porcentuales (periódica, % YoY a 12 meses o puntos porcentuales pp)</strong> según la naturaleza económica de cada serie para contrastar ciclos o calcular la correlación de Pearson ($r$) libre de tendencias espurias.
             </p>
           </div>
 
@@ -317,85 +304,126 @@
               <span>Presets Clásicos</span>
             </p>
             <div class="grid grid-cols-2 gap-1.5 text-xs">
-              <button onclick="aplicarPresetCruce('cobre', 'dolar')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
-                <span>🪙 Cobre vs Dólar</span>
+              <button onclick="aplicarPresetCruce('cobre', 'var_pct_yoy', 'dolar', 'var_pct_yoy')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
+                <span>🪙 Cobre vs Dólar (% YoY)</span>
               </button>
-              <button onclick="aplicarPresetCruce('tpm', 'ipc')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
-                <span>🏦 TPM vs Inflación</span>
+              <button onclick="aplicarPresetCruce('tpm', 'nivel', 'ipc', 'var_pct_yoy')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
+                <span>🏦 TPM vs Inflación 12M</span>
               </button>
-              <button onclick="aplicarPresetCruce('petroleo_brent', 'dolar')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
-                <span>🛢️ Petróleo vs Dólar</span>
+              <button onclick="aplicarPresetCruce('petroleo_brent', 'var_pct_yoy', 'dolar', 'var_pct_yoy')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
+                <span>🛢️ Petróleo vs Dólar (% YoY)</span>
               </button>
-              <button onclick="aplicarPresetCruce('dolar', 'euro')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
-                <span>💶 Dólar vs Euro</span>
+              <button onclick="aplicarPresetCruce('dolar', 'var_pct_periodo', 'cobre', 'var_pct_periodo')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
+                <span>⚡ Retornos Diarios (Δ %)</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Barra de Configuración del Cruce -->
+      <!-- Barra de Configuración de Variables y Métricas -->
       <section class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Fila 1: Selectores de Variables y Transformación de Métrica -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b border-slate-100">
           
-          <!-- Variable X (Eje Izquierdo / Eje X) -->
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
-              <span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
-              <span>Variable X (Base / Eje Izquierdo)</span>
-            </label>
-            <div class="relative">
-              <select id="cruce-var-x" onchange="actualizarCruceVariables()" class="w-full appearance-none bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                <option value="cobre" selected>Cobre Físico (US$/lb - LME)</option>
-                <option value="dolar">Dólar Observado ($ CLP)</option>
-                <option value="euro">Euro Observado ($ CLP)</option>
-                <option value="yuan">Yuan Chino ($ CLP)</option>
-                <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
-                <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
-                <option value="uf">Unidad de Fomento (UF)</option>
-                <option value="tpm">Tasa Política Monetaria (TPM %)</option>
-                <option value="ipc">IPC Mensual (%)</option>
-                <option value="desempleo">Desocupación Nacional (%)</option>
-              </select>
-              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <!-- Bloque Variable X -->
+          <div class="p-3.5 bg-blue-50/50 rounded-xl border border-blue-100 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-blue-900 flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
+                <span>Variable X (Eje Izquierdo / Eje Horizontal)</span>
+              </label>
+              <span id="lbl-tipo-var-x" class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">COMMODITY</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div class="relative">
+                <select id="cruce-var-x" onchange="alCambiarVariableX()" class="w-full appearance-none bg-white text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                  <optgroup label="Commodities">
+                    <option value="cobre" selected>Cobre Físico (US$/lb)</option>
+                    <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
+                    <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
+                  </optgroup>
+                  <optgroup label="Divisas">
+                    <option value="dolar">Dólar Observado ($ CLP)</option>
+                    <option value="euro">Euro Observado ($ CLP)</option>
+                    <option value="yuan">Yuan Chino ($ CLP)</option>
+                  </optgroup>
+                  <optgroup label="Tasas e Inflación">
+                    <option value="uf">Unidad de Fomento (UF)</option>
+                    <option value="tpm">Tasa Política Monetaria (TPM %)</option>
+                    <option value="ipc">IPC Mensual (%)</option>
+                    <option value="desempleo">Desocupación Nacional (%)</option>
+                  </optgroup>
+                </select>
+                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+              </div>
+
+              <div class="relative">
+                <select id="cruce-metrica-x" onchange="actualizarCruceVariables()" class="w-full appearance-none bg-white text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </select>
+                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-blue-600 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+              </div>
             </div>
           </div>
 
-          <!-- Variable Y (Eje Derecho / Eje Y) -->
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
-              <span>Variable Y (Contraste / Eje Derecho)</span>
-            </label>
-            <div class="relative">
-              <select id="cruce-var-y" onchange="actualizarCruceVariables()" class="w-full appearance-none bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 transition">
-                <option value="cobre">Cobre Físico (US$/lb - LME)</option>
-                <option value="dolar" selected>Dólar Observado ($ CLP)</option>
-                <option value="euro">Euro Observado ($ CLP)</option>
-                <option value="yuan">Yuan Chino ($ CLP)</option>
-                <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
-                <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
-                <option value="uf">Unidad de Fomento (UF)</option>
-                <option value="tpm">Tasa Política Monetaria (TPM %)</option>
-                <option value="ipc">IPC Mensual (%)</option>
-                <option value="desempleo">Desocupación Nacional (%)</option>
-              </select>
-              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <!-- Bloque Variable Y -->
+          <div class="p-3.5 bg-amber-50/50 rounded-xl border border-amber-100 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                <span>Variable Y (Eje Derecho / Eje Vertical)</span>
+              </label>
+              <span id="lbl-tipo-var-y" class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">DIVISA</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div class="relative">
+                <select id="cruce-var-y" onchange="alCambiarVariableY()" class="w-full appearance-none bg-white text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 transition">
+                  <optgroup label="Divisas">
+                    <option value="dolar" selected>Dólar Observado ($ CLP)</option>
+                    <option value="euro">Euro Observado ($ CLP)</option>
+                    <option value="yuan">Yuan Chino ($ CLP)</option>
+                  </optgroup>
+                  <optgroup label="Commodities">
+                    <option value="cobre">Cobre Físico (US$/lb)</option>
+                    <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
+                    <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
+                  </optgroup>
+                  <optgroup label="Tasas e Inflación">
+                    <option value="uf">Unidad de Fomento (UF)</option>
+                    <option value="tpm">Tasa Política Monetaria (TPM %)</option>
+                    <option value="ipc">IPC Mensual (%)</option>
+                    <option value="desempleo">Desocupación Nacional (%)</option>
+                  </optgroup>
+                </select>
+                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+              </div>
+
+              <div class="relative">
+                <select id="cruce-metrica-y" onchange="actualizarCruceVariables()" class="w-full appearance-none bg-white text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg border border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500 transition">
+                </select>
+                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-amber-600 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+              </div>
             </div>
           </div>
 
-          <!-- Rango Temporal -->
+        </div>
+
+        <!-- Fila 2: Ventana Temporal y Modo de Visualización -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-center">
+          
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Ventana de Análisis</label>
             <div id="cruce-contenedor-rangos" class="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs font-medium">
               <button onclick="cambiarRangoCruce('1A')" data-rango-cruce="1A" class="flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition text-center">1A</button>
               <button onclick="cambiarRangoCruce('3A')" data-rango-cruce="3A" class="flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition text-center">3A</button>
               <button onclick="cambiarRangoCruce('5A')" data-rango-cruce="5A" class="flex-1 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition text-center">5A</button>
-              <button onclick="cambiarRangoCruce('todo')" data-rango-cruce="todo" class="flex-1 py-1.5 rounded-lg bg-white text-blue-600 font-bold shadow-sm transition text-center">Todo</button>
+              <button onclick="cambiarRangoCruce('todo')" data-rango-cruce="todo" class="flex-1 py-1.5 rounded-lg bg-white text-blue-600 font-bold shadow-sm transition text-center">Todo (10A)</button>
             </div>
           </div>
 
-          <!-- Tipo de Visualización (Dual Axis vs Scatter) -->
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Modo de Visualización</label>
             <div class="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs font-semibold">
@@ -410,24 +438,38 @@
             </div>
           </div>
 
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Alineación Rápida de Métricas</label>
+            <div class="flex gap-1.5 text-xs font-medium">
+              <button onclick="alinearMetricasGlobal('nivel')" class="flex-1 py-1.5 px-2 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 text-slate-700 transition text-center">
+                Niveles
+              </button>
+              <button onclick="alinearMetricasGlobal('var_pct_yoy')" class="flex-1 py-1.5 px-2 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 text-slate-700 transition text-center font-bold text-blue-600">
+                % YoY
+              </button>
+              <button onclick="alinearMetricasGlobal('var_pct_periodo')" class="flex-1 py-1.5 px-2 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 text-slate-700 transition text-center">
+                Δ % Diaria
+              </button>
+            </div>
+          </div>
+
         </div>
       </section>
 
       <!-- Lienzo Gráfico y Estadísticas en Vivo -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        <!-- Canvas Principal (3 Columnas) -->
         <div class="lg:col-span-3 bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-3 border-b border-slate-100">
             <div>
               <h4 id="cruce-grafico-titulo" class="font-bold text-slate-900 text-base">
-                Cobre (US$/lb) vs Dólar Observado ($ CLP)
+                Cobre vs Dólar
               </h4>
               <p id="cruce-grafico-subtitulo" class="text-xs text-slate-500">
-                Serie temporal con escalas independientes normalizadas para contraste de ciclos.
+                Serie temporal con escalas independientes normalizadas.
               </p>
             </div>
-            <div id="cruce-badge-escala" class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg border border-slate-200 flex items-center gap-1">
+            <div class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg border border-slate-200 flex items-center gap-1">
               <i data-lucide="sliders-horizontal" class="w-3 h-3 text-slate-500"></i>
               <span id="cruce-info-fechas">Calculando observaciones...</span>
             </div>
@@ -438,10 +480,8 @@
           </div>
         </div>
 
-        <!-- Panel Lateral de Métricas Bivariadas y Rigor Empírico (1 Columna) -->
         <div class="space-y-4">
           
-          <!-- Tarjeta 1: Coeficiente de Correlación de Pearson -->
           <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm">
             <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
               <span>Correlación de Pearson (r)</span>
@@ -454,7 +494,6 @@
               </span>
             </div>
 
-            <!-- Gauge visual de correlación de -1 a +1 -->
             <div class="mt-3">
               <div class="flex justify-between text-[10px] text-slate-400 font-mono mb-1">
                 <span>-1.0 (Inversa)</span>
@@ -462,22 +501,19 @@
                 <span>+1.0 (Directa)</span>
               </div>
               <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden relative">
-                <!-- Marca central cero -->
                 <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-300"></div>
-                <!-- Barra de correlación -->
                 <div id="cruce-gauge-bar" class="h-full bg-blue-600 rounded-full transition-all duration-500" style="width: 50%; margin-left: 25%;"></div>
               </div>
             </div>
           </div>
 
-          <!-- Tarjeta 2: Varianza Explicada (R²) y Modelo de Regresión -->
           <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm space-y-2.5">
             <div>
               <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
                 <span>Coeficiente R²</span>
                 <span class="text-xs font-mono font-bold text-slate-800" id="cruce-stat-r2">42,6%</span>
               </div>
-              <p class="text-[11px] text-slate-500 mt-0.5">Varianza de Y explicada linealmente por X.</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Varianza explicada linealmente por la regresión.</p>
             </div>
 
             <div class="pt-2 border-t border-slate-100">
@@ -489,11 +525,10 @@
 
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
               <span class="font-medium">Muestra Pareada (N):</span>
-              <span id="cruce-stat-n" class="font-bold text-slate-800">2.417 días</span>
+              <span id="cruce-stat-n" class="font-bold text-slate-800">2.417 observaciones</span>
             </div>
           </div>
 
-          <!-- Tarjeta 3: Interpretación Pedagógica en Tiempo Real -->
           <div class="bg-gradient-to-br from-slate-50 to-blue-50/50 rounded-2xl border border-blue-100 p-4">
             <h5 class="text-xs font-bold text-slate-900 flex items-center gap-1.5 mb-1.5">
               <i data-lucide="book-open" class="w-4 h-4 text-blue-600"></i>
@@ -511,7 +546,7 @@
     </div>
 
     <!-- ===================================================================== -->
-    <!-- PESTAÑA 3: CENTRO DE DESCARGAS HISTÓRICAS                              -->
+    <!-- PESTAÑA 3: CENTRO DE DESCARGAS HISTÓRICAS (CON FILTROS MES / AÑO)      -->
     <!-- ===================================================================== -->
     <div id="tab-descargas" class="hidden space-y-6">
 
@@ -523,7 +558,7 @@
               <span>Centro de Descarga de Series Oficiales</span>
             </h3>
             <p class="text-xs text-slate-500 mt-0.5">
-              Filtra por categorías o indicadores individuales y exporta la serie decenal completa (2016-2026) en JSON o CSV.
+              Filtra con precisión por variables, años específicos y trimestres o meses del calendario.
             </p>
           </div>
 
@@ -539,124 +574,165 @@
           </div>
         </div>
 
-        <!-- Presets y Checkboxes de Variables -->
-        <div class="space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">1. Selección de Variables</span>
-            <div class="flex gap-1.5 text-xs font-semibold">
-              <button onclick="seleccionarPresetDescarga('todas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Todas</button>
-              <button onclick="seleccionarPresetDescarga('divisas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Divisas</button>
-              <button onclick="seleccionarPresetDescarga('commodities')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Commodities</button>
-              <button onclick="seleccionarPresetDescarga('tasas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Tasas/Precios</button>
-              <button onclick="seleccionarPresetDescarga('ninguna')" class="px-2.5 py-1 text-slate-400 hover:text-slate-600 transition">Limpiar</button>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-xs">
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="dolar" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">Dólar Observado</span>
-            </label>
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="euro" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">Euro Observado</span>
-            </label>
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="yuan" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">Yuan Chino</span>
-            </label>
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="cobre" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">Cobre (LME)</span>
-            </label>
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="petroleo_brent" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">Petróleo Brent</span>
-            </label>
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="petroleo_wti" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">Petróleo WTI</span>
-            </label>
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="uf" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">Unidad Fomento</span>
-            </label>
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="tpm" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">Tasa TPM</span>
-            </label>
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="ipc" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">IPC Mensual</span>
-            </label>
-            <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
-              <input type="checkbox" value="desempleo" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
-              <span class="font-medium text-slate-800">Desempleo ENE</span>
-            </label>
-          </div>
-
-          <!-- Selector de Años -->
-          <div class="pt-4 border-t border-slate-100">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">2. Rango de Años (2016 - 2026)</span>
+        <div class="space-y-5">
+          <!-- 1. Variables -->
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">1. Selección de Variables</span>
               <div class="flex gap-1.5 text-xs font-semibold">
-                <button onclick="seleccionarPresetAnos('todos')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition">Todos</button>
-                <button onclick="seleccionarPresetAnos('ultimos3')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition">Últimos 3</button>
-                <button onclick="seleccionarPresetAnos('2026')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition">2026</button>
+                <button onclick="seleccionarPresetDescarga('todas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Todas</button>
+                <button onclick="seleccionarPresetDescarga('divisas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Divisas</button>
+                <button onclick="seleccionarPresetDescarga('commodities')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Commodities</button>
+                <button onclick="seleccionarPresetDescarga('tasas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Tasas/Precios</button>
+                <button onclick="seleccionarPresetDescarga('ninguna')" class="px-2.5 py-1 text-slate-400 hover:text-slate-600 transition">Limpiar</button>
               </div>
             </div>
 
-            <div class="flex flex-wrap gap-2 text-xs">
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2026" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2026</span>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-xs">
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="dolar" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">Dólar Observado</span>
               </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2025" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2025</span>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="euro" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">Euro Observado</span>
               </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2024" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2024</span>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="yuan" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">Yuan Chino</span>
               </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2023" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2023</span>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="cobre" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">Cobre (LME)</span>
               </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2022" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2022</span>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="petroleo_brent" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">Petróleo Brent</span>
               </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2021" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2021</span>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="petroleo_wti" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">Petróleo WTI</span>
               </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2020" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2020</span>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="uf" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">Unidad Fomento</span>
               </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2019" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2019</span>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="tpm" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">Tasa TPM</span>
               </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2018" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2018</span>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="ipc" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">IPC Mensual</span>
               </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2017" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2017</span>
-              </label>
-              <label class="px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" value="2016" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
-                <span class="font-semibold text-slate-800">2016</span>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="desempleo" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">Desempleo ENE</span>
               </label>
             </div>
           </div>
 
-          <!-- Resumen de Exportación -->
+          <!-- 2. Rango de Años y 3. Periodo (Trimestre / Mes) -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
+            
+            <div class="lg:col-span-2 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">2. Rango de Años (2016 - 2026)</span>
+                <div class="flex gap-1.5 text-xs font-semibold">
+                  <button onclick="seleccionarPresetAnos('todos')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition">Todos</button>
+                  <button onclick="seleccionarPresetAnos('ultimos3')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition">Últimos 3</button>
+                  <button onclick="seleccionarPresetAnos('2026')" class="px-2.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition">2026</button>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-2 text-xs">
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2026" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2026</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2025" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2025</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2024" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2024</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2023" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2023</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2022" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2022</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2021" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2021</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2020" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2020</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2019" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2019</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2018" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2018</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2017" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2017</span>
+                </label>
+                <label class="px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" value="2016" checked onchange="actualizarResumenDescarga()" class="chk-ano rounded text-blue-600">
+                  <span class="font-semibold text-slate-800">2016</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Selector de Periodo Temporal (Trimestre o Mes) -->
+            <div class="space-y-2 p-3 bg-slate-50 rounded-xl border border-slate-200 flex flex-col justify-between">
+              <label class="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-600"></i>
+                <span>3. Periodo (Trimestre o Mes)</span>
+              </label>
+              <div class="relative">
+                <select id="dl-periodo" onchange="actualizarResumenDescarga()" class="w-full appearance-none bg-white border border-slate-300 text-slate-800 rounded-lg p-2 text-xs font-semibold focus:ring-2 focus:ring-blue-500">
+                  <optgroup label="Año Completo">
+                    <option value="todos" selected>Año Completo (Sin filtro de mes)</option>
+                  </optgroup>
+                  <optgroup label="Trimestres Calendario">
+                    <option value="T1">Trimestre 1 (Enero - Marzo)</option>
+                    <option value="T2">Trimestre 2 (Abril - Junio)</option>
+                    <option value="T3">Trimestre 3 (Julio - Septiembre)</option>
+                    <option value="T4">Trimestre 4 (Octubre - Diciembre)</option>
+                  </optgroup>
+                  <optgroup label="Mes Calendario Específico">
+                    <option value="01">Enero</option>
+                    <option value="02">Febrero</option>
+                    <option value="03">Marzo</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Mayo</option>
+                    <option value="06">Junio</option>
+                    <option value="07">Julio</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                  </optgroup>
+                </select>
+                <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+              </div>
+            </div>
+
+          </div>
+
           <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
-            <span id="resumen-descarga-texto">10 variables seleccionadas • 11 años seleccionados</span>
+            <span id="resumen-descarga-texto">10 variables seleccionadas • 11 años seleccionados • Periodo: Año Completo</span>
             <span class="font-mono text-slate-400">Codificación UTF-8</span>
           </div>
 
@@ -748,7 +824,6 @@
   <div id="modal-notas-tecnicas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
       
-      <!-- Modal Header -->
       <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
         <div class="flex items-center space-x-2.5">
           <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
@@ -764,20 +839,13 @@
         </button>
       </div>
 
-      <!-- Modal Body (Selector Tabs + Contenido) -->
       <div class="flex-1 overflow-y-auto flex flex-col md:flex-row">
-        <!-- Sidebar Tabs -->
         <div class="w-full md:w-56 bg-slate-50 border-r border-slate-200 p-2 space-y-1 shrink-0" id="tabs-modal-indicadores">
-          <!-- Botones de tabs renderizados dinámicamente -->
         </div>
-
-        <!-- Contenido Detallado -->
         <div class="flex-1 p-6 space-y-4" id="contenido-modal-ficha">
-          <!-- Render dinámico -->
         </div>
       </div>
 
-      <!-- Modal Footer -->
       <div class="px-6 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
         <span class="flex items-center gap-1">
           <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-600"></i>
@@ -808,17 +876,15 @@
   </footer>
 
   <!-- ===================================================================== -->
-  <!-- LÓGICA Y SCRIPTS DE VISUALIZACIÓN                                     -->
+  <!-- SCRIPTS Y LÓGICA DE VISUALIZACIÓN                                     -->
   <!-- ===================================================================== -->
   <script>
-    // Prefijo de rutas de datos
     const DATA_PREFIX = "../data/";
 
     // =========================================================================
-    // 1. BIBLIOTECA DE FORMATEO ESTÁNDAR CHILENO (es-CL)
+    // 1. FORMATEADOR ESTÁNDAR CHILENO (es-CL)
     // =========================================================================
     const FormatCL = {
-      // Número genérico: separador de miles con punto, decimal con coma
       num: function(val, dec = 2) {
         if (val === null || val === undefined || isNaN(val)) return "N/D";
         return Number(val).toLocaleString("es-CL", {
@@ -826,28 +892,31 @@
           maximumFractionDigits: dec
         });
       },
-      // Pesos Chilenos (CLP)
       clp: function(val, dec = 2) {
         if (val === null || val === undefined || isNaN(val)) return "N/D";
         return "$" + this.num(val, dec);
       },
-      // Dólares Estadounidenses (US$)
       usd: function(val, dec = 2) {
         if (val === null || val === undefined || isNaN(val)) return "N/D";
         return "US$ " + this.num(val, dec);
       },
-      // Porcentajes (%)
       pct: function(val, dec = 2, conSigno = false) {
         if (val === null || val === undefined || isNaN(val)) return "N/D";
         const n = Number(val);
         const s = conSigno && n > 0 ? "+" : "";
         return `${s}${this.num(n, dec)}%`;
       },
-      // Formateo inteligente según metadatos de unidad
+      pp: function(val, dec = 2, conSigno = false) {
+        if (val === null || val === undefined || isNaN(val)) return "N/D";
+        const n = Number(val);
+        const s = conSigno && n > 0 ? "+" : "";
+        return `${s}${this.num(n, dec)} pp`;
+      },
       auto: function(val, unidad, dec = 2) {
         if (unidad === "CLP") return this.clp(val, dec);
         if (unidad === "US$/lb" || unidad === "US$/bbl" || unidad === "US$") return this.usd(val, dec);
         if (unidad === "%") return this.pct(val, dec);
+        if (unidad === "pp") return this.pp(val, dec);
         return this.num(val, dec);
       }
     };
@@ -862,7 +931,7 @@
         emisor: "Banco Central de Chile & SII",
         fuentePrimaria: "Servicio de Impuestos Internos (SII) - Serie Oficial",
         marcoLegal: "Decreto Ley Nº 3.588 de 1980 y D.F.L. Nº 320 de 1960",
-        unidad: "Pesos Chilenos ($ CLP por UF)",
+        unidad: "CLP",
         frecuencia: "Diaria (Reajuste legal a las 00:00 hrs)",
         urlFuente: "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
         icono: "badge-percent",
@@ -876,7 +945,7 @@
         emisor: "Banco Central de Chile (BCCh)",
         fuentePrimaria: "Base de Datos Estadísticos (BDE) - Banco Central",
         marcoLegal: "Compendio de Normas de Cambios Internacionales, Cap. I, Nº 6",
-        unidad: "Pesos Chilenos por Dólar ($ CLP)",
+        unidad: "CLP",
         frecuencia: "Días hábiles bancarios (publicación 09:00 hrs)",
         urlFuente: "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
         icono: "dollar-sign",
@@ -890,7 +959,7 @@
         emisor: "Banco Central de Chile (BCCh)",
         fuentePrimaria: "Base de Datos Estadísticos (BDE) - Paridades de Monedas Extranjeras",
         marcoLegal: "Compendio de Normas de Cambios Internacionales, Cap. I, Nº 7",
-        unidad: "Pesos Chilenos por Euro ($ CLP)",
+        unidad: "CLP",
         frecuencia: "Días hábiles bancarios",
         urlFuente: "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
         icono: "coins",
@@ -904,7 +973,7 @@
         emisor: "Banco Central de Chile (BCCh)",
         fuentePrimaria: "Base de Datos Estadísticos (BDE) - Banco Central",
         marcoLegal: "Compendio de Normas de Cambios Internacionales del BCCh",
-        unidad: "Pesos Chilenos por Yuan ($ CLP)",
+        unidad: "CLP",
         frecuencia: "Días hábiles bancarios",
         urlFuente: "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
         icono: "circle-dollar-sign",
@@ -918,7 +987,7 @@
         emisor: "London Metal Exchange (LME) & Cochilco",
         fuentePrimaria: "Comisión Chilena del Cobre (Cochilco - La Rueda Diaria BML)",
         marcoLegal: "Decreto Ley Nº 1.349 de 1976 (Cochilco)",
-        unidad: "Dólares por Libra (US$/lb)",
+        unidad: "US$/lb",
         frecuencia: "Días hábiles bursátiles (sesión matinal de Londres)",
         urlFuente: "https://www.cochilco.cl/web/la-rueda-diaria/",
         icono: "gem",
@@ -932,7 +1001,7 @@
         emisor: "U.S. Energy Information Administration (EIA) & FRED",
         fuentePrimaria: "Federal Reserve Bank of St. Louis (FRED - Serie DCOILBRENTEU)",
         marcoLegal: "EIA - U.S. Department of Energy Official Statistical Release",
-        unidad: "Dólares por Barril (US$/bbl)",
+        unidad: "US$/bbl",
         frecuencia: "Días hábiles (desfase T-1 por cierre de mercado)",
         urlFuente: "https://fred.stlouisfed.org/series/DCOILBRENTEU",
         icono: "flame",
@@ -946,7 +1015,7 @@
         emisor: "U.S. Energy Information Administration (EIA) & FRED",
         fuentePrimaria: "Federal Reserve Bank of St. Louis (FRED - Serie DCOILWTICO)",
         marcoLegal: "EIA - U.S. Department of Energy Official Statistical Release",
-        unidad: "Dólares por Barril (US$/bbl)",
+        unidad: "US$/bbl",
         frecuencia: "Días hábiles (desfase T-1)",
         urlFuente: "https://fred.stlouisfed.org/series/DCOILWTICO",
         icono: "fuel",
@@ -960,7 +1029,7 @@
         emisor: "Banco Central de Chile (BCCh)",
         fuentePrimaria: "Reuniones de Política Monetaria (RPM) - Banco Central",
         marcoLegal: "Ley Orgánica Constitucional del Banco Central (Ley Nº 18.840, Art. 3º)",
-        unidad: "Porcentaje Anual (%)",
+        unidad: "%",
         frecuencia: "8 reuniones al año (calendario oficial RPM)",
         urlFuente: "https://www.bcentral.cl/areas/politica-monetaria",
         icono: "landmark",
@@ -974,7 +1043,7 @@
         emisor: "Instituto Nacional de Estadísticas (INE)",
         fuentePrimaria: "INE Chile - Precios e Inflación (Boletín Mensual)",
         marcoLegal: "Ley Nº 17.374 y Decretos Supremos del Ministerio de Economía",
-        unidad: "Variación Porcentual Mensual / Anual (%)",
+        unidad: "%",
         frecuencia: "Mensual (Día 8 de cada mes a las 08:00 hrs)",
         urlFuente: "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor",
         icono: "trending-up",
@@ -988,7 +1057,7 @@
         emisor: "Instituto Nacional de Estadísticas (INE)",
         fuentePrimaria: "Encuesta Nacional de Empleo (ENE) - INE",
         marcoLegal: "Ley Nº 17.374 Orgánica del INE",
-        unidad: "Porcentaje de la Fuerza de Trabajo (%)",
+        unidad: "%",
         frecuencia: "Mensual en trimestres móviles (último día hábil del mes)",
         urlFuente: "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
         icono: "users",
@@ -1005,17 +1074,19 @@
     let indicadoresHoy = null;
     let cuadroMinuta = null;
 
-    // Estado Gráfico Principal (Pestaña 1)
+    // Estado Gráfico Principal (Tab 1)
     let chartPrincipal = null;
     let variableActualGrafico = "dolar";
     let rangoActualGrafico = "10A";
 
-    // Estado Gráfico Cruce (Pestaña 2)
+    // Estado Gráfico Cruce (Tab 2)
     let chartCruce = null;
     let cruceVarX = "cobre";
+    let cruceMetricaX = "var_pct_yoy";
     let cruceVarY = "dolar";
+    let cruceMetricaY = "var_pct_yoy";
     let cruceRango = "todo";
-    let cruceModo = "dual_axis"; // "dual_axis" | "scatter"
+    let cruceModo = "dual_axis";
 
     // =========================================================================
     // 3. NAVEGACIÓN ENTRE PESTAÑAS (SPA)
@@ -1034,11 +1105,10 @@
         }
       });
 
-      // Si se activa el cruce o panel, redimensionar gráficos
       if (idTab === "cruce") {
         setTimeout(() => {
           if (chartCruce) chartCruce.resize();
-          else inicializarGraficoCruce();
+          else actualizarCruceVariables();
         }, 50);
       } else if (idTab === "panel") {
         setTimeout(() => {
@@ -1048,7 +1118,7 @@
     }
 
     // =========================================================================
-    // 4. CARGA DE DATOS ASÍNCRONA CON CACHE-BUSTING
+    // 4. INICIALIZACIÓN Y CARGA DE DATOS
     // =========================================================================
     async function inicializarDashboard() {
       lucide.createIcons();
@@ -1057,6 +1127,8 @@
         cargarCuadroMinuta(),
         cargarSeriesHistoricas()
       ]);
+      poblarSelectoresMetricasCruce();
+      actualizarResumenDescarga();
       lucide.createIcons();
     }
 
@@ -1072,7 +1144,6 @@
         const data = await res.json();
         indicadoresHoy = data;
 
-        // Fecha de actualización
         if (data.metadatos && data.metadatos.fecha_actualizacion_utc) {
           const fechaUtc = new Date(data.metadatos.fecha_actualizacion_utc);
           document.getElementById("timestamp-general").textContent = `Actualizado: ${fechaUtc.toLocaleDateString("es-CL", { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} ${fechaUtc.toLocaleTimeString("es-CL", { hour: '2-digit', minute: '2-digit' })} hrs`;
@@ -1106,10 +1177,9 @@
         card.className = `bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md cursor-pointer ${k.border} flex flex-col justify-between`;
         card.onclick = () => seleccionarVariableYScroll(k.key === "ipc_mensual" ? "ipc" : k.key);
 
-        // Estilo de variación semanal
         let badgeColor = "bg-slate-100 text-slate-700";
-        if (k.delta && k.delta.includes("Alza")) badgeColor = "bg-emerald-50 text-emerald-800 border border-emerald-200";
-        else if (k.delta && k.delta.includes("Baja")) badgeColor = "bg-rose-50 text-rose-800 border border-rose-200";
+        if (k.delta && (k.delta.includes("Alza") || k.delta.includes("▲"))) badgeColor = "bg-emerald-50 text-emerald-800 border border-emerald-200";
+        else if (k.delta && (k.delta.includes("Baja") || k.delta.includes("▼"))) badgeColor = "bg-rose-50 text-rose-800 border border-rose-200";
 
         card.innerHTML = `
           <div>
@@ -1148,7 +1218,7 @@
     }
 
     // =========================================================================
-    // 5. CUADRO OFICIAL PARA LA MINUTA SEMANAL UCEN
+    // 5. CUADRO OFICIAL PARA LA MINUTA SEMANAL UCEN (CORRECCIÓN RESILIENTE)
     // =========================================================================
     async function cargarCuadroMinuta() {
       try {
@@ -1162,20 +1232,39 @@
         const data = await res.json();
         cuadroMinuta = data;
 
+        if (data.metadatos && data.metadatos.semana_analizada) {
+          document.getElementById("badge-semana-minuta").textContent = `Semana: ${data.metadatos.semana_analizada}`;
+        }
+
+        // Acceso resiliente: array directo o propiedad .indicadores
+        const listaIndicadores = Array.isArray(data) ? data : (data.indicadores || []);
+
         const tbody = document.getElementById("tabla-minuta-body");
         tbody.innerHTML = "";
 
-        data.forEach(item => {
+        if (listaIndicadores.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400">No se encontraron indicadores en el cuadro oficial.</td></tr>`;
+          return;
+        }
+
+        listaIndicadores.forEach(item => {
           const tr = document.createElement("tr");
           tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
 
-          // Formatear variación semanal con estilo elegante
           let varClass = "text-slate-600 bg-slate-100";
-          if (item.variacion_ww.includes("Alza")) varClass = "text-emerald-800 bg-emerald-50 border border-emerald-200";
-          else if (item.variacion_ww.includes("Baja")) varClass = "text-rose-800 bg-rose-50 border border-rose-200";
+          if (item.variacion_ww.includes("Alza") || item.variacion_ww.includes("▲")) {
+            varClass = "text-emerald-800 bg-emerald-50 border border-emerald-200";
+          } else if (item.variacion_ww.includes("Baja") || item.variacion_ww.includes("▼")) {
+            varClass = "text-rose-800 bg-rose-50 border border-rose-200";
+          }
+
+          const lectura = item.lectura_analitica ? `<div class="text-[11px] text-slate-500 mt-0.5">${item.lectura_analitica}</div>` : "";
 
           tr.innerHTML = `
-            <td class="py-3 px-4 font-semibold text-slate-900">${item.variable}</td>
+            <td class="py-3 px-4 font-semibold text-slate-900">
+              ${item.variable}
+              ${lectura}
+            </td>
             <td class="py-3 px-4 text-right font-mono font-bold text-slate-800">${item.cierre_semanal}</td>
             <td class="py-3 px-4 text-center">
               <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${varClass}">
@@ -1188,9 +1277,13 @@
                 <i data-lucide="external-link" class="w-3 h-3"></i>
               </a>
             </td>
+            <td class="py-3 px-4 text-slate-500 text-[11px]">
+              ${item.lectura_analitica || "Registro formal certificado."}
+            </td>
           `;
           tbody.appendChild(tr);
         });
+        lucide.createIcons();
       } catch (e) {
         console.error("Error al cargar cuadro_minuta_semanal.json:", e);
       }
@@ -1198,9 +1291,10 @@
 
     function copiarTablaMinuta() {
       if (!cuadroMinuta) return;
-      let texto = "Variable Macroeconómica\tCierre Semanal\tVariación Semanal\tFuente Oficial\n";
-      cuadroMinuta.forEach(r => {
-        texto += `${r.variable}\t${r.cierre_semanal}\t${r.variacion_ww}\t${r.fuente_oficial}\n`;
+      const lista = Array.isArray(cuadroMinuta) ? cuadroMinuta : (cuadroMinuta.indicadores || []);
+      let texto = "Variable Macroeconómica\tCierre Semanal\tVariación Semanal\tFuente Oficial\tLectura Analítica\n";
+      lista.forEach(r => {
+        texto += `${r.variable}\t${r.cierre_semanal}\t${r.variacion_ww}\t${r.fuente_oficial}\t${r.lectura_analitica || ''}\n`;
       });
       navigator.clipboard.writeText(texto).then(() => {
         const btn = document.getElementById("btn-copiar-texto");
@@ -1210,7 +1304,7 @@
     }
 
     // =========================================================================
-    // 6. GRÁFICO HISTÓRICO MULTIVARIABLE (PESTAÑA 1)
+    // 6. GRÁFICO HISTÓRICO MULTIVARIABLE (TAB 1 CON RANGOS ADAPTATIVOS)
     // =========================================================================
     async function cargarSeriesHistoricas() {
       try {
@@ -1224,11 +1318,58 @@
         const data = await res.json();
         seriesHistoricas = data;
 
+        actualizarBotonesRangoPrincipal();
         actualizarGraficoPrincipal();
         actualizarCruceVariables();
       } catch (e) {
         console.error("Error al cargar series_historicas.json:", e);
       }
+    }
+
+    function esVariablePeriodica(key) {
+      return ["ipc", "desempleo", "tpm"].includes(key);
+    }
+
+    function actualizarBotonesRangoPrincipal() {
+      const cont = document.getElementById("contenedor-rangos");
+      if (!cont) return;
+      cont.innerHTML = "";
+
+      const esPeriodica = esVariablePeriodica(variableActualGrafico);
+      let opciones = [];
+
+      if (esPeriodica) {
+        opciones = [
+          { id: "6M", label: "6M", title: "Últimos 6 Meses" },
+          { id: "1A", label: "1A", title: "Último Año (12 Meses)" },
+          { id: "3A", label: "3A", title: "Últimos 3 Años" },
+          { id: "5A", label: "5A", title: "Últimos 5 Años" },
+          { id: "10A", label: "10A (Todo)", title: "Serie Completa" }
+        ];
+        if (rangoActualGrafico === "1M" || rangoActualGrafico === "3M") rangoActualGrafico = "1A";
+      } else {
+        opciones = [
+          { id: "1M", label: "1M", title: "Último Mes" },
+          { id: "3M", label: "3M", title: "Últimos 3 Meses" },
+          { id: "6M", label: "6M", title: "Últimos 6 Meses" },
+          { id: "1A", label: "1A", title: "Último Año" },
+          { id: "3A", label: "3A", title: "Últimos 3 Años" },
+          { id: "5A", label: "5A", title: "Últimos 5 Años" },
+          { id: "10A", label: "10A (Todo)", title: "Serie Completa" }
+        ];
+      }
+
+      opciones.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.onclick = () => filtrarRango(opt.id);
+        const esActivo = rangoActualGrafico === opt.id;
+        btn.className = esActivo
+          ? "px-2 py-1 rounded-lg bg-white text-blue-600 font-bold shadow-sm transition"
+          : "px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition";
+        btn.textContent = opt.label;
+        btn.title = opt.title;
+        cont.appendChild(btn);
+      });
     }
 
     function cambiarVariableGrafico(nuevaVar) {
@@ -1238,25 +1379,23 @@
       document.getElementById("fuente-grafico-texto").textContent = `Fuente: ${meta.fuentePrimaria || meta.emisor}`;
       document.getElementById("fuente-grafico-link").href = meta.urlFuente;
 
+      actualizarBotonesRangoPrincipal();
       actualizarGraficoPrincipal();
     }
 
     function filtrarRango(rango) {
       rangoActualGrafico = rango;
-      const contenedor = document.getElementById("contenedor-rangos");
-      contenedor.querySelectorAll("button").forEach(b => {
-        if (b.dataset.rango === rango) {
-          b.className = "px-2 py-1 rounded-lg bg-white text-blue-600 font-bold shadow-sm transition";
-        } else {
-          b.className = "px-2 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition";
-        }
-      });
+      actualizarBotonesRangoPrincipal();
       actualizarGraficoPrincipal();
     }
 
     function recortarSeriePorRango(serie, rango) {
-      if (rango === "10A" || rango === "todo" || !serie) return serie;
-      const ahora = new Date();
+      if (rango === "10A" || rango === "todo" || !serie || serie.length === 0) return serie;
+
+      const ultimoPunto = serie[serie.length - 1];
+      const partes = ultimoPunto.fecha.split("-");
+      const fechaFin = new Date(parseInt(partes[0], 10), parseInt(partes[1], 10) - 1, parseInt(partes[2] || "1", 10));
+
       let dias = 3650;
       if (rango === "1M") dias = 30;
       else if (rango === "3M") dias = 90;
@@ -1265,7 +1404,7 @@
       else if (rango === "3A") dias = 365 * 3;
       else if (rango === "5A") dias = 365 * 5;
 
-      const cutoff = new Date(ahora.getTime() - dias * 24 * 60 * 60 * 1000);
+      const cutoff = new Date(fechaFin.getTime() - dias * 24 * 60 * 60 * 1000);
       const cutoffStr = cutoff.toISOString().split("T")[0];
       return serie.filter(p => p.fecha >= cutoffStr);
     }
@@ -1280,7 +1419,6 @@
       const unidad = objVar.unidad || "";
 
       const ctx = document.getElementById("canvas-grafico").getContext("2d");
-
       if (chartPrincipal) chartPrincipal.destroy();
 
       const gradient = ctx.createLinearGradient(0, 0, 0, 350);
@@ -1322,8 +1460,7 @@
                   return new Date(fStr + "T00:00:00").toLocaleDateString("es-CL", { weekday: "short", day: "numeric", month: "long", year: "numeric" });
                 },
                 label: function(item) {
-                  const val = item.parsed.y;
-                  return `${objVar.nombre}: ${FormatCL.auto(val, unidad)}`;
+                  return `${objVar.nombre}: ${FormatCL.auto(item.parsed.y, unidad)}`;
                 }
               }
             }
@@ -1331,20 +1468,14 @@
           scales: {
             x: {
               grid: { display: false },
-              ticks: {
-                maxTicksLimit: 8,
-                color: "#64748b",
-                font: { size: 10 }
-              }
+              ticks: { maxTicksLimit: 8, color: "#64748b", font: { size: 10 } }
             },
             y: {
               grid: { color: "#f1f5f9" },
               ticks: {
                 color: "#64748b",
                 font: { size: 10 },
-                callback: function(v) {
-                  return FormatCL.auto(v, unidad);
-                }
+                callback: v => FormatCL.auto(v, unidad)
               }
             }
           }
@@ -1353,11 +1484,87 @@
     }
 
     // =========================================================================
-    // 7. CRUCE DE VARIABLES & RELACIONES MACROECONÓMICAS (PESTAÑA 2)
+    // 7. CRUCE DE VARIABLES & MOTOR DE TRANSFORMACIÓN MACRO (TAB 2)
     // =========================================================================
-    function aplicarPresetCruce(varX, varY) {
+    function getTipoVariable(key) {
+      if (key === "tpm" || key === "desempleo") return "tasa";
+      if (key === "ipc") return "inflacion";
+      return "precio";
+    }
+
+    function poblarSelectoresMetricasCruce() {
+      const poblar = (idSelect, keyVar, valActual) => {
+        const sel = document.getElementById(idSelect);
+        if (!sel) return;
+        const tipo = getTipoVariable(keyVar);
+        sel.innerHTML = "";
+
+        if (tipo === "precio") {
+          sel.innerHTML = `
+            <option value="nivel">Nivel Bruto (Valor Nominal)</option>
+            <option value="var_pct_yoy" selected>Variación Interanual (% YoY a 12M)</option>
+            <option value="var_pct_periodo">Variación Periódica (Δ %)</option>
+            <option value="var_acumulada">Variación Acumulada (% en Ventana)</option>
+          `;
+        } else if (tipo === "tasa") {
+          sel.innerHTML = `
+            <option value="nivel" selected>Nivel de Tasa (%)</option>
+            <option value="var_pct_yoy">Cambio Interanual (Δ pp YoY)</option>
+            <option value="var_pct_periodo">Cambio Periódico (Δ pp)</option>
+            <option value="var_acumulada">Cambio Acumulado (Δ pp en Ventana)</option>
+          `;
+        } else if (tipo === "inflacion") {
+          sel.innerHTML = `
+            <option value="nivel">IPC Mensual Oficial (%)</option>
+            <option value="var_pct_yoy" selected>Inflación Acumulada 12 Meses (% YoY)</option>
+            <option value="var_pct_periodo">Aceleración Inflacionaria (Δ pp)</option>
+          `;
+        }
+
+        if (valActual && sel.querySelector(`option[value="${valActual}"]`)) {
+          sel.value = valActual;
+        }
+      };
+
+      poblar("cruce-metrica-x", cruceVarX, cruceMetricaX);
+      poblar("cruce-metrica-y", cruceVarY, cruceMetricaY);
+
+      document.getElementById("lbl-tipo-var-x").textContent = getTipoVariable(cruceVarX).toUpperCase();
+      document.getElementById("lbl-tipo-var-y").textContent = getTipoVariable(cruceVarY).toUpperCase();
+    }
+
+    function alCambiarVariableX() {
+      cruceVarX = document.getElementById("cruce-var-x").value;
+      poblarSelectoresMetricasCruce();
+      actualizarCruceVariables();
+    }
+
+    function alCambiarVariableY() {
+      cruceVarY = document.getElementById("cruce-var-y").value;
+      poblarSelectoresMetricasCruce();
+      actualizarCruceVariables();
+    }
+
+    function alinearMetricasGlobal(metrica) {
+      cruceMetricaX = metrica;
+      cruceMetricaY = metrica;
+      poblarSelectoresMetricasCruce();
+      actualizarCruceVariables();
+    }
+
+    function aplicarPresetCruce(varX, metX, varY, metY) {
+      cruceVarX = varX;
+      cruceMetricaX = metX;
+      cruceVarY = varY;
+      cruceMetricaY = metY;
+
       document.getElementById("cruce-var-x").value = varX;
       document.getElementById("cruce-var-y").value = varY;
+
+      poblarSelectoresMetricasCruce();
+      document.getElementById("cruce-metrica-x").value = metX;
+      document.getElementById("cruce-metrica-y").value = metY;
+
       actualizarCruceVariables();
     }
 
@@ -1388,13 +1595,112 @@
       actualizarCruceVariables();
     }
 
+    // Motor de transformación matemática según la métrica elegida
+    function transformarSerie(serieOriginal, keyVar, tipoMetrica) {
+      if (!serieOriginal || serieOriginal.length === 0) return { serie: [], unidad: "", etiqueta: "" };
+
+      const tipoVar = getTipoVariable(keyVar);
+      const meta = NOTAS_TECNICAS[keyVar] || { nombre: keyVar, unidad: "" };
+
+      if (tipoMetrica === "nivel") {
+        return {
+          serie: serieOriginal.map(p => ({ fecha: p.fecha, valor: p.valor })),
+          unidad: meta.unidad,
+          etiqueta: `${meta.nombre} (Nivel ${meta.unidad})`
+        };
+      }
+
+      if (tipoMetrica === "var_pct_periodo") {
+        const res = [];
+        for (let i = 1; i < serieOriginal.length; i++) {
+          const prev = serieOriginal[i - 1].valor;
+          const curr = serieOriginal[i].valor;
+          if (tipoVar === "tasa" || tipoVar === "inflacion") {
+            res.push({ fecha: serieOriginal[i].fecha, valor: curr - prev });
+          } else {
+            if (prev !== 0) {
+              res.push({ fecha: serieOriginal[i].fecha, valor: ((curr - prev) / prev) * 100 });
+            }
+          }
+        }
+        const u = (tipoVar === "tasa" || tipoVar === "inflacion") ? "pp" : "%";
+        return {
+          serie: res,
+          unidad: u,
+          etiqueta: `${meta.nombre} (Variación Periódica ${u})`
+        };
+      }
+
+      if (tipoMetrica === "var_pct_yoy") {
+        const mapaFechas = new Map(serieOriginal.map(p => [p.fecha, p.valor]));
+        const res = [];
+
+        if (tipoVar === "inflacion") {
+          for (let i = 11; i < serieOriginal.length; i++) {
+            let acum = 0;
+            for (let j = 0; j < 12; j++) acum += serieOriginal[i - j].valor;
+            res.push({ fecha: serieOriginal[i].fecha, valor: acum });
+          }
+          return {
+            serie: res,
+            unidad: "% 12M",
+            etiqueta: "Inflación IPC Acumulada 12 Meses (% YoY)"
+          };
+        }
+
+        for (let i = 0; i < serieOriginal.length; i++) {
+          const p = serieOriginal[i];
+          const d = new Date(p.fecha + "T00:00:00");
+          d.setFullYear(d.getFullYear() - 1);
+
+          let prevVal = null;
+          for (let offset = 0; offset <= 6; offset++) {
+            const d1 = new Date(d.getTime() + offset * 86400000).toISOString().split("T")[0];
+            const d2 = new Date(d.getTime() - offset * 86400000).toISOString().split("T")[0];
+            if (mapaFechas.has(d1)) { prevVal = mapaFechas.get(d1); break; }
+            if (mapaFechas.has(d2)) { prevVal = mapaFechas.get(d2); break; }
+          }
+
+          if (prevVal !== null && prevVal !== undefined) {
+            if (tipoVar === "tasa") {
+              res.push({ fecha: p.fecha, valor: p.valor - prevVal });
+            } else if (prevVal !== 0) {
+              res.push({ fecha: p.fecha, valor: ((p.valor - prevVal) / prevVal) * 100 });
+            }
+          }
+        }
+
+        const u = tipoVar === "tasa" ? "pp YoY" : "% YoY";
+        return {
+          serie: res,
+          unidad: u,
+          etiqueta: `${meta.nombre} (Variación Interanual ${u})`
+        };
+      }
+
+      if (tipoMetrica === "var_acumulada") {
+        const base = serieOriginal[0].valor;
+        const res = serieOriginal.map(p => {
+          if (tipoVar === "tasa") return { fecha: p.fecha, valor: p.valor - base };
+          return { fecha: p.fecha, valor: base !== 0 ? ((p.valor - base) / base) * 100 : 0 };
+        });
+        const u = tipoVar === "tasa" ? "pp Acum." : "% Acum.";
+        return {
+          serie: res,
+          unidad: u,
+          etiqueta: `${meta.nombre} (Variación Acumulada ${u})`
+        };
+      }
+
+      return { serie: serieOriginal, unidad: meta.unidad, etiqueta: meta.nombre };
+    }
+
     function emparejarObservaciones(serieX, serieY, esMensualX, esMensualY) {
-      if (!serieX || !serieY) return [];
+      if (!serieX || !serieY || serieX.length === 0 || serieY.length === 0) return [];
 
       const requiereMensual = esMensualX || esMensualY;
 
       if (requiereMensual) {
-        // Agrupar por mes YYYY-MM
         const mapaX = {};
         serieX.forEach(p => {
           const m = p.fecha.substring(0, 7);
@@ -1415,7 +1721,6 @@
           return { fecha: m, x: promX, y: promY };
         });
       } else {
-        // Emparejamiento por día exacto
         const mapaY = new Map(serieY.map(p => [p.fecha, p.valor]));
         const pareados = [];
         serieX.forEach(p => {
@@ -1472,34 +1777,36 @@
       };
     }
 
-    function obtenerInterpretacionPedagogica(keyX, keyY, stats) {
+    function obtenerInterpretacionPedagogica(keyX, metX, keyY, metY, stats) {
       if (!stats) return "Datos insuficientes para la ventana temporal seleccionada.";
 
       const r = stats.r;
       const rFormato = FormatCL.num(r, 2);
       const r2Pct = FormatCL.pct(stats.r2 * 100, 1);
 
-      // Banco de casos específicos clásicos
+      const esYoY = metX.includes("yoy") && metY.includes("yoy");
+      const esRetorno = metX.includes("periodo") && metY.includes("periodo");
+
       if ((keyX === "cobre" && keyY === "dolar") || (keyX === "dolar" && keyY === "cobre")) {
-        return `<strong>Términos de intercambio y canal cambiario:</strong> La correlación obtenida (r = ${rFormato}) refleja la interacción histórica en Chile. En periodos normales de precios del cobre, un alza incrementa el flujo de divisas por exportaciones, apreciando el peso y reduciendo el tipo de cambio USD/CLP (relación inversa). En periodos inflacionarios globales, factores exógenos pueden inducir co-movimientos moderados.`;
-      }
-      if ((keyX === "tpm" && keyY === "ipc") || (keyX === "ipc" && keyY === "tpm")) {
-        return `<strong>Mecanismo de transmisión de política monetaria:</strong> La asociación (r = ${rFormato}) denota la respuesta reactiva del Banco Central: ante brotes inflacionarios sostenidos, el Consejo incrementa la TPM para contraer la demanda agregada y anclar las expectativas a 24 meses (regla tipo Taylor).`;
-      }
-      if ((keyX === "petroleo_brent" && keyY === "dolar") || (keyX === "dolar" && keyY === "petroleo_brent")) {
-        return `<strong>Presión de términos de intercambio importados:</strong> (r = ${rFormato}). Un incremento en el crudo internacional presiona la cuenta corriente chilena (mayor demanda de dólares para importar energía), lo que tiende a depreciar el tipo de cambio y encarecer la canasta básica energética local (MEPCO).`;
-      }
-      if ((keyX === "uf" && keyY === "ipc") || (keyX === "ipc" && keyY === "uf")) {
-        return `<strong>Indexación legal:</strong> La UF acumula la inflación mensual con un rezago regulatorio entre el día 10 del mes actual y el 9 del siguiente.`;
+        if (esYoY) {
+          return `<strong>Términos de intercambio y ciclo interanual:</strong> La correlación de variaciones a 12 meses (r = ${rFormato}) confirma la ley económica estructural de Chile: alzas sostenidas en el precio del cobre fortalecen el balance de pagos e inducen apreciación cambiaria del peso chileno (menor USD/CLP), resultando en una correlación negativa robusta y libre de tendencia espuria.`;
+        }
+        if (esRetorno) {
+          return `<strong>Sensibilidad intradiaria/periódica de divisas:</strong> La correlación de retornos inmediatos (r = ${rFormato}) mide la elasticidad de corto plazo entre el mercado de metales de Londres y el dólar interbancario spot de Santiago.`;
+        }
+        return `<strong>Nivel nominal de divisas vs commodity:</strong> Correlación (r = ${rFormato}). Nota metodológica: la correlación en niveles puede incorporar tendencias de inflación acumulada a largo plazo; se recomienda contrastar con variaciones % YoY.`;
       }
 
-      // Interpretación genérica según magnitud
+      if ((keyX === "tpm" && keyY === "ipc") || (keyX === "ipc" && keyY === "tpm")) {
+        return `<strong>Mecanismo de transmisión de política monetaria:</strong> La asociación observada (r = ${rFormato}, R² = ${r2Pct}) refleja la función de reacción del Banco Central: periodos de aceleración de precios son respondidos con alzas de TPM para contraer la brecha del PIB y anclar expectativas.`;
+      }
+
       const direccion = r > 0 ? "directa (positiva)" : "inversa (negativa)";
       let fuerza = "débil o nula";
       if (Math.abs(r) >= 0.7) fuerza = "fuerte";
       else if (Math.abs(r) >= 0.4) fuerza = "moderada";
 
-      return `La relación lineal empírica entre ambas variables es <strong>${fuerza} y ${direccion}</strong> (r = ${rFormato}, R² = ${r2Pct}). Esto indica que variaciones en la variable base explican aproximadamente el ${r2Pct} de la dispersión observada en la variable de contraste en la ventana seleccionada (${stats.fechaInicio} a ${stats.fechaFin}).`;
+      return `La relación empírica entre las transformaciones seleccionadas es <strong>${fuerza} y ${direccion}</strong> (r = ${rFormato}, R² = ${r2Pct}), calculada sobre ${FormatCL.num(stats.n, 0)} observaciones pareadas entre ${stats.fechaInicio} y ${stats.fechaFin}.`;
     }
 
     function actualizarCruceVariables() {
@@ -1507,39 +1814,39 @@
 
       cruceVarX = document.getElementById("cruce-var-x").value;
       cruceVarY = document.getElementById("cruce-var-y").value;
+      cruceMetricaX = document.getElementById("cruce-metrica-x").value;
+      cruceMetricaY = document.getElementById("cruce-metrica-y").value;
 
       const objX = seriesHistoricas[cruceVarX];
       const objY = seriesHistoricas[cruceVarY];
       if (!objX || !objY) return;
 
-      // Filtrar por rango
-      const serieXFiltrada = recortarSeriePorRango(objX.serie, cruceRango);
-      const serieYFiltrada = recortarSeriePorRango(objY.serie, cruceRango);
+      const serieXRecortada = recortarSeriePorRango(objX.serie, cruceRango);
+      const serieYRecortada = recortarSeriePorRango(objY.serie, cruceRango);
+
+      const transX = transformarSerie(serieXRecortada, cruceVarX, cruceMetricaX);
+      const transY = transformarSerie(serieYRecortada, cruceVarY, cruceMetricaY);
 
       const esMensualX = (cruceVarX === "ipc" || cruceVarX === "desempleo");
       const esMensualY = (cruceVarY === "ipc" || cruceVarY === "desempleo");
 
-      const pareados = emparejarObservaciones(serieXFiltrada, serieYFiltrada, esMensualX, esMensualY);
+      const pareados = emparejarObservaciones(transX.serie, transY.serie, esMensualX, esMensualY);
       const stats = calcularEstadisticasBivariadas(pareados);
 
-      // Actualizar tarjeta de métricas
       if (stats) {
         document.getElementById("cruce-stat-r").textContent = FormatCL.num(stats.r, 2);
         document.getElementById("cruce-stat-r2").textContent = FormatCL.pct(stats.r2 * 100, 1);
         document.getElementById("cruce-stat-n").textContent = `${FormatCL.num(stats.n, 0)} obs.`;
         document.getElementById("cruce-info-fechas").textContent = `${stats.fechaInicio} a ${stats.fechaFin}`;
 
-        // Etiqueta cualitativa y barra gauge
         let catR = "Débil";
         if (Math.abs(stats.r) >= 0.7) catR = stats.r > 0 ? "Directa Fuerte" : "Inversa Fuerte";
         else if (Math.abs(stats.r) >= 0.4) catR = stats.r > 0 ? "Directa Moderada" : "Inversa Moderada";
         document.getElementById("cruce-stat-r-calidad").textContent = catR;
 
-        // Ecuación
         const signoB = stats.intercept >= 0 ? "+" : "-";
         document.getElementById("cruce-stat-ecuacion").textContent = `Y = ${FormatCL.num(stats.slope, 2)} · X ${signoB} ${FormatCL.num(Math.abs(stats.intercept), 2)}`;
 
-        // Gauge (-1 a +1 escalado a 0% - 100%)
         const pctPos = ((stats.r + 1) / 2) * 100;
         const gaugeBar = document.getElementById("cruce-gauge-bar");
         if (stats.r >= 0) {
@@ -1552,27 +1859,24 @@
           gaugeBar.className = "h-full bg-blue-600 rounded-full transition-all duration-300";
         }
 
-        // Interpretación
-        document.getElementById("cruce-stat-interpretacion").innerHTML = obtenerInterpretacionPedagogica(cruceVarX, cruceVarY, stats);
+        document.getElementById("cruce-stat-interpretacion").innerHTML = obtenerInterpretacionPedagogica(cruceVarX, cruceMetricaX, cruceVarY, cruceMetricaY, stats);
       }
 
-      // Título del gráfico
-      document.getElementById("cruce-grafico-titulo").textContent = `${objX.nombre} vs ${objY.nombre}`;
+      document.getElementById("cruce-grafico-titulo").textContent = `${transX.etiqueta} vs ${transY.etiqueta}`;
       if (cruceModo === "dual_axis") {
         document.getElementById("cruce-grafico-subtitulo").textContent = "Evolución cronológica superpuesta con escalas independientes calibradas (Eje izquierdo vs Eje derecho).";
       } else {
         document.getElementById("cruce-grafico-subtitulo").textContent = "Diagrama de dispersión bivariado con recta de regresión ajustada por Mínimos Cuadrados Ordinarios (MCO).";
       }
 
-      renderizarGraficoCruce(pareados, stats, objX, objY);
+      renderizarGraficoCruce(pareados, stats, transX, transY);
     }
 
-    function renderizarGraficoCruce(pareados, stats, objX, objY) {
+    function renderizarGraficoCruce(pareados, stats, transX, transY) {
       const ctx = document.getElementById("canvas-cruce").getContext("2d");
       if (chartCruce) chartCruce.destroy();
 
       if (cruceModo === "dual_axis") {
-        // Modo Dual-Axis Time Series
         const fechas = pareados.map(p => p.fecha);
         const valoresX = pareados.map(p => p.x);
         const valoresY = pareados.map(p => p.y);
@@ -1583,9 +1887,9 @@
             labels: fechas,
             datasets: [
               {
-                label: `${objX.nombre} (${objX.unidad})`,
+                label: transX.etiqueta,
                 data: valoresX,
-                borderColor: "#2563eb", // Azul Eje Izquierdo
+                borderColor: "#2563eb",
                 backgroundColor: "rgba(37, 99, 235, 0.05)",
                 borderWidth: 2,
                 yAxisID: "y1",
@@ -1593,9 +1897,9 @@
                 tension: 0.1
               },
               {
-                label: `${objY.nombre} (${objY.unidad})`,
+                label: transY.etiqueta,
                 data: valoresY,
-                borderColor: "#d97706", // Ámbar Eje Derecho
+                borderColor: "#d97706",
                 backgroundColor: "rgba(217, 119, 6, 0.05)",
                 borderWidth: 2,
                 yAxisID: "y2",
@@ -1623,8 +1927,8 @@
                   },
                   label: function(item) {
                     const esY1 = item.datasetIndex === 0;
-                    const nombre = esY1 ? objX.nombre : objY.nombre;
-                    const unidad = esY1 ? objX.unidad : objY.unidad;
+                    const nombre = esY1 ? transX.etiqueta : transY.etiqueta;
+                    const unidad = esY1 ? transX.unidad : transY.unidad;
                     return `${nombre}: ${FormatCL.auto(item.parsed.y, unidad)}`;
                   }
                 }
@@ -1638,22 +1942,22 @@
               y1: {
                 type: "linear",
                 position: "left",
-                title: { display: true, text: `${objX.nombre} (${objX.unidad})`, color: "#2563eb", font: { size: 11, weight: 'bold' } },
+                title: { display: true, text: transX.etiqueta, color: "#2563eb", font: { size: 11, weight: 'bold' } },
                 ticks: {
                   color: "#2563eb",
                   font: { size: 10 },
-                  callback: v => FormatCL.auto(v, objX.unidad)
+                  callback: v => FormatCL.auto(v, transX.unidad)
                 }
               },
               y2: {
                 type: "linear",
                 position: "right",
                 grid: { drawOnChartArea: false },
-                title: { display: true, text: `${objY.nombre} (${objY.unidad})`, color: "#d97706", font: { size: 11, weight: 'bold' } },
+                title: { display: true, text: transY.etiqueta, color: "#d97706", font: { size: 11, weight: 'bold' } },
                 ticks: {
                   color: "#d97706",
                   font: { size: 10 },
-                  callback: v => FormatCL.auto(v, objY.unidad)
+                  callback: v => FormatCL.auto(v, transY.unidad)
                 }
               }
             }
@@ -1661,10 +1965,7 @@
         });
 
       } else {
-        // Modo Scatter Plot con Regresión Lineal
         const scatterData = pareados.map(p => ({ x: p.x, y: p.y, fecha: p.fecha }));
-
-        // Línea de regresión
         const minX = stats ? stats.minX : 0;
         const maxX = stats ? stats.maxX : 100;
         const regData = stats ? [
@@ -1685,7 +1986,7 @@
                 pointHoverRadius: 6
               },
               {
-                label: `Línea de Regresión (MCO)`,
+                label: "Línea de Regresión (MCO)",
                 type: "line",
                 data: regData,
                 borderColor: "#ef4444",
@@ -1713,27 +2014,27 @@
                     if (raw.fecha) {
                       return [
                         `Fecha: ${raw.fecha}`,
-                        `${objX.nombre}: ${FormatCL.auto(raw.x, objX.unidad)}`,
-                        `${objY.nombre}: ${FormatCL.auto(raw.y, objY.unidad)}`
+                        `${transX.etiqueta}: ${FormatCL.auto(raw.x, transX.unidad)}`,
+                        `${transY.etiqueta}: ${FormatCL.auto(raw.y, transY.unidad)}`
                       ];
                     }
-                    return `Ajuste MCO: ${FormatCL.auto(raw.y, objY.unidad)}`;
+                    return `Ajuste MCO: ${FormatCL.auto(raw.y, transY.unidad)}`;
                   }
                 }
               }
             },
             scales: {
               x: {
-                title: { display: true, text: `${objX.nombre} (${objX.unidad})`, font: { size: 11, weight: 'bold' } },
+                title: { display: true, text: transX.etiqueta, font: { size: 11, weight: 'bold' } },
                 ticks: {
-                  callback: v => FormatCL.auto(v, objX.unidad),
+                  callback: v => FormatCL.auto(v, transX.unidad),
                   font: { size: 10 }
                 }
               },
               y: {
-                title: { display: true, text: `${objY.nombre} (${objY.unidad})`, font: { size: 11, weight: 'bold' } },
+                title: { display: true, text: transY.etiqueta, font: { size: 11, weight: 'bold' } },
                 ticks: {
-                  callback: v => FormatCL.auto(v, objY.unidad),
+                  callback: v => FormatCL.auto(v, transY.unidad),
                   font: { size: 10 }
                 }
               }
@@ -1744,7 +2045,7 @@
     }
 
     // =========================================================================
-    // 8. CENTRO DE DESCARGAS (PESTAÑA 3)
+    // 8. CENTRO DE DESCARGAS (CON FILTROS TRIMESTRE / MES Y AÑOS)
     // =========================================================================
     function seleccionarPresetDescarga(preset) {
       const checkboxes = document.querySelectorAll(".chk-descarga");
@@ -1768,10 +2069,27 @@
       actualizarResumenDescarga();
     }
 
+    function pasaFiltroFecha(fechaStr, anosSel, perSel) {
+      const partes = fechaStr.split("-");
+      const y = partes[0];
+      const m = partes[1];
+
+      if (!anosSel.includes(y)) return false;
+      if (perSel === "todos" || !perSel) return true;
+      if (perSel === "T1") return ["01", "02", "03"].includes(m);
+      if (perSel === "T2") return ["04", "05", "06"].includes(m);
+      if (perSel === "T3") return ["07", "08", "09"].includes(m);
+      if (perSel === "T4") return ["10", "11", "12"].includes(m);
+      return m === perSel;
+    }
+
     function actualizarResumenDescarga() {
       const vars = Array.from(document.querySelectorAll(".chk-descarga:checked")).map(c => c.value);
       const anos = Array.from(document.querySelectorAll(".chk-ano:checked")).map(c => c.value);
-      document.getElementById("resumen-descarga-texto").textContent = `${vars.length} variables seleccionadas • ${anos.length} años seleccionados`;
+      const selPer = document.getElementById("dl-periodo");
+      const textoPer = selPer ? selPer.options[selPer.selectedIndex].text : "Año Completo";
+
+      document.getElementById("resumen-descarga-texto").textContent = `${vars.length} variables • ${anos.length} años • ${textoPer}`;
     }
 
     function ejecutarDescarga(formato) {
@@ -1779,9 +2097,14 @@
 
       const vars = Array.from(document.querySelectorAll(".chk-descarga:checked")).map(c => c.value);
       const anos = Array.from(document.querySelectorAll(".chk-ano:checked")).map(c => c.value);
+      const perSel = document.getElementById("dl-periodo") ? document.getElementById("dl-periodo").value : "todos";
 
-      if (vars.length === 0 || anos.length === 0) {
-        alert("Por favor selecciona al menos una variable y un año para exportar.");
+      if (vars.length === 0) {
+        alert("Por favor selecciona al menos una variable macroeconómica.");
+        return;
+      }
+      if (anos.length === 0) {
+        alert("Por favor selecciona al menos un año del calendario.");
         return;
       }
 
@@ -1791,33 +2114,40 @@
             portal: "Datos Macroeconómicos de Chile - Universidad Central de Chile",
             fecha_exportacion_utc: new Date().toISOString(),
             variables_incluidas: vars,
-            anos_incluidos: anos
+            anos_incluidos: anos,
+            periodo_seleccionado: perSel
           },
           series: {}
         };
 
+        let totalPuntos = 0;
         vars.forEach(v => {
           if (seriesHistoricas[v]) {
+            const filtrada = seriesHistoricas[v].serie.filter(p => pasaFiltroFecha(p.fecha, anos, perSel));
+            totalPuntos += filtrada.length;
             exportObj.series[v] = {
               nombre: seriesHistoricas[v].nombre,
               unidad: seriesHistoricas[v].unidad,
               fuente_oficial: seriesHistoricas[v].fuente_oficial,
-              serie: seriesHistoricas[v].serie.filter(p => anos.includes(p.fecha.substring(0, 4)))
+              serie: filtrada
             };
           }
         });
 
+        if (totalPuntos === 0) {
+          alert("No se encontraron observaciones para los filtros temporales seleccionados.");
+          return;
+        }
+
         const jsonStr = JSON.stringify(exportObj, null, 2);
-        descargarArchivo(jsonStr, "datos_macro_chile_ucen.json", "application/json");
+        descargarArchivo(jsonStr, `datos_macro_chile_${perSel}.json`, "application/json");
 
       } else if (formato === "csv") {
-        // Consolidar fechas únicas
         const mapaFechas = new Map();
         vars.forEach(v => {
           if (seriesHistoricas[v]) {
             seriesHistoricas[v].serie.forEach(p => {
-              const ano = p.fecha.substring(0, 4);
-              if (anos.includes(ano)) {
+              if (pasaFiltroFecha(p.fecha, anos, perSel)) {
                 if (!mapaFechas.has(p.fecha)) mapaFechas.set(p.fecha, {});
                 mapaFechas.get(p.fecha)[v] = p.valor;
               }
@@ -1826,8 +2156,12 @@
         });
 
         const fechasOrdenadas = Array.from(mapaFechas.keys()).sort();
-        let csvContent = "fecha," + vars.join(",") + "\n";
+        if (fechasOrdenadas.length === 0) {
+          alert("No se encontraron observaciones para los filtros temporales seleccionados.");
+          return;
+        }
 
+        let csvContent = "fecha," + vars.join(",") + "\n";
         fechasOrdenadas.forEach(f => {
           const fila = [f];
           const reg = mapaFechas.get(f);
@@ -1837,7 +2171,7 @@
           csvContent += fila.join(",") + "\n";
         });
 
-        descargarArchivo(csvContent, "datos_macro_chile_ucen.csv", "text/csv;charset=utf-8;");
+        descargarArchivo(csvContent, `datos_macro_chile_${perSel}.csv`, "text/csv;charset=utf-8;");
       }
     }
 
@@ -1958,7 +2292,6 @@
       `;
     }
 
-    // Inicializar al cargar el DOM
     document.addEventListener("DOMContentLoaded", inicializarDashboard);
   </script>
 </body>
