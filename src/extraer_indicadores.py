@@ -670,11 +670,11 @@ def ejecutar_pipeline_multivariable():
         },
         {
             "variable": "Inflación IPC (último registro oficial INE) (Var. % m/m y a/a)",
-            "cierre_semanal": f"{ipc_info['variacion_mensual_pct']}% m/m; {ipc_info['variacion_anual_pct']}% a/a",
+            "cierre_semanal": f"{formatear_numero_cl(float(ipc_info['variacion_mensual_pct']), 1)}% m/m; {formatear_numero_cl(float(ipc_info['variacion_anual_pct']), 1)}% a/a",
             "variacion_ww": "▬ Estable",
             "fuente_oficial": ipc_info["fuente_oficial"],
             "url_fuente_oficial": ipc_info["url_fuente"],
-            "lectura_analitica": f"IPC de {ipc_info.get('mes_referencia', 'último mes')} con {ipc_info['variacion_mensual_pct']}% mensual y {ipc_info['variacion_anual_pct']}% a doce meses."
+            "lectura_analitica": f"IPC de {ipc_info.get('mes_referencia', 'último mes')} con {formatear_numero_cl(float(ipc_info['variacion_mensual_pct']), 1)}% mensual y {formatear_numero_cl(float(ipc_info['variacion_anual_pct']), 1)}% a doce meses."
         },
         {
             "variable": "Tasa de Desocupación Nacional (último registro oficial ENE - INE) (%)",
@@ -682,7 +682,7 @@ def ejecutar_pipeline_multivariable():
             "variacion_ww": "▬ Estable",
             "fuente_oficial": desempleo_info["fuente_oficial"],
             "url_fuente_oficial": desempleo_info["url_fuente"],
-            "lectura_analitica": f"Desocupación situada en {desempleo_info['valor_actual']}% en el trimestre móvil {desempleo_info.get('trimestre_movil', '')}."
+            "lectura_analitica": f"Desocupación situada en {formatear_numero_cl(float(desempleo_info['valor_actual']), 1)}% en el trimestre móvil {desempleo_info.get('trimestre_movil', '')}."
         }
     ]
 

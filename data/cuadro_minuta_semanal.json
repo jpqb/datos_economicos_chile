@@ -74,11 +74,11 @@
     },
     {
       "variable": "Inflación IPC (último registro oficial INE) (Var. % m/m y a/a)",
-      "cierre_semanal": "0.4% m/m; 4.1% a/a",
+      "cierre_semanal": "0,4% m/m; 4,1% a/a",
       "variacion_ww": "▬ Estable",
       "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
       "url_fuente_oficial": "https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor",
-      "lectura_analitica": "IPC de Septiembre 2026 con 0.4% mensual y 4.1% a doce meses."
+      "lectura_analitica": "IPC de Septiembre 2026 con 0,4% mensual y 4,1% a doce meses."
     },
     {
       "variable": "Tasa de Desocupación Nacional (último registro oficial ENE - INE) (%)",
@@ -86,7 +86,7 @@
       "variacion_ww": "▬ Estable",
       "fuente_oficial": "Instituto Nacional de Estadísticas (INE)",
       "url_fuente_oficial": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion",
-      "lectura_analitica": "Desocupación situada en 9.6% en el trimestre móvil Junio - Agosto 2026."
+      "lectura_analitica": "Desocupación situada en 9,6% en el trimestre móvil Junio - Agosto 2026."
     }
   ]
 }

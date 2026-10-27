@@ -611,8 +611,33 @@
     let rangoActual = "1y";
     let datosMinutaCacheados = null;
 
+    // Formateador estándar chileno (punto miles, coma decimal)
+    const FormatoCL = {
+      num: function(val, dec = 2) {
+        if (val === null || val === undefined || isNaN(val)) return "N/D";
+        return Number(val).toLocaleString("es-CL", {
+          minimumFractionDigits: dec,
+          maximumFractionDigits: dec
+        });
+      },
+      clp: function(val, dec = 2) {
+        if (val === null || val === undefined || isNaN(val)) return "N/D";
+        return "$" + this.num(val, dec);
+      },
+      usd: function(val, dec = 2) {
+        if (val === null || val === undefined || isNaN(val)) return "N/D";
+        return "US$ " + this.num(val, dec);
+      },
+      pct: function(val, dec = 2, conSigno = false) {
+        if (val === null || val === undefined || isNaN(val)) return "N/D";
+        const n = Number(val);
+        const s = conSigno && n > 0 ? "+" : "";
+        return `${s}${this.num(n, dec)}%`;
+      }
+    };
+
     const formatoCLP = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", minimumFractionDigits: 2 });
-    const formatoUSD = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
+    const formatoUSD = new Intl.NumberFormat("es-CL", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
 
     async function inicializarDashboard() {
       lucide.createIcons();
@@ -714,7 +739,7 @@
         const cardsConfig = [
           { 
             key: "uf", serieKey: "uf", titulo: "UF", 
-            valor: `$${indMap.uf.valor.toLocaleString("es-CL", {minimumFractionDigits: 2})}`, 
+            valor: FormatoCL.clp(indMap.uf.valor, 2), 
             sub: "Pesos Chilenos", var: indMap.uf.var_ww, icon: "badge-percent", 
             fuente: indMap.uf.fuente, url: indMap.uf.url_fuente,
             tipTitulo: "Variación Semanal (w/w)",
@@ -722,7 +747,7 @@
           },
           { 
             key: "dolar", serieKey: "dolar", titulo: "Dólar Obs.", 
-            valor: `$${indMap.dolar.valor.toFixed(2)}`, 
+            valor: FormatoCL.clp(indMap.dolar.valor, 2), 
             sub: "USD / CLP", var: indMap.dolar.var_ww, icon: "dollar-sign", 
             fuente: indMap.dolar.fuente, url: indMap.dolar.url_fuente,
             tipTitulo: "Variación Semanal (w/w)",
@@ -730,7 +755,7 @@
           },
           { 
             key: "euro", serieKey: "euro", titulo: "Euro Obs.", 
-            valor: `$${indMap.euro.valor.toFixed(2)}`, 
+            valor: FormatoCL.clp(indMap.euro.valor, 2), 
             sub: "EUR / CLP", var: indMap.euro.var_ww, icon: "euro", 
             fuente: indMap.euro.fuente, url: indMap.euro.url_fuente,
             tipTitulo: "Variación Semanal (w/w)",
@@ -738,7 +763,7 @@
           },
           { 
             key: "cobre", serieKey: "cobre", titulo: "Cobre (LME)", 
-            valor: `US$ ${indMap.cobre.valor.toFixed(2)}`, 
+            valor: FormatoCL.usd(indMap.cobre.valor, 2), 
             sub: "Por libra física • Cochilco", var: indMap.cobre.var_ww, icon: "layers", 
             fuente: "LME / Cochilco", url: indMap.cobre.url_fuente,
             tipTitulo: "Variación Semanal (w/w)",
@@ -746,7 +771,7 @@
           },
           { 
             key: "petroleo_brent", serieKey: "petroleo_brent", titulo: "Petróleo Brent", 
-            valor: `US$ ${indMap.petroleo_brent.valor.toFixed(2)}`, 
+            valor: FormatoCL.usd(indMap.petroleo_brent.valor, 2), 
             sub: "Por barril • Cierre T-1 (FRED)", var: indMap.petroleo_brent.var_ww, icon: "droplet", 
             fuente: "FRED / EIA", url: indMap.petroleo_brent.url_fuente,
             tipTitulo: "Cierre Spot Oficial T-1 (EIA / FRED)",
@@ -754,7 +779,7 @@
           },
           { 
             key: "tpm", serieKey: "tpm", titulo: "TPM", 
-            valor: `${indMap.tpm.valor}%`, 
+            valor: FormatoCL.pct(indMap.tpm.valor, 1), 
             sub: "Tasa Banco Central", var: "▬ Estable", icon: "percent", 
             fuente: indMap.tpm.fuente, url: indMap.tpm.url_fuente,
             tipTitulo: "Variación por Reunión (RPM)",
@@ -762,7 +787,7 @@
           },
           { 
             key: "ipc_mensual", serieKey: "ipc", titulo: "IPC Mensual", 
-            valor: `+${indMap.ipc_mensual.valor}%`, 
+            valor: FormatoCL.pct(indMap.ipc_mensual.valor, 1, true), 
             sub: "Septiembre 2026", var: "INE Oficial", icon: "trending-up", 
             fuente: indMap.ipc_mensual.fuente, url: indMap.ipc_mensual.url_fuente,
             tipTitulo: "Variación Mensual (m/m)",
@@ -770,7 +795,7 @@
           },
           { 
             key: "desempleo", serieKey: "desempleo", titulo: "Desempleo", 
-            valor: `${indMap.desempleo.valor}%`, 
+            valor: FormatoCL.pct(indMap.desempleo.valor, 1), 
             sub: "Trimestre Jun-Ago (INE)", var: "ENE - INE", icon: "users", 
             fuente: indMap.desempleo.fuente, url: indMap.desempleo.url_fuente,
             tipTitulo: "Variación por Trimestre Móvil",
@@ -778,7 +803,7 @@
           },
           { 
             key: "yuan", serieKey: "yuan", titulo: "Yuan Chino", 
-            valor: `$${indMap.yuan.valor.toFixed(2)}`, 
+            valor: FormatoCL.clp(indMap.yuan.valor, 2), 
             sub: "CNY / CLP", var: indMap.yuan.var_ww, icon: "coins", 
             fuente: indMap.yuan.fuente, url: indMap.yuan.url_fuente,
             tipTitulo: "Variación Semanal (w/w)",
@@ -786,7 +811,7 @@
           },
           { 
             key: "petroleo_wti", serieKey: "petroleo_wti", titulo: "Petróleo WTI", 
-            valor: `US$ ${indMap.petroleo_wti.valor.toFixed(2)}`, 
+            valor: FormatoCL.usd(indMap.petroleo_wti.valor, 2), 
             sub: "Por barril • Cierre T-1 (FRED)", var: indMap.petroleo_wti.var_ww, icon: "fuel", 
             fuente: "FRED / EIA", url: indMap.petroleo_wti.url_fuente,
             tipTitulo: "Cierre Spot Oficial T-1 (EIA / FRED)",
@@ -1318,10 +1343,10 @@
                 },
                 label: function(ctx) {
                   const val = ctx.parsed.y;
-                  if (unidad === "CLP") return `${objVar.nombre}: $${val.toLocaleString("es-CL", {minimumFractionDigits: 2})} CLP`;
-                  if (unidad === "US$/lb" || unidad === "US$/bbl") return `${objVar.nombre}: US$ ${val.toFixed(2)}`;
-                  if (unidad === "%") return `${objVar.nombre}: ${val.toFixed(2)}%`;
-                  return `${objVar.nombre}: ${val}`;
+                  if (unidad === "CLP") return `${objVar.nombre}: ${FormatoCL.clp(val, 2)} CLP`;
+                  if (unidad === "US$/lb" || unidad === "US$/bbl" || unidad === "US$") return `${objVar.nombre}: ${FormatoCL.usd(val, 2)}`;
+                  if (unidad === "%") return `${objVar.nombre}: ${FormatoCL.pct(val, 2)}`;
+                  return `${objVar.nombre}: ${FormatoCL.num(val, 2)}`;
                 }
               }
             }
@@ -1336,10 +1361,10 @@
               ticks: { 
                 font: { size: 10 },
                 callback: function(v) {
-                  if (unidad === "CLP") return "$" + v.toLocaleString("es-CL");
-                  if (unidad === "US$/lb" || unidad === "US$/bbl") return "US$ " + v;
-                  if (unidad === "%") return v + "%";
-                  return v;
+                  if (unidad === "CLP") return "$" + Number(v).toLocaleString("es-CL");
+                  if (unidad === "US$/lb" || unidad === "US$/bbl" || unidad === "US$") return "US$ " + Number(v).toLocaleString("es-CL", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+                  if (unidad === "%") return Number(v).toLocaleString("es-CL", { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + "%";
+                  return Number(v).toLocaleString("es-CL");
                 }
               } 
             }

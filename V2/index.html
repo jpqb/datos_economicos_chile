@@ -1159,7 +1159,7 @@
         { key: "cobre", nombre: "Cobre Físico (LME)", cat: "Commodity", val: indMap.cobre ? FormatCL.usd(indMap.cobre.valor, 2) : "N/D", delta: indMap.cobre?.var_ww, url: NOTAS_TECNICAS.cobre.urlFuente, border: "hover:border-amber-400" },
         { key: "petroleo_brent", nombre: "Petróleo Brent", cat: "Energía", val: indMap.petroleo_brent ? FormatCL.usd(indMap.petroleo_brent.valor, 2) : "N/D", delta: indMap.petroleo_brent?.var_ww, url: NOTAS_TECNICAS.petroleo_brent.urlFuente, border: "hover:border-rose-400" },
         { key: "petroleo_wti", nombre: "Petróleo WTI", cat: "Energía", val: indMap.petroleo_wti ? FormatCL.usd(indMap.petroleo_wti.valor, 2) : "N/D", delta: indMap.petroleo_wti?.var_ww, url: NOTAS_TECNICAS.petroleo_wti.urlFuente, border: "hover:border-orange-400" },
-        { key: "tpm", nombre: "Tasa Política Monetaria", cat: "Tasa BCCh", val: indMap.tpm ? FormatCL.pct(indMap.tpm.valor, 2) : "N/D", delta: indMap.tpm?.var_ww, url: NOTAS_TECNICAS.tpm.urlFuente, border: "hover:border-purple-400" },
+        { key: "tpm", nombre: "Tasa Política Monetaria", cat: "Tasa BCCh", val: indMap.tpm ? FormatCL.pct(indMap.tpm.valor, 1) : "N/D", delta: indMap.tpm?.var_ww, url: NOTAS_TECNICAS.tpm.urlFuente, border: "hover:border-purple-400" },
         { key: "ipc_mensual", nombre: "IPC Mensual", cat: "Inflación", val: indMap.ipc_mensual ? FormatCL.pct(indMap.ipc_mensual.valor, 1, true) : "N/D", delta: "INE Oficial", url: NOTAS_TECNICAS.ipc.urlFuente, border: "hover:border-red-400" },
         { key: "desempleo", nombre: "Desempleo Nacional", cat: "Laboral", val: indMap.desempleo ? FormatCL.pct(indMap.desempleo.valor, 1) : "N/D", delta: "ENE Trimestre", url: NOTAS_TECNICAS.desempleo.urlFuente, border: "hover:border-teal-400" }
       ];
