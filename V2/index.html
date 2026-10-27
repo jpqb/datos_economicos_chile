@@ -187,6 +187,9 @@
                   <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
                   <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
                 </optgroup>
+                <optgroup label="Actividad Económica & Crecimiento">
+                  <option value="imacec">IMACEC (Crecimiento Anual % a/a)</option>
+                </optgroup>
                 <optgroup label="Tasas e Inflación">
                   <option value="uf">Unidad de Fomento (UF)</option>
                   <option value="tpm">Tasa de Política Monetaria (TPM)</option>
@@ -290,24 +293,39 @@
           </div>
 
           <!-- Presets Rápidos de Análisis -->
-          <div class="bg-white/5 p-3 rounded-xl border border-white/10 shrink-0">
-            <p class="text-[11px] font-bold text-indigo-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-              <span>Presets Clásicos</span>
+          <div class="bg-white/10 p-3.5 rounded-2xl border border-white/20 shrink-0 max-w-md">
+            <p class="text-[11px] font-bold text-blue-200 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span>Modelos Macroeconómicos Canónicos</span>
             </p>
-            <div class="grid grid-cols-2 gap-1.5 text-xs">
-              <button onclick="aplicarPresetCruce('cobre', 'var_pct_yoy', 'dolar', 'var_pct_yoy')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
-                <span>🪙 Cobre vs Dólar (% YoY)</span>
-              </button>
-              <button onclick="aplicarPresetCruce('tpm', 'nivel', 'ipc', 'var_pct_yoy')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
-                <span>🏦 TPM vs Inflación 12M</span>
-              </button>
-              <button onclick="aplicarPresetCruce('petroleo_brent', 'var_pct_yoy', 'dolar', 'var_pct_yoy')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
-                <span>🛢️ Petróleo vs Dólar (% YoY)</span>
-              </button>
-              <button onclick="aplicarPresetCruce('dolar', 'var_pct_periodo', 'cobre', 'var_pct_periodo')" class="text-left px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1">
-                <span>⚡ Retornos Diarios (Δ %)</span>
-              </button>
+            <div class="flex flex-col gap-1.5 text-xs">
+              <div class="flex gap-1.5">
+                <button onclick="aplicarPresetCruce('imacec', 'nivel', 'desempleo', 'var_pct_yoy', 'scatter')" class="flex-1 text-left px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition flex items-center justify-between shadow-sm border border-blue-400/40 group">
+                  <span class="flex items-center gap-1.5">
+                    <i data-lucide="line-chart" class="w-3.5 h-3.5 text-blue-200"></i>
+                    <span>📉 Ley de Okun</span>
+                  </span>
+                  <span class="text-[10px] font-normal text-blue-200 bg-blue-700/60 px-1.5 py-0.5 rounded">IMACEC / Desempleo</span>
+                </button>
+                <button onclick="aplicarPresetCruce('desempleo', 'nivel', 'ipc', 'var_pct_yoy', 'scatter')" class="flex-1 text-left px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition flex items-center justify-between shadow-sm border border-indigo-400/40 group">
+                  <span class="flex items-center gap-1.5">
+                    <i data-lucide="scatter-chart" class="w-3.5 h-3.5 text-indigo-200"></i>
+                    <span>📈 Curva Phillips</span>
+                  </span>
+                  <span class="text-[10px] font-normal text-indigo-200 bg-indigo-700/60 px-1.5 py-0.5 rounded">Desempleo / IPC</span>
+                </button>
+              </div>
+              <div class="grid grid-cols-3 gap-1.5 text-[11px]">
+                <button onclick="aplicarPresetCruce('cobre', 'var_pct_yoy', 'dolar', 'var_pct_yoy', 'dual_axis')" class="text-left px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1 truncate" title="Cobre vs Dólar (% YoY)">
+                  <span>🪙 Cobre/Dólar</span>
+                </button>
+                <button onclick="aplicarPresetCruce('tpm', 'nivel', 'ipc', 'var_pct_yoy', 'dual_axis')" class="text-left px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1 truncate" title="Regla TPM vs Inflación 12M">
+                  <span>🏦 TPM/Inflación</span>
+                </button>
+                <button onclick="aplicarPresetCruce('petroleo_brent', 'var_pct_yoy', 'dolar', 'var_pct_yoy', 'dual_axis')" class="text-left px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition font-medium flex items-center gap-1 truncate" title="Petróleo Brent vs Dólar (% YoY)">
+                  <span>🛢️ Crudo/Dólar</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -332,8 +350,19 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div class="relative">
                 <select id="cruce-var-x" onchange="alCambiarVariableX()" class="w-full appearance-none bg-white text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                  <optgroup label="Actividad Económica & Crecimiento">
+                    <option value="imacec" selected>IMACEC (Crecimiento Anual % a/a)</option>
+                  </optgroup>
+                  <optgroup label="Mercado Laboral & Precios">
+                    <option value="desempleo">Desocupación Nacional (%)</option>
+                    <option value="ipc">IPC Mensual (%)</option>
+                  </optgroup>
+                  <optgroup label="Tasas & Monetario">
+                    <option value="tpm">Tasa Política Monetaria (TPM %)</option>
+                    <option value="uf">Unidad de Fomento (UF)</option>
+                  </optgroup>
                   <optgroup label="Commodities">
-                    <option value="cobre" selected>Cobre Físico (US$/lb)</option>
+                    <option value="cobre">Cobre Físico (US$/lb)</option>
                     <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
                     <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
                   </optgroup>
@@ -341,12 +370,6 @@
                     <option value="dolar">Dólar Observado ($ CLP)</option>
                     <option value="euro">Euro Observado ($ CLP)</option>
                     <option value="yuan">Yuan Chino ($ CLP)</option>
-                  </optgroup>
-                  <optgroup label="Tasas e Inflación">
-                    <option value="uf">Unidad de Fomento (UF)</option>
-                    <option value="tpm">Tasa Política Monetaria (TPM %)</option>
-                    <option value="ipc">IPC Mensual (%)</option>
-                    <option value="desempleo">Desocupación Nacional (%)</option>
                   </optgroup>
                 </select>
                 <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
@@ -367,14 +390,21 @@
                 <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
                 <span>Variable Y (Eje Derecho / Eje Vertical)</span>
               </label>
-              <span id="lbl-tipo-var-y" class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">DIVISA</span>
+              <span id="lbl-tipo-var-y" class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">MERCADO LABORAL</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div class="relative">
                 <select id="cruce-var-y" onchange="alCambiarVariableY()" class="w-full appearance-none bg-white text-slate-800 text-xs font-semibold pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 transition">
+                  <optgroup label="Mercado Laboral & Precios">
+                    <option value="desempleo" selected>Desocupación Nacional (%)</option>
+                    <option value="ipc">IPC Mensual (%)</option>
+                  </optgroup>
+                  <optgroup label="Actividad Económica & Crecimiento">
+                    <option value="imacec">IMACEC (Crecimiento Anual % a/a)</option>
+                  </optgroup>
                   <optgroup label="Divisas">
-                    <option value="dolar" selected>Dólar Observado ($ CLP)</option>
+                    <option value="dolar">Dólar Observado ($ CLP)</option>
                     <option value="euro">Euro Observado ($ CLP)</option>
                     <option value="yuan">Yuan Chino ($ CLP)</option>
                   </optgroup>
@@ -383,11 +413,9 @@
                     <option value="petroleo_brent">Petróleo Brent (US$/bbl)</option>
                     <option value="petroleo_wti">Petróleo WTI (US$/bbl)</option>
                   </optgroup>
-                  <optgroup label="Tasas e Inflación">
+                  <optgroup label="Tasas & Monetario">
                     <option value="uf">Unidad de Fomento (UF)</option>
                     <option value="tpm">Tasa Política Monetaria (TPM %)</option>
-                    <option value="ipc">IPC Mensual (%)</option>
-                    <option value="desempleo">Desocupación Nacional (%)</option>
                   </optgroup>
                 </select>
                 <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
@@ -620,6 +648,10 @@
               <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
                 <input type="checkbox" value="desempleo" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
                 <span class="font-medium text-slate-800">Desempleo ENE</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="imacec" checked onchange="actualizarResumenDescarga()" class="chk-descarga rounded text-blue-600 focus:ring-blue-500">
+                <span class="font-medium text-slate-800">IMACEC Anual</span>
               </label>
             </div>
           </div>
@@ -918,6 +950,17 @@
     // =========================================================================
     
     const NOTAS_TECNICAS = {
+      imacec: {
+        nombre: "Índice Mensual de Actividad Económica (IMACEC)",
+        emisor: "Banco Central de Chile",
+        fuentePrimaria: "Banco Central de Chile - Base de Datos Estadísticos (BDE)",
+        marcoLegal: "Ley Orgánica Constitucional del Banco Central (Ley Nº 18.840)",
+        unidad: "% a/a",
+        frecuencia: "Mensual (Publicación el primer día hábil a las 08:30 hrs)",
+        urlFuente: "https://www.bcentral.cl/areas/estadisticas/imacec",
+        icono: "line-chart",
+        descripcion: "Estimación mensual de la actividad de los distintos sectores económicos a precios del año anterior encadenados. Constituye el principal indicador sintético de la trayectoria del PIB nacional en alta frecuencia."
+      },
       uf: {
         nombre: "Unidad de Fomento (UF)",
         emisor: "Banco Central de Chile & SII",
@@ -1071,14 +1114,14 @@
     let variableActualGrafico = "dolar";
     let rangoActualGrafico = "10A";
 
-    // Estado Gráfico Cruce (Tab 2)
+    // Estado Gráfico Cruce (Tab 2) - Inicializa en Ley de Okun (Arthur Okun, 1962)
     let chartCruce = null;
-    let cruceVarX = "cobre";
-    let cruceMetricaX = "var_pct_yoy";
-    let cruceVarY = "dolar";
+    let cruceVarX = "imacec";
+    let cruceMetricaX = "nivel";
+    let cruceVarY = "desempleo";
     let cruceMetricaY = "var_pct_yoy";
     let cruceRango = "todo";
-    let cruceModo = "dual_axis";
+    let cruceModo = "scatter";
 
     // =========================================================================
     // 3. NAVEGACIÓN ENTRE PESTAÑAS (SPA)
@@ -1479,8 +1522,12 @@
     // 7. CRUCE DE VARIABLES & MOTOR DE TRANSFORMACIÓN MACRO (TAB 2)
     // =========================================================================
     function getTipoVariable(key) {
-      if (key === "tpm" || key === "desempleo") return "tasa";
+      if (key === "imacec") return "crecimiento";
+      if (key === "desempleo") return "laboral";
+      if (key === "tpm") return "tasa";
       if (key === "ipc") return "inflacion";
+      if (key === "cobre" || key === "petroleo_brent" || key === "petroleo_wti") return "commodity";
+      if (key === "dolar" || key === "euro" || key === "yuan") return "divisa";
       return "precio";
     }
 
@@ -1491,25 +1538,35 @@
         const tipo = getTipoVariable(keyVar);
         sel.innerHTML = "";
 
-        if (tipo === "precio") {
+        if (tipo === "crecimiento") {
           sel.innerHTML = `
-            <option value="nivel">Nivel Bruto (Valor Nominal)</option>
-            <option value="var_pct_yoy" selected>Variación Interanual (% YoY a 12M)</option>
-            <option value="var_pct_periodo">Variación Periódica (Δ %)</option>
-            <option value="var_acumulada">Variación Acumulada (% en Ventana)</option>
+            <option value="nivel" selected>Crecimiento Anual (% a/a)</option>
+            <option value="var_pct_periodo">Aceleración Mensual (Δ pp)</option>
+          `;
+        } else if (tipo === "laboral") {
+          sel.innerHTML = `
+            <option value="var_pct_yoy" selected>Variación Interanual (Δ pp a 12M)</option>
+            <option value="nivel">Nivel de Desocupación (%)</option>
+            <option value="var_pct_periodo">Cambio Trimestral (Δ pp)</option>
           `;
         } else if (tipo === "tasa") {
           sel.innerHTML = `
             <option value="nivel" selected>Nivel de Tasa (%)</option>
-            <option value="var_pct_yoy">Cambio Interanual (Δ pp YoY)</option>
-            <option value="var_pct_periodo">Cambio Periódico (Δ pp)</option>
-            <option value="var_acumulada">Cambio Acumulado (Δ pp en Ventana)</option>
+            <option value="var_pct_yoy">Cambio Interanual (Δ pp a 12M)</option>
+            <option value="var_pct_periodo">Cambio por Reunión (Δ pp)</option>
           `;
         } else if (tipo === "inflacion") {
           sel.innerHTML = `
-            <option value="nivel">IPC Mensual Oficial (%)</option>
             <option value="var_pct_yoy" selected>Inflación Acumulada 12 Meses (% YoY)</option>
-            <option value="var_pct_periodo">Aceleración Inflacionaria (Δ pp)</option>
+            <option value="nivel">IPC Mensual Oficial (%)</option>
+            <option value="var_pct_periodo">Aceleración Mensual (Δ pp)</option>
+          `;
+        } else {
+          sel.innerHTML = `
+            <option value="var_pct_yoy" selected>Variación Interanual (% YoY a 12M)</option>
+            <option value="nivel">Nivel Nominal (Valor Bruto)</option>
+            <option value="var_pct_periodo">Retorno Diario / Periódico (Δ %)</option>
+            <option value="var_acumulada">Variación Acumulada en Ventana (%)</option>
           `;
         }
 
@@ -1521,8 +1578,17 @@
       poblar("cruce-metrica-x", cruceVarX, cruceMetricaX);
       poblar("cruce-metrica-y", cruceVarY, cruceMetricaY);
 
-      document.getElementById("lbl-tipo-var-x").textContent = getTipoVariable(cruceVarX).toUpperCase();
-      document.getElementById("lbl-tipo-var-y").textContent = getTipoVariable(cruceVarY).toUpperCase();
+      const labelTipos = {
+        crecimiento: "ACTIVIDAD ECONÓMICA",
+        laboral: "MERCADO LABORAL",
+        inflacion: "INFLACIÓN",
+        tasa: "TASA OFICIAL",
+        commodity: "COMMODITY",
+        divisa: "DIVISA SPOT",
+        precio: "PRECIO / ÍNDICE"
+      };
+      document.getElementById("lbl-tipo-var-x").textContent = labelTipos[getTipoVariable(cruceVarX)] || "VARIABLE";
+      document.getElementById("lbl-tipo-var-y").textContent = labelTipos[getTipoVariable(cruceVarY)] || "VARIABLE";
     }
 
     function alCambiarVariableX() {
@@ -1544,7 +1610,7 @@
       actualizarCruceVariables();
     }
 
-    function aplicarPresetCruce(varX, metX, varY, metY) {
+    function aplicarPresetCruce(varX, metX, varY, metY, modo = null) {
       cruceVarX = varX;
       cruceMetricaX = metX;
       cruceVarY = varY;
@@ -1557,7 +1623,11 @@
       document.getElementById("cruce-metrica-x").value = metX;
       document.getElementById("cruce-metrica-y").value = metY;
 
-      actualizarCruceVariables();
+      if (modo) {
+        cambiarModoVisualizacionCruce(modo);
+      } else {
+        actualizarCruceVariables();
+      }
     }
 
     function cambiarRangoCruce(rango) {
@@ -1593,6 +1663,66 @@
 
       const tipoVar = getTipoVariable(keyVar);
       const meta = NOTAS_TECNICAS[keyVar] || { nombre: keyVar, unidad: "" };
+
+      if (tipoVar === "crecimiento") {
+        if (tipoMetrica === "nivel" || tipoMetrica === "var_pct_yoy") {
+          return {
+            serie: serieOriginal.map(p => ({ fecha: p.fecha, valor: p.valor })),
+            unidad: "% a/a",
+            etiqueta: "Crecimiento IMACEC (% a/a)"
+          };
+        }
+        if (tipoMetrica === "var_pct_periodo") {
+          const res = [];
+          for (let i = 1; i < serieOriginal.length; i++) {
+            res.push({ fecha: serieOriginal[i].fecha, valor: serieOriginal[i].valor - serieOriginal[i - 1].valor });
+          }
+          return {
+            serie: res,
+            unidad: "pp",
+            etiqueta: "Aceleración IMACEC (Δ pp)"
+          };
+        }
+      }
+
+      if (tipoVar === "laboral") {
+        if (tipoMetrica === "nivel") {
+          return {
+            serie: serieOriginal.map(p => ({ fecha: p.fecha, valor: p.valor })),
+            unidad: "%",
+            etiqueta: "Tasa de Desocupación (%)"
+          };
+        }
+        if (tipoMetrica === "var_pct_yoy") {
+          const mapaFechas = new Map(serieOriginal.map(p => [p.fecha.substring(0, 7), p.valor]));
+          const res = [];
+          for (let i = 0; i < serieOriginal.length; i++) {
+            const p = serieOriginal[i];
+            const d = new Date(p.fecha + "T00:00:00");
+            d.setFullYear(d.getFullYear() - 1);
+            const mAnt = d.toISOString().substring(0, 7);
+            if (mapaFechas.has(mAnt)) {
+              res.push({ fecha: p.fecha, valor: p.valor - mapaFechas.get(mAnt) });
+            }
+          }
+          return {
+            serie: res,
+            unidad: "pp a/a",
+            etiqueta: "Variación Desempleo a 12M (Δ pp)"
+          };
+        }
+        if (tipoMetrica === "var_pct_periodo") {
+          const res = [];
+          for (let i = 1; i < serieOriginal.length; i++) {
+            res.push({ fecha: serieOriginal[i].fecha, valor: serieOriginal[i].valor - serieOriginal[i - 1].valor });
+          }
+          return {
+            serie: res,
+            unidad: "pp",
+            etiqueta: "Cambio Desempleo Móvil (Δ pp)"
+          };
+        }
+      }
 
       if (tipoMetrica === "nivel") {
         return {
@@ -1779,6 +1909,16 @@
       const esYoY = metX.includes("yoy") && metY.includes("yoy");
       const esRetorno = metX.includes("periodo") && metY.includes("periodo");
 
+      // 1. LEY DE OKUN
+      if ((keyX === "imacec" && keyY === "desempleo") || (keyX === "desempleo" && keyY === "imacec")) {
+        return `<strong>Ley de Okun (Arthur Okun, 1962):</strong> La estimación empírica para Chile arroja una correlación inversa robusta de <strong>r = ${rFormato} (R² = ${r2Pct})</strong> con coeficiente de Okun <strong>β = ${FormatCL.num(stats.slope, 2)}</strong>. Este resultado valida la regularidad macroeconómica empírica: cuando el crecimiento del producto (IMACEC) supera la tasa tendencial, la absorción de mano de obra se intensifica contrayendo la desocupación en torno a β puntos porcentuales por cada punto de mayor crecimiento.`;
+      }
+
+      // 2. CURVA DE PHILLIPS
+      if ((keyX === "desempleo" && keyY === "ipc") || (keyX === "ipc" && keyY === "desempleo")) {
+        return `<strong>Curva de Phillips (A.W. Phillips, 1958):</strong> Analiza la relación empírica entre holguras de capacidad en el mercado laboral y presiones inflacionarias (r = ${rFormato}, R² = ${r2Pct}). En economías con régimen de metas de inflación y banco central autónomo como Chile (meta 3%), la curva de Phillips tiende a aplanarse significativamente en el largo plazo, predominando los shocks externos de oferta (tipo de cambio, energía) y el anclaje de expectativas inflacionarias sobre la brecha laboral estricta.`;
+      }
+
       if ((keyX === "cobre" && keyY === "dolar") || (keyX === "dolar" && keyY === "cobre")) {
         if (esYoY) {
           return `<strong>Términos de intercambio y ciclo interanual:</strong> La correlación de variaciones a 12 meses (r = ${rFormato}) confirma la ley económica estructural de Chile: alzas sostenidas en el precio del cobre fortalecen el balance de pagos e inducen apreciación cambiaria del peso chileno (menor USD/CLP), resultando en una correlación negativa robusta y libre de tendencia espuria.`;
@@ -1819,8 +1959,8 @@
       const transX = transformarSerie(serieXRecortada, cruceVarX, cruceMetricaX);
       const transY = transformarSerie(serieYRecortada, cruceVarY, cruceMetricaY);
 
-      const esMensualX = (cruceVarX === "ipc" || cruceVarX === "desempleo");
-      const esMensualY = (cruceVarY === "ipc" || cruceVarY === "desempleo");
+      const esMensualX = (cruceVarX === "ipc" || cruceVarX === "desempleo" || cruceVarX === "imacec");
+      const esMensualY = (cruceVarY === "ipc" || cruceVarY === "desempleo" || cruceVarY === "imacec");
 
       const pareados = emparejarObservaciones(transX.serie, transY.serie, esMensualX, esMensualY);
       const stats = calcularEstadisticasBivariadas(pareados);
@@ -2046,7 +2186,7 @@
         else if (preset === "ninguna") c.checked = false;
         else if (preset === "divisas") c.checked = ["dolar", "euro", "yuan"].includes(c.value);
         else if (preset === "commodities") c.checked = ["cobre", "petroleo_brent", "petroleo_wti"].includes(c.value);
-        else if (preset === "tasas") c.checked = ["uf", "tpm", "ipc", "desempleo"].includes(c.value);
+        else if (preset === "tasas") c.checked = ["uf", "tpm", "ipc", "desempleo", "imacec"].includes(c.value);
       });
       actualizarResumenDescarga();
     }

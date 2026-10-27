@@ -101,6 +101,10 @@ FUENTES_OFICIALES = {
     "ine_desempleo": {
         "nombre": "Instituto Nacional de Estadísticas (INE)",
         "url": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion"
+    },
+    "bcentral_imacec": {
+        "nombre": "Banco Central de Chile (BDE)",
+        "url": "https://www.bcentral.cl/areas/estadisticas/imacec"
     }
 }
 
@@ -558,6 +562,17 @@ def ejecutar_pipeline_multivariable():
         "url_fuente": desempleo_info["url_fuente"],
         "serie": serie_desempleo_10y
     }
+
+    if "imacec" in base_periodica:
+        imacec_info = base_periodica["imacec"]
+        serie_imacec_10y = imacec_info.get("serie_historica_10y", [])
+        series_historicas["imacec"] = {
+            "nombre": "IMACEC (Crecimiento Anual)",
+            "unidad": "%",
+            "fuente_oficial": imacec_info.get("fuente_oficial", "Banco Central de Chile"),
+            "url_fuente": imacec_info.get("url_fuente", "https://www.bcentral.cl/areas/estadisticas/imacec"),
+            "serie": serie_imacec_10y
+        }
 
     # ==============================================================================
     # 5. GUARDAR TODAS LAS SERIES HISTÓRICAS PARA EL GRÁFICO DINÁMICO
