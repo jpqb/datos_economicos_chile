@@ -1,8 +1,8 @@
 {
   "metadatos": {
     "titulo": "Cuadro de Variables Macroeconómicas y Financieras",
-    "fecha_emision": "2026-10-27",
-    "semana_analizada": "2026-10-20 al 2026-10-27",
+    "fecha_emision": "2026-10-28",
+    "semana_analizada": "2026-10-21 al 2026-10-28",
     "proveedor": "Repositorio Oficial de Datos Económicos de Chile (UCEN)",
     "url_proveedor": "https://jpqb.github.io/datos_economicos_chile/",
     "licencia": "Datos Públicos Abiertos"
@@ -18,16 +18,16 @@
     },
     {
       "variable": "Dólar Observado (USD/CLP) ($ CLP)",
-      "cierre_semanal": "994,29",
-      "variacion_ww": "▲ 12,43",
+      "cierre_semanal": "985,14",
+      "variacion_ww": "▲ 6,58",
       "fuente_oficial": "Banco Central de Chile",
       "url_fuente_oficial": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
       "lectura_analitica": "Cotización del tipo de cambio influenciada por presiones externas y diferenciales de tasas."
     },
     {
       "variable": "Euro Observado (EUR/CLP) ($ CLP)",
-      "cierre_semanal": "1.112,80",
-      "variacion_ww": "▲ 11,94",
+      "cierre_semanal": "1.097,16",
+      "variacion_ww": "▼ 2,10",
       "fuente_oficial": "Banco Central de Chile (BDE)",
       "url_fuente_oficial": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
       "lectura_analitica": "Paridad cambiaria oficial fijada por el Banco Central a partir del arbitraje EUR/USD en mercados globales."
@@ -35,14 +35,14 @@
     {
       "variable": "Yuan Chino (CNY/CLP) ($ CLP)",
       "cierre_semanal": "147,09",
-      "variacion_ww": "▲ 0,10",
+      "variacion_ww": "▲ 0,60",
       "fuente_oficial": "Banco Central de Chile (BDE)",
       "url_fuente_oficial": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
       "lectura_analitica": "Tipo de cambio oficial reportado por el Banco Central conforme a la paridad oficial con el Banco Popular de China."
     },
     {
       "variable": "Unidad de Fomento (UF) ($ CLP)",
-      "cierre_semanal": "41.226,39",
+      "cierre_semanal": "41.231,70",
       "variacion_ww": "▲ 37,15",
       "fuente_oficial": "Servicio de Impuestos Internos (SII)",
       "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
