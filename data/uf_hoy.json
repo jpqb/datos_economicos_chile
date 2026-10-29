@@ -5,12 +5,12 @@
     "fuente_oficial": "Servicio de Impuestos Internos (SII)",
     "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
     "licencia": "Datos Públicos Abiertos",
-    "fecha_extraccion_utc": "2026-10-28T18:20:39.931578+00:00",
+    "fecha_extraccion_utc": "2026-10-29T10:00:02.345933+00:00",
     "nota": "Valores oficiales consolidados sin proyecciones."
   },
   "hoy": {
-    "fecha": "2026-10-28",
-    "valor_clp": 41231.7,
+    "fecha": "2026-10-29",
+    "valor_clp": 41237.01,
     "variacion_diaria_clp": 5.31,
     "variacion_diaria_pct": 0.0129
   }
