@@ -1,8 +1,8 @@
 {
   "metadatos": {
     "titulo": "Cuadro de Variables Macroeconómicas y Financieras",
-    "fecha_emision": "2026-11-07",
-    "semana_analizada": "2026-10-31 al 2026-11-07",
+    "fecha_emision": "2026-11-08",
+    "semana_analizada": "2026-11-01 al 2026-11-08",
     "proveedor": "Repositorio Oficial de Datos Económicos de Chile (UCEN)",
     "url_proveedor": "https://jpqb.github.io/datos_economicos_chile/",
     "licencia": "Datos Públicos Abiertos"
@@ -42,8 +42,8 @@
     },
     {
       "variable": "Unidad de Fomento (UF) ($ CLP)",
-      "cierre_semanal": "41.284,83",
-      "variacion_ww": "▲ 37,20",
+      "cierre_semanal": "41.290,15",
+      "variacion_ww": "▲ 37,21",
       "fuente_oficial": "Servicio de Impuestos Internos (SII)",
       "url_fuente_oficial": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm",
       "lectura_analitica": "La UF mantiene su reajuste diario legal conforme a la variación del IPC reportado por el INE."
