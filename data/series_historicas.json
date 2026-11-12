@@ -15876,6 +15876,10 @@
       {
         "fecha": "2026-11-11",
         "valor": 41309.19
+      },
+      {
+        "fecha": "2026-11-12",
+        "valor": 41316.06
       }
     ]
   },
@@ -26700,6 +26704,10 @@
       {
         "fecha": "2026-11-11",
         "valor": 977.05
+      },
+      {
+        "fecha": "2026-11-12",
+        "valor": 984.49
       }
     ]
   },
@@ -26709,10 +26717,6 @@
     "fuente_oficial": "Banco Central de Chile (BDE)",
     "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
     "serie": [
-      {
-        "fecha": "2016-11-11",
-        "valor": 691.27
-      },
       {
         "fecha": "2016-11-14",
         "valor": 707.46
@@ -37140,6 +37144,10 @@
       {
         "fecha": "2026-11-11",
         "valor": 1089.61
+      },
+      {
+        "fecha": "2026-11-12",
+        "valor": 1091.82
       }
     ]
   },
@@ -37149,10 +37157,6 @@
     "fuente_oficial": "Banco Central de Chile (BDE)",
     "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
     "serie": [
-      {
-        "fecha": "2016-11-11",
-        "valor": 96.52
-      },
       {
         "fecha": "2016-11-14",
         "valor": 97.39
@@ -45987,6 +45991,10 @@
       },
       {
         "fecha": "2026-11-11",
+        "valor": 147.09
+      },
+      {
+        "fecha": "2026-11-12",
         "valor": 147.09
       }
     ]
@@ -56051,6 +56059,10 @@
       },
       {
         "fecha": "2026-11-11",
+        "valor": 6.27
+      },
+      {
+        "fecha": "2026-11-12",
         "valor": 6.58
       }
     ]
@@ -66119,7 +66131,11 @@
       },
       {
         "fecha": "2026-11-11",
-        "valor": 93.18
+        "valor": 92.76
+      },
+      {
+        "fecha": "2026-11-12",
+        "valor": 91.99
       }
     ]
   },
@@ -76183,7 +76199,11 @@
       },
       {
         "fecha": "2026-11-11",
-        "valor": 86.97
+        "valor": 86.53
+      },
+      {
+        "fecha": "2026-11-12",
+        "valor": 85.75
       }
     ]
   },
