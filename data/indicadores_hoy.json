@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-11-21T19:13:04.447593+00:00",
+    "fecha_actualizacion_utc": "2026-11-22T11:27:35.348962+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii_uf": {
@@ -52,9 +52,9 @@
   "indicadores": {
     "uf": {
       "nombre": "Unidad de Fomento",
-      "valor": 41377.93,
+      "valor": 41384.81,
       "unidad": "CLP",
-      "var_ww": "▲ 48,13",
+      "var_ww": "▲ 48,14",
       "fuente": "Servicio de Impuestos Internos (SII)",
       "url_fuente": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm"
     },

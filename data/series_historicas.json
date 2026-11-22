@@ -15916,6 +15916,10 @@
       {
         "fecha": "2026-11-21",
         "valor": 41377.93
+      },
+      {
+        "fecha": "2026-11-22",
+        "valor": 41384.81
       }
     ]
   },
@@ -37224,6 +37228,10 @@
       {
         "fecha": "2026-11-21",
         "valor": 1103.49
+      },
+      {
+        "fecha": "2026-11-22",
+        "valor": 1103.49
       }
     ]
   },
@@ -46088,6 +46096,10 @@
       {
         "fecha": "2026-11-21",
         "valor": 147.09
+      },
+      {
+        "fecha": "2026-11-22",
+        "valor": 147.09
       }
     ]
   },
@@ -46097,10 +46109,6 @@
     "fuente_oficial": "London Metal Exchange (LME) / Cochilco",
     "url_fuente": "https://www.cochilco.cl/web/la-rueda-diaria/",
     "serie": [
-      {
-        "fecha": "2016-11-21",
-        "valor": 2.51
-      },
       {
         "fecha": "2016-11-22",
         "valor": 2.54
@@ -56159,10 +56167,10 @@
       },
       {
         "fecha": "2026-11-20",
-        "valor": 5.48
+        "valor": 5.49
       },
       {
-        "fecha": "2026-11-21",
+        "fecha": "2026-11-22",
         "valor": 6.58
       }
     ]
@@ -56173,10 +56181,6 @@
     "fuente_oficial": "Federal Reserve Bank of St. Louis (FRED) / EIA",
     "url_fuente": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
     "serie": [
-      {
-        "fecha": "2016-11-21",
-        "valor": 48.9
-      },
       {
         "fecha": "2016-11-22",
         "valor": 49.12
@@ -66239,7 +66243,7 @@
       },
       {
         "fecha": "2026-11-20",
-        "valor": 92.57
+        "valor": 89.95
       }
     ]
   },
@@ -66249,10 +66253,6 @@
     "fuente_oficial": "Federal Reserve Bank of St. Louis (FRED) / EIA",
     "url_fuente": "https://fred.stlouisfed.org/series/DCOILWTICO",
     "serie": [
-      {
-        "fecha": "2016-11-21",
-        "valor": 47.49
-      },
       {
         "fecha": "2016-11-22",
         "valor": 48.03
@@ -76311,7 +76311,7 @@
       },
       {
         "fecha": "2026-11-20",
-        "valor": 83.98
+        "valor": 83.41
       }
     ]
   },
