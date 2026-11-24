@@ -1,6 +1,6 @@
 {
   "metadatos": {
-    "fecha_actualizacion_utc": "2026-11-23T23:51:32.556710+00:00",
+    "fecha_actualizacion_utc": "2026-11-24T13:45:49.369361+00:00",
     "estado": "Operativo (Alta Disponibilidad)",
     "fuentes_oficiales": {
       "sii_uf": {
@@ -52,25 +52,25 @@
   "indicadores": {
     "uf": {
       "nombre": "Unidad de Fomento",
-      "valor": 41391.69,
+      "valor": 41398.57,
       "unidad": "CLP",
-      "var_ww": "▲ 48,14",
+      "var_ww": "▲ 48,15",
       "fuente": "Servicio de Impuestos Internos (SII)",
       "url_fuente": "https://www.sii.cl/valores_y_fechas/uf/uf2026.htm"
     },
     "dolar": {
       "nombre": "Dólar Observado",
-      "valor": 1017.17,
+      "valor": 1017.66,
       "unidad": "CLP",
-      "var_ww": "▲ 18,07",
+      "var_ww": "▲ 16,49",
       "fuente": "Banco Central de Chile",
       "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx"
     },
     "euro": {
       "nombre": "Euro Observado",
-      "valor": 1116.54,
+      "valor": 1107.84,
       "unidad": "CLP",
-      "var_ww": "▲ 14,51",
+      "var_ww": "▲ 5,84",
       "fuente": "Banco Central de Chile (BDE)",
       "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx"
     },
