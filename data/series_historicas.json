@@ -15932,6 +15932,10 @@
       {
         "fecha": "2026-11-25",
         "valor": 41405.45
+      },
+      {
+        "fecha": "2026-11-26",
+        "valor": 41412.34
       }
     ]
   },
@@ -26796,6 +26800,10 @@
       {
         "fecha": "2026-11-25",
         "valor": 1025.06
+      },
+      {
+        "fecha": "2026-11-26",
+        "valor": 1044.08
       }
     ]
   },
@@ -26805,10 +26813,6 @@
     "fuente_oficial": "Banco Central de Chile (BDE)",
     "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
     "serie": [
-      {
-        "fecha": "2016-11-25",
-        "valor": 701.09
-      },
       {
         "fecha": "2016-11-28",
         "valor": 702.68
@@ -37252,6 +37256,10 @@
       {
         "fecha": "2026-11-25",
         "valor": 1124.46
+      },
+      {
+        "fecha": "2026-11-26",
+        "valor": 1146.84
       }
     ]
   },
@@ -37261,10 +37269,6 @@
     "fuente_oficial": "Banco Central de Chile (BDE)",
     "url_fuente": "https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx",
     "serie": [
-      {
-        "fecha": "2016-11-25",
-        "valor": 97.91
-      },
       {
         "fecha": "2016-11-28",
         "valor": 97.98
@@ -46116,6 +46120,10 @@
       {
         "fecha": "2026-11-25",
         "valor": 147.09
+      },
+      {
+        "fecha": "2026-11-26",
+        "valor": 147.09
       }
     ]
   },
@@ -46125,10 +46133,6 @@
     "fuente_oficial": "London Metal Exchange (LME) / Cochilco",
     "url_fuente": "https://www.cochilco.cl/web/la-rueda-diaria/",
     "serie": [
-      {
-        "fecha": "2016-11-25",
-        "valor": 2.67
-      },
       {
         "fecha": "2016-11-28",
         "valor": 2.66
@@ -56187,6 +56191,10 @@
       },
       {
         "fecha": "2026-11-25",
+        "valor": 5.33
+      },
+      {
+        "fecha": "2026-11-26",
         "valor": 6.58
       }
     ]
@@ -56197,10 +56205,6 @@
     "fuente_oficial": "Federal Reserve Bank of St. Louis (FRED) / EIA",
     "url_fuente": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
     "serie": [
-      {
-        "fecha": "2016-11-25",
-        "valor": 47.24
-      },
       {
         "fecha": "2016-11-28",
         "valor": 48.24
@@ -66263,7 +66267,11 @@
       },
       {
         "fecha": "2026-11-25",
-        "valor": 90.81
+        "valor": 94.61
+      },
+      {
+        "fecha": "2026-11-26",
+        "valor": 91.03
       }
     ]
   },
@@ -66273,10 +66281,6 @@
     "fuente_oficial": "Federal Reserve Bank of St. Louis (FRED) / EIA",
     "url_fuente": "https://fred.stlouisfed.org/series/DCOILWTICO",
     "serie": [
-      {
-        "fecha": "2016-11-25",
-        "valor": 46.06
-      },
       {
         "fecha": "2016-11-28",
         "valor": 47.08
@@ -76335,7 +76339,11 @@
       },
       {
         "fecha": "2026-11-25",
-        "valor": 84.19
+        "valor": 83.68
+      },
+      {
+        "fecha": "2026-11-26",
+        "valor": 84.52
       }
     ]
   },
